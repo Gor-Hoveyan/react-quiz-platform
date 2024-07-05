@@ -61,9 +61,6 @@ out/
 # Ignore the modules directory for TypeScript
 lib/
 
-# Ignore the public directory for TypeScript
-public/
-
 # IDE directories
 .idea
 .vscode
@@ -73,7 +70,7 @@ public/
 Thumbs.db
 *.bak
 
-# React Native
+# React specific
 *.prettierrc
 *.tern-port
 
@@ -99,3 +96,5 @@ docs/
 coverage/
 
 # Ignore custom directories
+/server/node_modules
+/client/node_modules

@@ -13,7 +13,7 @@ The Quiz Platform is an engaging web application designed for users to craft the
 
   A sophisticated like and comment system enables users to rate quizzes and provide valuable feedback, enhancing the interactive and community-driven experience.
 
-  
+
 <h2>Technologies</h2>
 
   <h3>Front-end</h3>
