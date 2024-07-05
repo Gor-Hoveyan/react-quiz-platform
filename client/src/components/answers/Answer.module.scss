@@ -1,0 +1,59 @@
+@import '../../styles/mixins/_mixins.scss';
+
+
+.comment {
+    background: #f9f9f9;
+    padding: 10px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    @include dropdown;
+    @include answerLink;
+    @include likesAndCommentsCounter(1.1rem);
+
+    p {
+        margin: 0 0 5px 0;
+    }
+
+    span {
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    .nameAndDropdown {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.6s;
+    
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+    
+    .cancelButton {
+        margin: 10px 20px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: tomato;
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.6s;
+    
+        &:hover {
+            background-color: orangered;
+        }
+    }
+}

@@ -1,0 +1,78 @@
+@mixin dropdown() {
+    .dropdown {
+        text-align: right;
+
+        .dropdownContent {
+            display: none;
+        }
+
+        &:hover {
+            .dropdownContent {
+                display: block;
+            }
+        }
+
+        .dropdownContent {
+            margin-top: 0;
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: fit-content;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+
+        .dropdownContent p {
+            color: black;
+            padding: 8px 13px;
+            display: block;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dropdownContent p:hover {
+            background-color: #f1f1f1;
+        }
+    }
+}
+
+@mixin answerLink {
+    .answerLink {
+        font-size: 0.8rem;
+        padding-left: 20px;
+        color: rgb(0, 153, 255);
+        cursor: pointer;
+        max-width: fit-content;
+        text-decoration: dotted underline;
+
+        &:hover {
+            color: blue;
+        }
+    }
+}
+
+@mixin likesAndCommentsCounter($fontSize) {
+    .testOtherData {
+        margin: 5px 0;
+        font-size: $fontSize;
+        display: flex;
+        align-items: center;
+        color: black;
+
+        p,
+        .testCommentIcon,
+        span {
+            margin-right: 8px;
+        }
+
+        .testLikes {
+            display: flex;
+            color: black;
+            align-items: center;
+            margin-right: 15px;
+            margin-left: 8px;
+        }
+    }
+}

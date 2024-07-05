@@ -1,0 +1,87 @@
+.main {
+    width: 100%;
+    min-height: 100vh;
+    max-height: fit-content;
+    background-color: #333;
+    padding: 100px 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.nestedFormGroup {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.answerGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type='radio'] {
+    width: auto;
+}
+
+.button {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: tomato;
+    margin: 10px 0;
+    text-align: center;
+    
+}
+
+.textarea {
+    resize: vertical;
+}
+
+.navLink {
+    text-decoration: none;
+    color: white;
+}

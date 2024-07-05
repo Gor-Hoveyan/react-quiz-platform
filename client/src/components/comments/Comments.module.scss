@@ -1,0 +1,113 @@
+@import '../../styles/mixins/_mixins.scss';
+
+.commentsSection {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.commentsList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    @include dropdown;
+    @include likesAndCommentsCounter(1.2rem);
+
+    .nameAndCircles {
+        display: flex;
+        justify-content: space-between;
+
+        .circles {
+            font-size: 2rem;
+            padding-top: 0;
+            padding-right: 10px;
+            cursor: pointer;
+        }
+    }
+
+    .comment {
+        background: #fff;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+        p {
+            margin: 0 0 5px 0;
+        }
+
+        span {
+            color: #666;
+            font-size: 0.9em;
+        }
+    }
+
+    @include answerLink;
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+        margin-bottom: 10px;
+    }
+
+    .input {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 1em;
+    }
+
+
+
+    .error {
+        color: tomato;
+        margin: 10px 0;
+    }
+}
+
+.button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.6s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+
+.cancelButton {
+    padding: 10px 15px;
+    margin: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: tomato;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.6s;
+
+    &:hover {
+        background-color: orangered;
+    }
+}
+
+
+.textarea {
+    resize: vertical;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    min-height: 80px;
+}

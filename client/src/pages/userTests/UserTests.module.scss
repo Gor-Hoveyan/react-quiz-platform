@@ -1,0 +1,38 @@
+.main {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    max-height: fit-content;
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .searchInput {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 40%;
+            align-self: flex-end;
+            margin: 30px 0;
+            outline: 1px solid #ddd;
+            transition-duration:  0.5s;
+
+            &:focus {
+                outline: 0;
+                outline: 1px solid #555555;
+            }
+        }
+    }
+
+    h1 {
+        margin: 0 auto;
+        margin-bottom: 40px;
+        font-size: 2rem;
+        text-align: center;
+    }
+}

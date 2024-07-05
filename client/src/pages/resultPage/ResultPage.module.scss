@@ -1,0 +1,21 @@
+.resultPage {
+    max-width: 800px;
+    margin: 300px auto;
+    height: 20vh;
+
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .resultText {
+        font-size: 18px;
+        line-height: 1.5;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        white-space: pre-wrap;
+    }
+}

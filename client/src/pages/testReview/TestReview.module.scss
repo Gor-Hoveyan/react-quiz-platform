@@ -1,0 +1,85 @@
+@import '../../styles/mixins/mixins.scss';
+
+.testContainer {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 100px auto;
+    @include likesAndCommentsCounter(1.2rem);
+}
+
+@media (min-width: 1000px) {
+    .testContainer {
+        width: 50%;
+    }
+}
+
+@media (max-width: 1000px) {
+    .testContainer {
+        width: 80%;
+    }
+}
+
+.testReviewHeader {
+    margin-bottom: 20px;
+    border-bottom: 1px solid black;
+
+    .navLink {
+        font-size: 2rem;
+        text-decoration: none;
+        color: black;
+    }
+}
+
+.navLink {
+    font-size: 1rem;
+    color: rgb(0, 153, 255);
+
+    &:hover {
+        color: blue;
+    }
+}
+
+.testReviewH5,
+.testReviewH3 {
+    margin: 10px 0;
+}
+
+.testReviewH3 {
+    color: rgb(97, 97, 97);
+}
+
+.testReviewH5 {
+    font-size: 1.1rem;
+}
+
+.testComments, .testLikes {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.questions {
+    margin-bottom: 20px;
+}
+
+.question {
+    margin-bottom: 10px;
+}
+
+.ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.li {
+    padding: 5px 0;
+}
+
+.results {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+.result {
+    margin-bottom: 10px;
+}
