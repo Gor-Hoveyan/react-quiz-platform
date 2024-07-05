@@ -99,4 +99,5 @@ docs/
 coverage/
 
 # Ignore custom directories
-custom_dir/
+server/node_modules
+client/node_modules
