@@ -3,6 +3,7 @@ import styles from './Header.module.scss';
 import { NavLink } from 'react-router-dom';
 import useUserStore from '../../stores/userStore';
 import { isLoggedIn } from '../../services/authService';
+import BurgerMenu from '../burgerMenu/BurgerMenu';
 
 const Header = () => {
     const logout = useUserStore(state => state.logout);
@@ -10,9 +11,11 @@ const Header = () => {
     const setIsLogged = useUserStore(state => state.handleIsLogged);
     const isLogged = useUserStore(state => state.isLogged);
     const getUser = useUserStore(state => state.getUser);
+    const isMenuOpen = useUserStore(state => state.isMenuOpen);
+    const toggleMenu = useUserStore(state => state.toggleMenu);
 
     useEffect(() => {
-        if(isLoggedIn()) {
+        if (isLoggedIn()) {
             setIsLogged(true);
             getUser();
         } else {
@@ -22,26 +25,30 @@ const Header = () => {
 
     return (
         <header className={styles.headerContainer}>
-            <nav className={styles.nav}>
-                <NavLink to='/' className={styles.navItem}>Home</NavLink>
-                {isLogged && <>
-                <NavLink to='/user/myTests' className={styles.navItem}>My Tests</NavLink>
-                <NavLink to='/test/create' className={styles.navItem}>Create test</NavLink>
-                </>}
-                <div className={styles.authButtons}>
-                    {isLogged ?
-                        <NavLink to={'auth/login'}><button onClick={() => logout()} className={styles.button}>Logout</button></NavLink>
-                        :
-                        <>
-                            <NavLink to={'auth/login'}><button className={styles.button}>Login</button></NavLink>
-                            <NavLink  to={'auth/registration'}><button className={styles.button}>Sign Up</button></NavLink>
-                        </>
 
-                    }
+            <nav className={styles.nav}>
+                <BurgerMenu isLogged={isLogged} toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} logout={logout} />
+                
+                    <NavLink to='/' className={styles.navItem}>Home</NavLink>
+                    {isLogged && <>
+                        <NavLink to='/user/myTests' className={styles.navItem}>My Tests</NavLink>
+                        <NavLink to='/test/create' className={styles.navItem}>Create test</NavLink>
+                    </>}
+                    <div className={styles.authButtons}>
+                        {isLogged ?
+                            <NavLink to={'auth/login'}><button onClick={() => logout()} className={styles.button}>Logout</button></NavLink>
+                            :
+                            <>
+                                <NavLink to={'auth/login'}><button className={styles.button}>Login</button></NavLink>
+                                <NavLink to={'auth/registration'}><button className={styles.button}>Sign Up</button></NavLink>
+                            </>
+
+                        }
+                
                 </div>
             </nav>
 
-        </header>
+        </header >
     );
 };
 

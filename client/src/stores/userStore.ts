@@ -7,6 +7,7 @@ import { Test } from './testStore';
 
 interface IStore {
     errText: string,
+    isMenuOpen: boolean,
     isLogged: boolean,
     isRegistered: boolean,
     user: IUser | null,
@@ -21,7 +22,8 @@ interface IStore {
     getUserTests: (userId: string) => void,
     handleIsLogged: (val: boolean) => void,
     handleIsRegistered: (val: boolean) => void,
-    like: (testId: string) => void
+    like: (testId: string) => void,
+    toggleMenu: () => void,
 }
 
 interface IUser {
@@ -39,6 +41,7 @@ interface IUser {
 const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     errText: '',
     isLogged: false,
+    isMenuOpen: false,
     isRegistered: false,
     user: null,
     tests: [],
@@ -59,15 +62,18 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
                 set({ errText: 'Invalid email or password' });
                 set({ isLogged: false });
             }
-
+        }).catch(err => {
+            set({errText: 'Invalid password or email'});
+            console.log(err);
         });
     },
     logout: async () => {
         await API.post(`/auth/logout`).then(res => {
             console.log(res)
             if (res.data.message === 'Success') {
-                document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
-                set({ isLogged: false });
+                document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
+                set({ isLogged: false, isRegistered: false });
+                
             } else {
                 console.log('something went wrong')
             }
@@ -75,13 +81,13 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     refresh: async () => {
         await API.get(`/auth/refresh`).then(res => {
-            if (res.data.accessToken) {
+            if (res.data.accessToken.length) {
                 document.cookie = `token=${res.data.accessToken};`;
                 set({ isLogged: true, user: res.data.user });
             } else {
                 set({ isLogged: false });
             }
-        }).catch(err => console.log(err))
+        }).catch(err => console.log(err));
     },
     getUser: async () => {
         await API.get(`/user`).then(res => {
@@ -108,6 +114,10 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     like: async (testId) => {
         await API.post(`/likeTest/${testId}`).catch(err => console.log(err));
+    },
+    toggleMenu: () => {
+        const isMenuOpen = get().isMenuOpen;
+        set({isMenuOpen: !isMenuOpen});
     }
 })
 ),

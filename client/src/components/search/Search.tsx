@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './Search.module.scss';
 import useHomeStore from '../../stores/homeStore';
 
