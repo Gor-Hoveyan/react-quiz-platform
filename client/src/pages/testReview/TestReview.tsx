@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import styles from './TestReview.module.scss';
 import { NavLink, useParams } from "react-router-dom";
 import useTestStore from "../../stores/testStore";
-import { BiSolidComment } from 'react-icons/bi';
 import useUserStore from "../../stores/userStore";
 import Comments from "../../components/comments/Comments";
+import LikesComments from "../../components/likesComments/LikesComments";
 
 
 export default function TestReview() {
@@ -13,19 +13,14 @@ export default function TestReview() {
     const test = useTestStore(state => state.test);
     const getTest = useTestStore(state => state.getTest);
     const like = useUserStore(state => state.like);
+    const user = useUserStore(state => state.user);
+    const save = useUserStore(state => state.save);
 
     useEffect(() => {
         if (testId?.length) {
             getTest(testId);
         }
-    }, []);
-
-    let handleLike = () => {
-        if (testId) {
-            like(testId);
-            handleLike = () => { } //Replace handleLike with empty function to remove event
-        }
-    }
+    }, [testId, getTest]);
 
     return (
         <>
@@ -38,16 +33,18 @@ export default function TestReview() {
                     <h5 className={styles.testReviewH5}>Author: {test.author.username}</h5>
                     <h5 className={styles.testReviewH5}>Passed *** times</h5>
                     <h5 className={styles.testReviewH5}>*** views</h5>
-                    <div className={styles.testOtherData}>
-                        <p className={styles.testLikes}>
-                            <span onClick={() => handleLike()} style={{ color: 'red' }}>&#10084;</span>
-                            {test.likes}
-                        </p>
-                        <p className={styles.testComments}>
-                            <BiSolidComment color='#2065ce' className={styles.testCommentIcon} />
-                            {test.comments.length + test.commentAnswers?.length}
-                        </p>
-                    </div>
+                    <LikesComments
+                                id={test._id}
+                                commentsCount={test.comments.length + test.commentAnswers?.length}
+                                likesCount={test.likes}
+                                savesCount={test.saves}
+                                isSaved={(user?.savedPosts as string[]).includes(test._id)}
+                                isLiked={(user?.likedPosts as string[]).includes(test._id)}
+                                isComment={false}
+                                isAnswer={false}
+                                like={like}
+                                save={save}
+                            />
                     <Comments />
                 </div> : <h1>Loading...</h1>}
         </>

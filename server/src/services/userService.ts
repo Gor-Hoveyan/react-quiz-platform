@@ -132,11 +132,30 @@ async function likeTest(userId: string, testId: string) {
     }
 }
 
+async function saveTest(userId: string, testId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const test = await Test.findById(testId);
+    if (!test) {
+        throw new Error('Test not found');
+    }
+    if ((user.savedPosts as unknown[]).includes(testId)) {
+        await Test.findByIdAndUpdate(testId, { $set: { saves: --test.saves } });
+        await User.findByIdAndUpdate(userId, { $pull: { savedPosts: test._id } });
+    } else {
+        await Test.findByIdAndUpdate(testId, { $set: { saves: ++test.saves } });
+        await User.findByIdAndUpdate(userId, { $set: { savedPosts: [...user.savedPosts, test._id] } });
+    }
+}
+
 export const userService = {
     registerUser,
     login,
     logout,
     refreshToken,
     getUser,
-    likeTest
+    likeTest,
+    saveTest,
 };

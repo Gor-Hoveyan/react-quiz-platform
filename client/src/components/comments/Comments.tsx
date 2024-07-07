@@ -3,7 +3,8 @@ import styles from './Comments.module.scss';
 import useTestStore from '../../stores/testStore';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Answer from '../answers/Answer';
-import { BiSolidComment } from 'react-icons/bi';
+import LikesComments from '../likesComments/LikesComments';
+import useUserStore from '../../stores/userStore';
 
 type FormValues = {
     comment: string,
@@ -13,7 +14,8 @@ type FormValues = {
 
 export default function Comments() {
     const testId = useTestStore(state => state.test?._id);
-    const { register, handleSubmit, formState: { errors }, reset} = useForm<FormValues>();
+    const user = useUserStore(state => state.user);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>();
 
     const getComments = useTestStore(state => state.getComments);
     const createComment = useTestStore(state => state.createComment);
@@ -120,23 +122,22 @@ export default function Comments() {
                                 </div>
                             </div>}
                         <span>— {comment.author.username}</span>
-                        <div className={styles.testOtherData}>
-                            <p className={styles.testLikes}>
-                                <span onClick={() => likeComment(comment._id)} style={{ color: 'red' }}>&#10084;</span>
-                                {comment.likes}
-                            </p>
-                            <p className={styles.testComments}>
-                                <BiSolidComment color='#2065ce' className={styles.testCommentIcon} />
-                                {comment.answers.length}
-                            </p>
-                        </div>
+                        <LikesComments
+                            id={comment._id}
+                            commentsCount={comment.answers.length}
+                            likesCount={comment.likes}
+                            isLiked={(user?.likedComments as string[]).includes(comment._id)}
+                            isComment={true}
+                            isAnswer={false}
+                            like={likeComment}
+                        />
                         {handleAnswer(comment._id)}
                         {comment.answers[0] && !comment.answers[0].comment ? <p className={styles.answerLink} onClick={() => getAnswers(comment._id)}>Show answers</p>
                             :
                             comment?.answers?.map((answer, index) => (
                                 <Answer key={index} updatingAnswer={updatingAnswer} parent={comment._id} setUpdatingAnswer={setUpdatingAnswer}
                                     likeAnswer={likeAnswer} updateAnswer={updateAnswer} removeAnswer={removeAnswer}
-                                    answer={answer.comment} author={comment.author.username} id={answer._id ? answer._id : String(answer)} likes={comment.likes} />
+                                    answer={answer.comment} author={comment.author.username} id={answer._id ? answer._id : String(answer)} likes={answer.likes} />
                             ))
                         }
                     </li>

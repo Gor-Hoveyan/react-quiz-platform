@@ -50,7 +50,6 @@ export default function TestPage() {
     }, [test, setValue]);
 
     const onSubmit = (data: TestPageFormValues) => {
-        console.log(data)
         calculateResult(data);
     }
 

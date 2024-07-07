@@ -12,8 +12,6 @@
     padding: 0;
     margin: 0 0 20px 0;
     @include dropdown;
-    @include likesAndCommentsCounter(1.2rem);
-
     .nameAndCircles {
         display: flex;
         justify-content: space-between;

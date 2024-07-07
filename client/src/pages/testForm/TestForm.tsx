@@ -80,8 +80,6 @@ export default function TestForm() {
 
                         return setError(`Invalid scores in results  №${i} and  №${j}`);
                     } else if (iMinScore === jMinScore || iMaxScore === jMaxScore) {
-                        console.log(iMinScore, jMinScore);
-                        console.log(iMaxScore, jMaxScore)
                         return setError(`Invalid scores in results  №${i} and  №${j}`);
                     } else if (iMinScore === jMaxScore) {
                         return setError(`Invalid scores in results  №${i} and  №${j}`);

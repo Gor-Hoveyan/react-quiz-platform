@@ -47,6 +47,7 @@ export interface Test {
     results: Result[],
     score: number,
     likes: number,
+    saves: number,
     comments: string[],
     commentAnswers: string[],
     createdAt: string,

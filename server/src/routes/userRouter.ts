@@ -5,6 +5,8 @@ import { authMiddleware } from "../utils/authMiddleware";
 const router = Router();
 
 router.get('/user', authMiddleware, userController.getUser);
-router.post('/likeTest/:id', authMiddleware, userController.likeTest);
+router.put('/likeTest/:id', authMiddleware, userController.likeTest);
+router.put('/saveTest/:id', authMiddleware, userController.saveTest);
+
 
 export const userRouter = router;

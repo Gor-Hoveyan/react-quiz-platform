@@ -23,6 +23,7 @@ interface IStore {
     handleIsLogged: (val: boolean) => void,
     handleIsRegistered: (val: boolean) => void,
     like: (testId: string) => void,
+    save: (testId: string) => void,
     toggleMenu: () => void,
 }
 
@@ -32,7 +33,9 @@ interface IUser {
     email: string,
     isActivated: boolean,
     likedPosts: [],
+    savedPosts: [],
     likedComments: [],
+    likedAnswers: [],
     createdTests: [],
     posts: [],
     __v: number,
@@ -113,7 +116,10 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ isRegistered: val });
     },
     like: async (testId) => {
-        await API.post(`/likeTest/${testId}`).catch(err => console.log(err));
+        await API.put(`/likeTest/${testId}`).catch(err => console.log(err));
+    },
+    save: async (testId) => {
+        await API.put(`/saveTest/${testId}`).catch(err => console.log(err));
     },
     toggleMenu: () => {
         const isMenuOpen = get().isMenuOpen;

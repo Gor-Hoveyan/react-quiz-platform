@@ -10,8 +10,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     @include dropdown;
     @include answerLink;
-    @include likesAndCommentsCounter(1.1rem);
-
+    
     p {
         margin: 0 0 5px 0;
     }

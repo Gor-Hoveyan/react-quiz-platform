@@ -5,7 +5,6 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     margin: 100px auto;
-    @include likesAndCommentsCounter(1.2rem);
 }
 
 @media (min-width: 1000px) {

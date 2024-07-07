@@ -1,12 +1,10 @@
-@import '../../styles/_mixins.scss';
-
 .testList {
     margin: 0px auto;
     list-style-type: none;
     list-style: none;
     padding: 0;
     width: fit-content;
-    @include likesAndCommentsCounter(1.2rem);
+
     .navLink {
         text-decoration: none;
     }
