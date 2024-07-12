@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { testController } from "./../controllers/testController";
-import { authMiddleware } from "./../utils/authMiddleware";
+import { authMiddleware } from "./../utils/middlewares/authMiddleware";
 
 
 const router = Router();
@@ -13,5 +13,6 @@ router.get('/tests', testController.getTen);
 router.get('/tests/:id', authMiddleware, testController.getUserTests);
 router.post('/tests/search', testController.search);
 router.get('/testsPagination', testController.pagination);
+router.post('/submitTest', authMiddleware, testController.submit);
 
 export const testRouter = router;

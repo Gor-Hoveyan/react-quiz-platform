@@ -35,7 +35,7 @@ const Registration = () => {
     }
 
     return (
-        <>{!isRegistered ? <div className={styles.main}>
+        !isRegistered ? <div className={styles.main}>
             <div className={styles.formContainer}>
                 <h2 className={styles.header}>Sign Up</h2>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,7 +76,7 @@ const Registration = () => {
                     <button className={styles.button} type='submit'>Sign Up</button>
                 </form>
             </div>
-        </div> : <Navigate to={`/auth/login`} />}</>
+        </div> : <Navigate to={`/auth/login`} />
     );
 };
 

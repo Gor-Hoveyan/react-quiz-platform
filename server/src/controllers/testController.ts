@@ -111,6 +111,17 @@ async function pagination(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function submit(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { testId, score } = req.body;
+        const userId = req.user.id;
+        const result = await testService.submit(userId, testId, score);
+        return res.status(200).json({ result });
+    } catch (err) {
+        next(err);
+    }
+}
+
 export const testController = {
     createTest,
     deleteTest,
@@ -119,5 +130,6 @@ export const testController = {
     getTen,
     getUserTests,
     search,
-    pagination
+    pagination,
+    submit
 };

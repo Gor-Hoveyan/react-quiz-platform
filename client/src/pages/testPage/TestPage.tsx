@@ -17,7 +17,7 @@ export type TestPageFormValues = {
 export default function TestPage() {
     const getTest = useTestStore(state => state.getTest);
     const test = useTestStore(state => state.test);
-    const calculateResult = useTestStore(state => state.calculateResult)
+    const submitTest = useTestStore(state => state.submitTest)
     const params = useParams();
     const testId = params.id;
     const result = useTestStore(state => state.result);
@@ -50,7 +50,7 @@ export default function TestPage() {
     }, [test, setValue]);
 
     const onSubmit = (data: TestPageFormValues) => {
-        calculateResult(data);
+        submitTest(data);
     }
 
     return (

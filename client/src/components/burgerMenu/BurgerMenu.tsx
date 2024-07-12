@@ -21,6 +21,7 @@ export default function BurgerMenu({ isLogged, toggleMenu, isMenuOpen, logout }:
                 <ul className={styles.navList}>
                     <li><NavLink to='/' className={styles.navItem} onClick={toggleMenu}>Home</NavLink></li>
                     {isLogged && <>
+                        <li><NavLink to='/profile' className={styles.navItem} onClick={toggleMenu}>My Profile</NavLink></li>
                         <li><NavLink to='/user/myTests' className={styles.navItem} onClick={toggleMenu}>My Tests</NavLink></li>
                         <li><NavLink to='/test/create' className={styles.navItem} onClick={toggleMenu}>Create test</NavLink></li>
                     </>}

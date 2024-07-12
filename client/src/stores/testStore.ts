@@ -47,6 +47,8 @@ export interface Test {
     results: Result[],
     score: number,
     likes: number,
+    passed: number,
+    views: number,
     saves: number,
     comments: string[],
     commentAnswers: string[],
@@ -69,7 +71,7 @@ interface IStore {
     createTest: (name: string, description: string, questions: IQuestion[], results: Result[], score: number) => void,
     getComments: () => void,
     getAnswers: (commentId: string) => void,
-    calculateResult: (data: TestPageFormValues) => void,
+    submitTest: (data: TestPageFormValues) => void,
     setFormError: (err: string) => void,
     setScore: (num: number) => void,
     createComment: (comment: string) => void,
@@ -111,6 +113,7 @@ const useTestStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     getAnswers: async (commentId) => {
         await API.get(`/answer/${commentId}`).then(res => {
+            console.log(res.data);
             set((state) => {
                 state.comments.map(comment => {
                     if (comment._id === commentId) {
@@ -121,30 +124,17 @@ const useTestStore = create<IStore>()(devtools(immer((set, get) => ({
             })
         }).catch(err => console.log(err));
     },
-    calculateResult: (data) => {
+    submitTest: async (data) => {
         let score = 0;
-
         data.questions.forEach(q => {
             if (q.selectedAnswer) {
                 score += Number(q.selectedAnswer);
             }
         });
-
-        const currentTest = get().test;
-
-        if (currentTest !== null) {
-            let computedResult = '';
-
-            for (let i = 0; i < currentTest.results.length; i++) {
-                const res = currentTest.results[i];
-                if (score >= res.minScore && score <= res.maxScore) {
-                    computedResult = res.result;
-                    break;
-                }
-            }
-
-            set({ result: computedResult });
-        }
+        const testId = get().test?._id;
+        await API.post('/submitTest', {testId, score}).then(res => {
+            set({ result: res.data.result });
+        }).catch(err => console.log(err));
     },
     setFormError: (err) => {
         set({ formError: err });

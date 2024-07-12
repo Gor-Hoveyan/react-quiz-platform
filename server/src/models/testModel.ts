@@ -27,6 +27,8 @@ const testSchema = new Schema({
     score: { type: Number, required: true },
     likes: { type: Number, default: 0, required: true},
     saves: { type: Number, default: 0, required: true},
+    passed: { type: Number, default: 0, required: true},
+    views: { type: Number, default: 0, required: true},
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     commentAnswers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],
     createdAt: { type: Date, default: Date.now() },

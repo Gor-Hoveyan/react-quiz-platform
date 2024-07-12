@@ -1,5 +1,9 @@
 @import '../../styles/mixins.scss';
 
+.main {
+    min-height: 100vh;
+}
+
 .testContainer {
     padding: 20px;
     border: 1px solid #ccc;
@@ -24,14 +28,16 @@
     border-bottom: 1px solid black;
 
     .navLink {
-        font-size: 2rem;
         text-decoration: none;
         color: black;
+        &:hover {
+            color: rgb(0, 153, 255);
+        }
     }
 }
 
 .navLink {
-    font-size: 1rem;
+
     color: rgb(0, 153, 255);
 
     &:hover {
@@ -52,7 +58,8 @@
     font-size: 1.1rem;
 }
 
-.testComments, .testLikes {
+.testComments,
+.testLikes {
     font-size: 16px;
     margin-bottom: 20px;
 }

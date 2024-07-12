@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
-import { UserJWTPayload } from '../services/userService';
+import { UserJWTPayload } from './../../services/userService';
 
 
 

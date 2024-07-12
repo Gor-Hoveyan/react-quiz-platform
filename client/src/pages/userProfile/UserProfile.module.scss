@@ -1,0 +1,91 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.stats {
+    display: flex;
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0;
+    .likes, .followers, .followings, .tests {
+        padding: 0 15px;
+        line-height: 1.5;
+    }
+    .likes, .followers, .followings {
+        border-left: 2px solid gray;
+        padding: 0px 15px;
+    } 
+    .followers {
+        border-right: 0;
+    }
+}
+
+.username {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+.bio {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.posts {
+    text-align: center;
+    .postsHeader {
+        margin: 20px 0;
+    }
+}
+
+.addPost {
+    margin: 20px 0;
+}
+
+.avatarContainer {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    width: 150px;
+    height: 150px;
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+    .updateIcon {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        cursor: pointer;
+    }
+}

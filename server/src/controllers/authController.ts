@@ -36,7 +36,7 @@ async function logout(req: Request, res: Response, next: NextFunction) {
         }
         await userService.logout(refreshToken);
         res.cookie('refreshToken', refreshToken, { maxAge: 0 });
-
+        res.cookie('token', '', { maxAge: 0 });
         return res.status(200).json({ message: 'Success' });
     } catch (err) {
         next(err);

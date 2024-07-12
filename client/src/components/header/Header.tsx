@@ -31,6 +31,7 @@ const Header = () => {
                 
                     <NavLink to='/' className={styles.navItem}>Home</NavLink>
                     {isLogged && <>
+                        <NavLink to='/profile' className={styles.navItem}>My Profile</NavLink>
                         <NavLink to='/user/myTests' className={styles.navItem}>My Tests</NavLink>
                         <NavLink to='/test/create' className={styles.navItem}>Create test</NavLink>
                     </>}

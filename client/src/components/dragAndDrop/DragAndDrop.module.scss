@@ -1,0 +1,66 @@
+.dropArea,
+.dragAndDrop {
+    width: 75%;
+    height: 80%;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 4vw;
+    font-weight: bolder;
+    color: gray;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.dropArea {
+    border: 5px dashed gray;
+}
+
+.dragAndDrop {
+    .error {
+        color: tomato;
+    }
+
+    .inputFile {
+        display: none;
+    }
+
+    .inputFileLabel {
+        margin: 20px auto;
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: .5em;
+        justify-items: center;
+        align-content: center;
+        color: #007bff;
+        border: .2em solid #007bff;
+        background: hsl(0 0 0/0);
+        padding: 15px 20px;
+        color: #007bff;
+        border-radius: 2em;
+        transition: 1s;
+        width: fit-content;
+        height: fit-content;
+
+        &:hover {
+            background: #0056b3;
+            border: .2em solid #0056b3;
+            color: #fff;
+        }
+    }
+}
+
+.main {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.123);
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}

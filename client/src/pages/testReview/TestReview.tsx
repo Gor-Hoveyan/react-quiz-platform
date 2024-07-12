@@ -23,30 +23,34 @@ export default function TestReview() {
     }, [testId, getTest]);
 
     return (
-        <>
+        <div className={styles.main}>
             {test ?
                 <div className={styles.testContainer}>
                     <h1 className={styles.testReviewHeader}><NavLink className={styles.navLink} to={`/test/${test._id}`}>{test.name}</NavLink></h1>
                     <h3 className={styles.testReviewH3}>{test.description}</h3>
-                    <h6><NavLink className={styles.navLink} to={`/test/${test._id}`}>Go to the test</NavLink></h6>
+                    <h5 className={styles.testReviewH5}>
+                        <NavLink className={styles.navLink} to={`/test/${test._id}`}>Go to the test</NavLink>
+                    </h5>
                     <h5 className={styles.testReviewH5}>Total questions: {test.questions.length}</h5>
-                    <h5 className={styles.testReviewH5}>Author: {test.author.username}</h5>
-                    <h5 className={styles.testReviewH5}>Passed *** times</h5>
-                    <h5 className={styles.testReviewH5}>*** views</h5>
+                    <h5 className={styles.testReviewH5}>Author:
+                        <NavLink className={styles.navLink} to={`/profile/${test?.author?._id}`}>{test?.author?.username}</NavLink>
+                    </h5>
                     <LikesComments
-                                id={test._id}
-                                commentsCount={test.comments.length + test.commentAnswers?.length}
-                                likesCount={test.likes}
-                                savesCount={test.saves}
-                                isSaved={(user?.savedPosts as string[]).includes(test._id)}
-                                isLiked={(user?.likedPosts as string[]).includes(test._id)}
-                                isComment={false}
-                                isAnswer={false}
-                                like={like}
-                                save={save}
-                            />
+                        id={test._id}
+                        commentsCount={test.comments.length + test.commentAnswers?.length}
+                        likesCount={test.likes}
+                        savesCount={test.saves}
+                        isSaved={(user?.savedPosts as string[]).includes(test._id)}
+                        isLiked={(user?.likedPosts as string[]).includes(test._id)}
+                        isComment={false}
+                        isAnswer={false}
+                        like={like}
+                        save={save}
+                        views={test.views}
+                        passed={test.passed}
+                    />
                     <Comments />
                 </div> : <h1>Loading...</h1>}
-        </>
+        </div>
     );
 }

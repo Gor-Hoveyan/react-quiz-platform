@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './App.module.scss';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import Home from './pages/home/Home';
@@ -11,6 +11,9 @@ import ResultPage from './pages/resultPage/ResultPage';
 import TestForm from './pages/testForm/TestForm';
 import UserTests from './pages/userTests/UserTests';
 import TestReview from './pages/testReview/TestReview';
+import UserProfile from './pages/userProfile/UserProfile';
+import Profile from './pages/profile/Profile';
+import UserSettings from './pages/userSettings/UserSettings';
 
 
 function App() {
@@ -26,7 +29,10 @@ function App() {
         <Route path='test/:id/result' element={<ResultPage />} />
         <Route path='test/create' element={<TestForm />} />
         <Route path='user/myTests' element={<UserTests />} />
-        <Route path='test/review/:id' element={<TestReview />}/>
+        <Route path='test/review/:id' element={<TestReview />} />
+        <Route path='profile' element={<UserProfile />} />
+        <Route path='profile/:id' element={<Profile />} />
+        <Route path='/settings' element={<UserSettings />} />
       </Routes>
       <Footer />
     </BrowserRouter>

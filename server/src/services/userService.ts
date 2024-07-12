@@ -39,7 +39,7 @@ async function registerUser(username: string, email: string, password: string) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ username, email, password: passwordHash })
+    const newUser = new User({ username, email, password: passwordHash, bio: '   ', passedTests: [] })
     await newUser.save();
     return newUser;
 }
@@ -51,7 +51,7 @@ async function login(email: string, pass: string) {
         throw new Error('Invalid email or password')
     }
     const { password, ...user } = userData.toObject();
-    console.log(user)
+
     const isPasswordValid = await bcrypt.compare(pass, password);
     if (!isPasswordValid) {
         throw new Error('Invalid email or password')
@@ -98,14 +98,8 @@ async function refreshToken(token: string) {
     })
 }
 
-async function getUser(token: string) {
-
-    if (!token) {
-        throw new Error('Not authorized');
-    }
-
-    const decodedJWT = JSON.parse(atob(token.split('.')[1]));
-    const userData = await User.findById(decodedJWT.id);
+async function getUser(userId: string) {
+    const userData = await User.findById(userId);
     if (!userData) {
         throw new Error('User not found');
     }
@@ -124,11 +118,13 @@ async function likeTest(userId: string, testId: string) {
         throw new Error('Test not found');
     }
     if ((user.likedPosts as unknown[]).includes(testId)) {
-        await Test.findByIdAndUpdate(testId, { $set: { likes: --test.likes } });
+        await Test.findByIdAndUpdate(testId, { $inc: { likes: -1 } });
         await User.findByIdAndUpdate(userId, { $pull: { likedPosts: test._id } });
+        await User.findByIdAndUpdate(test.author, { $inc: { likes: - 1 } })
     } else {
-        await Test.findByIdAndUpdate(testId, { $set: { likes: ++test.likes } });
+        await Test.findByIdAndUpdate(testId, { $inc: { likes: +1 } });
         await User.findByIdAndUpdate(userId, { $set: { likedPosts: [...user.likedPosts, test._id] } });
+        await User.findByIdAndUpdate(test.author, { $inc: { likes: +1 } })
     }
 }
 
@@ -142,12 +138,86 @@ async function saveTest(userId: string, testId: string) {
         throw new Error('Test not found');
     }
     if ((user.savedPosts as unknown[]).includes(testId)) {
-        await Test.findByIdAndUpdate(testId, { $set: { saves: --test.saves } });
+        await Test.findByIdAndUpdate(testId, { $inc: { saves: -1 } });
         await User.findByIdAndUpdate(userId, { $pull: { savedPosts: test._id } });
     } else {
-        await Test.findByIdAndUpdate(testId, { $set: { saves: ++test.saves } });
+        await Test.findByIdAndUpdate(testId, { $inc: { saves: +1 } });
         await User.findByIdAndUpdate(userId, { $set: { savedPosts: [...user.savedPosts, test._id] } });
     }
+}
+
+async function follow(userId: string, subscriberId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const subscriber = await User.findById(subscriberId);
+    if (!subscriber) {
+        throw new Error('Subscriber not found');
+    }
+    if (user._id === subscriber._id) {
+        throw new Error('You can\'t follow youerself');
+    }
+    if ((subscriber.followings as unknown[]).includes(userId)) {
+        throw new Error('User already subscribed');
+    }
+    await User.findByIdAndUpdate(userId, { $set: { followers: [...user.followers, subscriber.id] } });
+    await User.findByIdAndUpdate(subscriberId, { $set: { followings: [...subscriber.followings, user.id] } });
+}
+
+async function unfollow(userId: string, subscriberId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const subscriber = await User.findById(subscriberId);
+    if (!subscriber) {
+        throw new Error('Subscriber not found');
+    }
+    if (user._id === subscriber._id) {
+        throw new Error('You can\'t follow youerself');
+    }
+    if (!(subscriber.followings as unknown[]).includes(userId)) {
+        throw new Error('User already unfollowed');
+    }
+    await User.findByIdAndUpdate(userId, { $pull: { followers: subscriber.id } });
+    await User.findByIdAndUpdate(subscriberId, { $pull: { followings: user.id } });
+}
+
+async function getUserPage(userId: string) {
+    const userData = await User.findById(userId).populate({
+        path: 'createdTests',
+        populate: {
+            path: 'author',
+            select: 'username'
+        }
+    });
+    if (!userData) {
+        throw new Error('User not found');
+    }
+    const {password, ...user} = userData.toObject();
+    return user;
+}
+
+async function updateUser(userId: string, username: string, bio: string) {
+    const user = await User.findById(userId);
+    if(!user) {
+        throw new Error('User not found');
+    }
+    const checkUsername = User.findOne({username});
+    if(!checkUsername) {
+        let err = 'Username already exists';
+        return err;
+    }
+    await User.findByIdAndUpdate(userId, {$set: {username, bio}});
+}
+
+async function setAvatar(userId: string, avatarUrl: string) {
+    const user = await User.findById(userId);
+    if(!user) {
+        throw new Error('User not found');
+    }
+    await User.findByIdAndUpdate(userId, {$set: {avatarUrl}});
 }
 
 export const userService = {
@@ -158,4 +228,9 @@ export const userService = {
     getUser,
     likeTest,
     saveTest,
+    follow,
+    unfollow,
+    getUserPage,
+    updateUser,
+    setAvatar
 };

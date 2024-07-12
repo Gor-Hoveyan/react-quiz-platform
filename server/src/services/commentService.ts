@@ -185,13 +185,10 @@ async function likeAnswer(answerId: string, userId: string) {
 async function getAnswers(commentId: string) {
     const comment = await Comment.findById(commentId).populate({
         path: 'answers',
-        populate: [
-            {
-                path: 'author',
-                model: 'User',
-                select: 'username'
-            }
-        ]
+        populate: {
+            path: 'author',
+        }
+
     });
     if (!comment) {
         throw new Error('Test not found');

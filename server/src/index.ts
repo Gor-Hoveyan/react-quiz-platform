@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { connectDB } from './config/db';
-import { errorMiddleware } from './utils/errorMiddleware';
+import { errorMiddleware } from './utils/middlewares/errorMiddleware';
 import { authRouter } from './routes/authRouter';
 import { testRouter } from './routes/testRouter';
 import { userRouter } from './routes/userRouter';

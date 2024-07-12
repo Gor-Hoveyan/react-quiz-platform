@@ -2,8 +2,22 @@
     width: 100%;
     min-height: 100vh;
     max-height: fit-content;
-    background-color: #333;
+    background-color: #eee;
     padding: 100px 0;
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    input[type='radio'] {
+        width: auto;
+    }
 }
 
 .form {
@@ -39,20 +53,6 @@ label {
     font-weight: bold;
 }
 
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-input[type='radio'] {
-    width: auto;
-}
-
 .button {
     width: 100%;
     padding: 10px 15px;
@@ -74,7 +74,7 @@ button:hover {
     color: tomato;
     margin: 10px 0;
     text-align: center;
-    
+
 }
 
 .textarea {

@@ -121,7 +121,7 @@ export default function Comments() {
                                     </div>
                                 </div>
                             </div>}
-                        <span>— {comment.author.username}</span>
+                        <span>— {comment?.author?.username}</span>
                         <LikesComments
                             id={comment._id}
                             commentsCount={comment.answers.length}
@@ -137,7 +137,7 @@ export default function Comments() {
                             comment?.answers?.map((answer, index) => (
                                 <Answer key={index} updatingAnswer={updatingAnswer} parent={comment._id} setUpdatingAnswer={setUpdatingAnswer}
                                     likeAnswer={likeAnswer} updateAnswer={updateAnswer} removeAnswer={removeAnswer}
-                                    answer={answer.comment} author={comment.author.username} id={answer._id ? answer._id : String(answer)} likes={answer.likes} />
+                                    answer={answer.comment} author={comment.author?.username} id={answer._id ? answer._id : String(answer)} likes={answer.likes} />
                             ))
                         }
                     </li>
