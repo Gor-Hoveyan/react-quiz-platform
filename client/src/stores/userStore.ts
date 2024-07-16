@@ -76,10 +76,11 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     isLoading: false,
     register: async (email, username, password) => {
         await API.post(`/auth/register`, { email, username, password }).then(res => {
+            console.log(res)
             if (res.data.message === 'Success') {
                 set({ isRegistered: true });
             }
-        });
+        }).catch(err => {new Error(err.response); set({errText: err.response.data.message});});
     },
     login: async (email, password) => {
         await API.post(`/auth/login`, { email, password }).then((res: AxiosResponse<any>) => {
@@ -92,7 +93,6 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             }
         }).catch(err => {
             set({ errText: 'Invalid password or email' });
-            console.log(err);
         });
     },
     logout: async () => {
@@ -101,10 +101,8 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
                 document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
                 set({ isLogged: false, isRegistered: false });
 
-            } else {
-                console.log('something went wrong')
             }
-        });
+        }).catch(err => { new Error(err)});
     },
     refresh: async () => {
         await API.get(`/auth/refresh`).then(res => {
@@ -114,28 +112,28 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             } else {
                 set({ isLogged: false });
             }
-        }).catch(err => console.log(err));
+        }).catch(err => set({isLogged: false}));
     },
     getUser: async () => {
         await API.get(`/user`).then(res => {
             if (res.data.user) {
                 set({ user: res.data.user });
             }
-        }).catch(err => console.log(err));
+        }).catch(err => { new Error(err)});
     },
     updateUser: async (username, bio) => {
         await API.put(`/user`, {username, bio}).then(res => {
             if(res.data.message !== 'Success') {
                 set({errText: res.data.message});
             }
-        }).catch(err => console.log(err));
+        }).catch(err => { new Error(err)});
     },
     getUserTests: async (userId) => {
         set({ isLoading: true });
         await API.get(`/tests/${userId}`).then(res => {
             set({ tests: res.data.tests });
             set({ isLoading: false });
-        }).catch(err => console.log(err))
+        }).catch(err => { new Error(err)})
     },
     setError: (err) => {
         set({ errText: err });
@@ -153,31 +151,31 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         set({dropArea: val});
     },
     like: async (testId) => {
-        await API.put(`/likeTest/${testId}`).catch(err => console.log(err));
+        await API.put(`/likeTest/${testId}`).catch(err => { new Error(err)});
     },
     save: async (testId) => {
-        await API.put(`/saveTest/${testId}`).catch(err => console.log(err));
+        await API.put(`/saveTest/${testId}`).catch(err => { new Error(err)});
     },
     toggleMenu: () => {
         const isMenuOpen = get().isMenuOpen;
         set({ isMenuOpen: !isMenuOpen });
     },
     follow: async (userId) => {
-        await API.put(`/follow/${userId}`, { userId }).catch(err => console.log(err));
+        await API.put(`/follow/${userId}`, { userId }).catch(err => { new Error(err)});
     },
     unfollow: async (userId) => {
-        await API.put(`/unfollow/${userId}`).catch(err => console.log(err));
+        await API.put(`/unfollow/${userId}`).catch(err => { new Error(err)});
     },
     getUserPage: async (userId) => {
         await API.get(`/userPage/${userId}`).then(res => {
             if (res.data.user) {
                 set({ userPage: res.data.user });
             }
-        }).catch(err => console.log(err));
+        }).catch(err => { new Error(err)});
     },
     setAvatar: async (img) => {
         const avatarUrl = await uploadImg(img);
-        await API.put(`/avatar`, {avatarUrl}).catch(err => console.log(err));
+        await API.put(`/avatar`, {avatarUrl}).catch(err => { new Error(err)});
     }
 })
 ),

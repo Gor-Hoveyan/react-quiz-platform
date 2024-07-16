@@ -1,0 +1,27 @@
+.errorFallback {
+    text-align: center;
+    font-size: 1.8rem;
+    .errImage {
+        width: 20%;
+        height: 20%;
+        margin: 0 auto;
+    }
+    .error {
+        color: tomato;
+    }
+    .button {
+        padding: 15px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+    
+    button:hover {
+        background-color: #0056b3;
+    }
+}

@@ -22,24 +22,6 @@
     margin-bottom: 10px;
 }
 
-.stats {
-    display: flex;
-    text-align: center;
-    font-weight: bold;
-    margin: 20px 0;
-    .likes, .followers, .followings, .tests {
-        padding: 0 15px;
-        line-height: 1.5;
-    }
-    .likes, .followers, .followings {
-        border-left: 2px solid gray;
-        padding: 0px 15px;
-    } 
-    .followers {
-        border-right: 0;
-    }
-}
-
 .username {
     font-size: 2em;
     font-weight: bold;

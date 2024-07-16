@@ -8,7 +8,7 @@ async function create(name: string, description: string, author: string, questio
     const user = await User.findById({ _id: author });
 
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const test = new Test({ name, description, author, questions, results, score });
     await test.save()
@@ -21,10 +21,10 @@ async function remove(testId: string, requestCreator: string) {
     const test = await Test.findById({ _id: testId });
 
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     if (String(test.author) !== requestCreator) {
-        throw new Error('Access denied')
+        throw ({ status: 403, message: 'Access denied' });
     }
     if (test.comments.length) {
         test.comments.map(async (commentId) => {
@@ -52,15 +52,15 @@ async function update(requestCreator: string, id: string, name: string, descript
     const user = await User.findById({ _id: author });
     let test = await Test.findById({ _id: id });
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
 
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
 
     if (String(test.author) !== requestCreator) {
-        throw new Error('Access denied');
+        throw ({ status: 403, message: 'Access denied' });
     }
     const updatedData = {
         name,
@@ -81,9 +81,9 @@ async function update(requestCreator: string, id: string, name: string, descript
 }
 
 async function getOne(id: string) {
-    const test = await Test.findById(id).populate('author', 'username').exec();
+    const test = await Test.findById(id).populate('author', ['username', 'avatarUrl']).exec();
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     await Test.findByIdAndUpdate(id, { $inc: { views: +1 } });
     return test;
@@ -98,7 +98,7 @@ async function getTen() {
                 let: { authorId: '$author' },
                 pipeline: [
                     { $match: { $expr: { $eq: ['$_id', '$$authorId'] } } },
-                    { $project: { username: 1 } } // Specify the fields you want to include
+                    { $project: { username: 1, avatarUrl: 1 } } // Specify the fields you want to include
                 ],
                 as: 'author'
             }
@@ -111,7 +111,7 @@ async function getTen() {
         }
     ]);
     if (!tests) {
-        throw new Error('Tests not found');
+        throw ({ status: 404, message: 'Tests not found' });
     }
     return tests;
 
@@ -122,29 +122,29 @@ async function getUserTests(userId: string) {
         path: 'createdTests',
         populate: {
             path: 'author',
-            select: 'username'
+            select: ['username', 'avatarUrl']
         }
     });
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     return user.createdTests;
 }
 
 async function searchTests(name: string) {
-    const tests = await Test.find({ name: new RegExp(name, 'i') }).populate('author', 'username');
+    const tests = await Test.find({ name: new RegExp(name, 'i') }).populate('author', ['username', 'avatarUrl']);
     if (!tests) {
-        throw new Error('Tests not found');
+        throw ({ status: 404, message: 'Tests not found' });
     }
     return tests;
 }
 
 async function pagination(page: number, limit: number) {
     const skip = (page - 1) * limit;
-    const tests = await Test.find({}, null, { skip, limit }).populate('author', 'username');
+    const tests = await Test.find({}, null, { skip, limit }).populate('author', ['username', 'avatarUrl']);
     const totalPages = Math.ceil(await Test.countDocuments() / limit)
     if (tests.length === 0) {
-        throw new Error('Tests not found');
+        throw ({ status: 404, message: 'Tests not found' });
     }
     return { tests, totalPages };
 }
@@ -152,11 +152,11 @@ async function pagination(page: number, limit: number) {
 async function submit(userId: string, testId: string, score: number) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
 
     const result = calculateResult(test.results, score);

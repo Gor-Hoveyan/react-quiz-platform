@@ -4,13 +4,8 @@ import { immer } from 'zustand/middleware/immer';
 import API from './../api/axiosConfig';
 import { Test } from './testStore';
 
-
-export interface TestData extends Test {
-    authorsName: string,
-}
-
 interface IStore {
-    tests: TestData[] | null,
+    tests: Test[] | null,
     searchVal: string,
     currentPage: number,
     totalPages: number,
@@ -56,7 +51,7 @@ const useHomeStore = create<IStore>()(devtools(immer((set, get) => ({
                 set({totalPages: Number(res.data.totalPages)});
                 set({tests: res.data.tests});
             }
-        }).catch(err => console.log(err));
+        }).catch(err => { new Error(err)});
     },
     setCurrentPage: (page) => {
         set({currentPage: page});

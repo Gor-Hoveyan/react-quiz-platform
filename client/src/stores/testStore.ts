@@ -20,7 +20,7 @@ export type Result = {
     maxScore: number
 }
 
-export interface IComment extends ICommentAnswer {
+export interface IComment extends Omit<ICommentAnswer, 'parentComment'> {
     answers: ICommentAnswer[],
 }
 
@@ -29,8 +29,10 @@ export interface ICommentAnswer {
     comment: string,
     author: {
         username: string,
-        _id: string
+        _id: string,
+        avatarUrl: string,
     },
+    parentComment: string,
     likes: number,
     createdAt: string
 }
@@ -41,7 +43,8 @@ export interface Test {
     description: string,
     author: {
         _id: string,
-        username: string
+        username: string,
+        avatarUrl: string,
     },
     questions: IQuestion[],
     results: Result[],

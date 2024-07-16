@@ -73,10 +73,7 @@ async function updateUser(req: Request, res: Response, next: NextFunction) {
     try {
         const { bio, username } = req.body;
         const userId = req.user.id
-        const isError = await userService.updateUser(userId, username, bio);
-        if(isError) {
-            return res.status(403).json({message: isError})
-        }
+        await userService.updateUser(userId, username, bio);
         return res.status(200).json({ message: 'Success' });
     } catch (err) {
         next(err);

@@ -33,7 +33,7 @@ export default function Profile() {
             <div className={styles.details}>
                 <p className={styles.username}>{userPage?.username}</p>
             </div>
-            <div className={styles.bio}>{user?.bio}</div>
+            <div className={styles.bio}>{userPage?.bio}</div>
             <UserData likes={userPage.likes} tests={userPage.createdTests.length} followers={userPage.followers.length} followings={userPage.followings.length} />
             {isLogged &&
                 <div className={styles.actions}>

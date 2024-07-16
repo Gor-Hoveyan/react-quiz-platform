@@ -31,10 +31,10 @@ async function registerUser(username: string, email: string, password: string) {
     const isUsernameRegistered = await User.findOne({ username });
 
     if (isEmailRegistered) {
-        throw new Error('User with this email already exists')
+        throw ({ status: 409, message: 'User with this email already exists' })
     }
     if (isUsernameRegistered) {
-        throw new Error('User with this username already exists')
+        throw ({ status: 409, message: 'User with this username already exists' })
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -48,13 +48,13 @@ async function login(email: string, pass: string) {
     const userData = await User.findOne({ email: email });
 
     if (!userData) {
-        throw new Error('Invalid email or password')
+        throw ({ status: 400, message: 'Invalid email or password' })
     }
     const { password, ...user } = userData.toObject();
 
     const isPasswordValid = await bcrypt.compare(pass, password);
     if (!isPasswordValid) {
-        throw new Error('Invalid email or password')
+        throw ({ status: 400, message: 'Invalid email or password' })
     }
 
     const refreshToken = generateRefreshToken(email, String(userData._id));
@@ -66,7 +66,8 @@ async function login(email: string, pass: string) {
 async function logout(token: string) {
     const refToken = RefreshToken.findOne({ token });
     if (!refToken) {
-        throw new Error('Invalid token');
+        throw ({ status: 401, message: 'Not authorized' })
+
     }
     return await RefreshToken.findOneAndDelete({ token });
 }
@@ -74,18 +75,18 @@ async function logout(token: string) {
 async function refreshToken(token: string) {
     const refToken = await RefreshToken.findOne({ token });
     if (!refToken) {
-        throw new Error('Invalid refresh token');
+        throw ({ status: 401, message: 'Not authorized' });
     }
 
     return new Promise((resolve, reject) => {
         jwt.verify(token, process.env.REFRESH_SECRET as Secret, async (err, payload) => {
             if (err) {
-                throw new Error('Invalid refresh token');
+                throw ({ status: 401, message: 'Not authorized' });
             }
             const userPayload = payload as UserJWTPayload;
             const userData = await User.findById(userPayload.id);
             if (!userData) {
-                throw new Error('user not found');
+                throw ({ status: 404, message: 'User not found' });
             }
             const newRefreshToken = generateRefreshToken(userPayload.email, userPayload.id);
             const newAccessToken = generateAccessToken(userPayload.email, userPayload.id);
@@ -101,7 +102,7 @@ async function refreshToken(token: string) {
 async function getUser(userId: string) {
     const userData = await User.findById(userId);
     if (!userData) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
 
     const { password, ...user } = userData.toObject();
@@ -111,11 +112,11 @@ async function getUser(userId: string) {
 async function likeTest(userId: string, testId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     if ((user.likedPosts as unknown[]).includes(testId)) {
         await Test.findByIdAndUpdate(testId, { $inc: { likes: -1 } });
@@ -131,11 +132,11 @@ async function likeTest(userId: string, testId: string) {
 async function saveTest(userId: string, testId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     if ((user.savedPosts as unknown[]).includes(testId)) {
         await Test.findByIdAndUpdate(testId, { $inc: { saves: -1 } });
@@ -149,17 +150,17 @@ async function saveTest(userId: string, testId: string) {
 async function follow(userId: string, subscriberId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const subscriber = await User.findById(subscriberId);
     if (!subscriber) {
-        throw new Error('Subscriber not found');
+        throw ({ status: 404, message: 'Subscriber not found' });
     }
     if (user._id === subscriber._id) {
-        throw new Error('You can\'t follow youerself');
+        throw ({ status: 403, message: 'You can\'t follow yourself' });
     }
     if ((subscriber.followings as unknown[]).includes(userId)) {
-        throw new Error('User already subscribed');
+        throw ({ status: 409, message: 'Already following' });
     }
     await User.findByIdAndUpdate(userId, { $set: { followers: [...user.followers, subscriber.id] } });
     await User.findByIdAndUpdate(subscriberId, { $set: { followings: [...subscriber.followings, user.id] } });
@@ -168,17 +169,17 @@ async function follow(userId: string, subscriberId: string) {
 async function unfollow(userId: string, subscriberId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const subscriber = await User.findById(subscriberId);
     if (!subscriber) {
-        throw new Error('Subscriber not found');
+        throw ({ status: 404, message: 'Subscriber not found' });
     }
     if (user._id === subscriber._id) {
-        throw new Error('You can\'t follow youerself');
+        throw ({ status: 403, message: 'You can\'t follow yourself' });
     }
     if (!(subscriber.followings as unknown[]).includes(userId)) {
-        throw new Error('User already unfollowed');
+        throw ({ status: 409, message: 'Already unfollowed' });
     }
     await User.findByIdAndUpdate(userId, { $pull: { followers: subscriber.id } });
     await User.findByIdAndUpdate(subscriberId, { $pull: { followings: user.id } });
@@ -189,35 +190,78 @@ async function getUserPage(userId: string) {
         path: 'createdTests',
         populate: {
             path: 'author',
-            select: 'username'
+            select: ['username', 'avatarUrl']
         }
     });
     if (!userData) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
-    const {password, ...user} = userData.toObject();
+    const { password, ...user } = userData.toObject();
     return user;
 }
 
 async function updateUser(userId: string, username: string, bio: string) {
     const user = await User.findById(userId);
-    if(!user) {
-        throw new Error('User not found');
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
     }
-    const checkUsername = User.findOne({username});
-    if(!checkUsername) {
-        let err = 'Username already exists';
-        return err;
+    const checkUsername = User.findOne({ username });
+    if (!checkUsername) {
+        throw ({ status: 409, message: 'Username already exists' });
     }
-    await User.findByIdAndUpdate(userId, {$set: {username, bio}});
+    await User.findByIdAndUpdate(userId, { $set: { username, bio } });
 }
 
 async function setAvatar(userId: string, avatarUrl: string) {
     const user = await User.findById(userId);
-    if(!user) {
-        throw new Error('User not found');
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
     }
-    await User.findByIdAndUpdate(userId, {$set: {avatarUrl}});
+    await User.findByIdAndUpdate(userId, { $set: { avatarUrl } });
+}
+
+async function getLikedPosts(userId: string) {
+    const user = await User.findById(userId).populate({
+        path: 'likedPosts',
+        populate: {
+            path: 'author',
+            select: ['username', 'avatarUrl']
+        }
+    });
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    return user.likedPosts;
+}
+
+async function getSavedPosts(userId: string) {
+    const user = await User.findById(userId).populate({
+        path: 'savedPosts',
+        populate: {
+            path: 'author',
+            select: ['username', 'avatarUrl']
+        }
+    });
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    return user.savedPosts;
+}
+
+async function getFollowers(userId: string) {
+    const user = await User.findById(userId).populate('followers', ['username', 'avatarUrl']);
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    return user.followers;
+}
+
+async function getFollowings(userId: string) {
+    const user = await User.findById(userId).populate('followings', ['username', 'avatarUrl']);
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    return user.followings;
 }
 
 export const userService = {
@@ -232,5 +276,9 @@ export const userService = {
     unfollow,
     getUserPage,
     updateUser,
-    setAvatar
+    setAvatar,
+    getLikedPosts,
+    getSavedPosts,
+    getFollowers,
+    getFollowings
 };

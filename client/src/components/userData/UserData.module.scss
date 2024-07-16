@@ -3,15 +3,27 @@
     text-align: center;
     font-weight: bold;
     margin: 20px 0;
-    .likes, .followers, .followings, .tests {
+
+    .likes,
+    .followers,
+    .followings,
+    .tests,
+    .likedTests,
+    .savedTests {
         padding: 0 15px;
         line-height: 1.5;
     }
-    .likes, .followers, .followings {
+
+    .likes,
+    .followers,
+    .followings,
+    .likedTests,
+    .savedTests {
         border-left: 2px solid gray;
-        padding: 0px 15px;
-    } 
-    .followers {
-        border-right: 0;
+    }
+
+    .likedPosts {
+        border-left: 2px solid gray;
+        border-right: 2px solid gray;
     }
 }

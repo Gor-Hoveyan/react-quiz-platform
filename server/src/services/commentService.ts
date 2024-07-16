@@ -6,55 +6,55 @@ import Test from './../models/testModel';
 async function createComment(comment: string, userId: string, testId: string) {
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const comm = new Comment({ comment, author: userId, test: testId });
     await comm.save();
     await Test.findByIdAndUpdate(testId, { $set: { comments: [...test.comments, comm._id] } });
     await User.findByIdAndUpdate(userId, { $set: { comments: [...user.comments, comm._id] } });
-    return await comm.populate('author', 'username');
+    return await comm.populate('author', ['username', 'avatarUrl']);
 }
 
 async function updateComment(commentId: string, testId: string, userId: string, newComment: string) {
     const user = await User.findById(userId);
     if (!user || String(user._id) !== userId) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     const comment = await Comment.findById(commentId);
     if (!comment) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Comment not found' });
     }
     if (String(comment.author) !== userId) {
-        throw new Error('Access denied');
+        throw ({ status: 403, message: 'Acccess denied' });
     }
     await Comment.findByIdAndUpdate(commentId, { $set: { comment: newComment } });
-    const updatedComment = await Comment.findById(commentId).populate('author', 'username');
+    const updatedComment = await Comment.findById(commentId).populate('author', ['username', 'avatarUrl']);
     return updatedComment;
 }
 
 async function removeComment(commentId: string, userId: string, testId: string) {
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const comment = await Comment.findById(commentId);
     if (!comment) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Comment not found' });
     }
     if (String(comment.author) !== userId) {
-        throw new Error('Access denied');
+        throw ({ status: 403, message: 'Access denied' });
     }
     if (comment.answers.length) {
         comment.answers.map(async (answerId) => {
@@ -74,11 +74,11 @@ async function removeComment(commentId: string, userId: string, testId: string) 
 async function likeComment(commentId: string, userId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const comment = await Comment.findById(commentId);
     if (!comment) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Comment not found' });
     }
     if ((user.likedComments as unknown[]).includes(commentId)) {
         await comment.updateOne({ $set: { likes: --comment.likes } })
@@ -96,13 +96,13 @@ async function getComments(testId: string) {
             {
                 path: 'author',
                 model: 'User',
-                select: 'username'
+                select: ['username', 'avatarUrl']
             }
         ]
     });
 
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     return test.comments;
 }
@@ -110,15 +110,15 @@ async function getComments(testId: string) {
 async function createAnswer(answer: string, userId: string, testId: string, parentId: string) {
     const test = await Test.findById(testId);
     if (!test) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const comment = await Comment.findById(parentId);
     if (!comment) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Comment not found' });
     }
     const answ = new Answer({ comment: answer, author: userId, test: testId, parentComment: parentId });
     await answ.save();
@@ -131,31 +131,35 @@ async function createAnswer(answer: string, userId: string, testId: string, pare
 async function updateAnswer(answerId: string, userId: string, newComment: string) {
     const user = await User.findById(userId);
     if (!user || String(user._id) !== userId) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const answer = await Answer.findById(answerId);
     if (!answer) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Comment not found' });
     }
     if (String(answer.author) !== userId) {
-        throw new Error('Access denied');
+        throw ({ status: 403, message: 'Access denied' });
     }
     await Answer.findByIdAndUpdate(answerId, { $set: { comment: newComment } });
-    const updatedAnswer = await Answer.findById(answerId).populate('author', 'username');
+    const updatedAnswer = await Answer.findById(answerId).populate('author', ['username', 'avatarUrl']);
     return updatedAnswer;
 }
 
 async function removeAnswer(parentId: string, answerId: string, userId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
+    }
+    const parent = await Comment.findById(parentId);
+    if (!parent) {
+        throw ({ status: 404, message: 'Parrent comment not found' });
     }
     const answer = await Answer.findById(answerId);
     if (!answer) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Answer not found' });
     }
     if (String(answer.author) !== userId) {
-        throw new Error('Access denied');
+        throw ({ status: 403, message: 'Access denied' });
     }
 
     await Comment.findByIdAndUpdate(answer.parentComment, { $pull: { answers: answer._id } });
@@ -167,11 +171,11 @@ async function removeAnswer(parentId: string, answerId: string, userId: string) 
 async function likeAnswer(answerId: string, userId: string) {
     const user = await User.findById(userId);
     if (!user) {
-        throw new Error('User not found');
+        throw ({ status: 404, message: 'User not found' });
     }
     const answer = await Answer.findById(answerId);
     if (!answer) {
-        throw new Error('Comment not found');
+        throw ({ status: 404, message: 'Comment not found' });
     }
     if ((user.likedAnswers as unknown[]).includes(answerId)) {
         await answer.updateOne({ $set: { likes: --answer.likes } })
@@ -187,11 +191,13 @@ async function getAnswers(commentId: string) {
         path: 'answers',
         populate: {
             path: 'author',
+            model: 'User',
+            select: ['username', 'avatarUrl']
         }
 
     });
     if (!comment) {
-        throw new Error('Test not found');
+        throw ({ status: 404, message: 'Test not found' });
     }
     return comment.answers;
 }

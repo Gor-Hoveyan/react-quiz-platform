@@ -16,42 +16,24 @@
         padding: 15px;
         margin-bottom: 10px;
         transition-duration: 0.5s;
-        min-width: 300px;
+        min-width: 400px;
 
         &:hover {
             background-color: #dfdfdf;
             border: 1px solid #9c9c9c;
         }
 
-        .titleDateDiv {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-
-            .testTitle {
-                margin: 0;
-                font-size: 1.5rem;
-                color: #333;
-            }
-
-            .testDate {
-                color: gray;
-            }
-        }
-
-
-        .testAuthor {
-            font-size: 1.2rem;
-            color: black;
-            margin: 10px 0;
-            text-align: left;
-        }
-
         .testDescription {
-            margin: 10px 0 0;
+            margin: 5px 0 0;
             color: #666;
             text-align: left;
         }
+    }
+    .testTitle {
+        margin: 5px 0;
+        font-size: 1.5rem;
+        color: black;
+        text-align: left;
     }
     
 }

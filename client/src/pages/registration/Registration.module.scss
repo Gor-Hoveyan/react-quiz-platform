@@ -42,19 +42,19 @@
 }
 
 .button {
-    background-color: #333;
-    color: white;
+    padding: 10px 15px;
     border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
     border-radius: 4px;
-    transition: background-color 0.3s;
-    width: 100%;
-    
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
 
-    &:hover {
-        background-color: #555;
-    }
+button:hover {
+    background-color: #0056b3;
 }
 
 .error {

@@ -1,6 +1,6 @@
 @mixin dropdown() {
     .dropdown {
-        text-align: right;
+        text-align: right !important;
 
         .dropdownContent {
             display: none;
@@ -44,7 +44,6 @@
         padding-left: 20px;
         color: rgb(0, 153, 255);
         cursor: pointer;
-        max-width: fit-content;
         text-decoration: dotted underline;
 
         &:hover {

@@ -15,26 +15,25 @@ import UserProfile from './pages/userProfile/UserProfile';
 import Profile from './pages/profile/Profile';
 import UserSettings from './pages/userSettings/UserSettings';
 
-
 function App() {
 
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path='/' index element={<Home />} />
-        <Route path='auth/login' element={<Login />} />
-        <Route path='auth/registration' element={<Registration />} />
-        <Route path='test/:id' element={<TestPage />} />
-        <Route path='test/:id/result' element={<ResultPage />} />
-        <Route path='test/create' element={<TestForm />} />
-        <Route path='user/myTests' element={<UserTests />} />
-        <Route path='test/review/:id' element={<TestReview />} />
-        <Route path='profile' element={<UserProfile />} />
-        <Route path='profile/:id' element={<Profile />} />
-        <Route path='/settings' element={<UserSettings />} />
-      </Routes>
-      <Footer />
+        <Header />
+        <Routes>
+          <Route path='/' index element={<Home />} />
+          <Route path='auth/login' element={<Login />} />
+          <Route path='auth/registration' element={<Registration />} />
+          <Route path='test/:id' element={<TestPage />} />
+          <Route path='test/:id/result' element={<ResultPage />} />
+          <Route path='test/create' element={<TestForm />} />
+          <Route path='user/myTests' element={<UserTests />} />
+          <Route path='test/review/:id' element={<TestReview />} />
+          <Route path='profile' element={<UserProfile />} />
+          <Route path='profile/:id' element={<Profile />} />
+          <Route path='/settings' element={<UserSettings />} />
+        </Routes>
+        <Footer />
     </BrowserRouter>
   );
 }

@@ -6,6 +6,7 @@ import Tests from '../../components/tests/Tests';
 import { MdSettings, MdChangeCircle } from "react-icons/md";
 import { FiPlusCircle } from "react-icons/fi";
 import DragAndDrop from '../../components/dragAndDrop/DragAndDrop';
+import UserData from '../../components/userData/UserData';
 
 
 export default function UserProfile() {
@@ -45,12 +46,9 @@ export default function UserProfile() {
                 </NavLink>
             </div>
             <div className={styles.bio}>{user?.bio}</div>
-            <div className={styles.stats}>
-                <div className={styles.tests}>Tests <br />{user.createdTests.length}</div>
-                <div className={styles.followers}>Followers <br />{user.followers.length}</div>
-                <div className={styles.likes}>Likes <br />{user.likes}</div>
-                <div className={styles.followings}>Followings <br />{user.followings.length}</div>
-            </div>
+            <UserData tests={user.createdTests.length} followers={user.followers.length}
+                likes={user.likes} followings={user.followings.length} likedTests={user.likedPosts.length} savedTests={user.savedPosts.length}
+            />
             <div className={styles.posts}>
                 <h3 className={styles.postsHeader}>Your posts</h3>
                 {tests.length ? <Tests tests={tests} /> : <h3>You have no posts yet</h3>}

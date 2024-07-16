@@ -3,46 +3,45 @@ import styles from './Answer.module.scss';
 import { useForm, SubmitHandler } from "react-hook-form";
 import useUserStore from "../../stores/userStore";
 import LikesComments from "../likesComments/LikesComments";
+import UserIcon from "../userIcon/UserIcon";
+import useTestStore, { ICommentAnswer } from "../../stores/testStore";
 
 type FormValues = {
     updatedAnswer: string
 }
 
 interface Props {
-    answer: string,
-    parent: string,
-    author: string,
-    id: string,
-    likes: number
-    likeAnswer: (answerId: string) => void,
-    setUpdatingAnswer: (answerId: string) => void,
-    removeAnswer: (answerId: string, parentId: string) => void,
-    updateAnswer: (newAnswer: string, answerId: string) => void,
-    updatingAnswer: string,
+    answer: ICommentAnswer;
 }
 
-export default function Answer({ answer, author, id, likes, likeAnswer, removeAnswer, updateAnswer, updatingAnswer, parent, setUpdatingAnswer }: Props) {
+export default function Answer({ answer }: Props) {
     const { register, handleSubmit, reset } = useForm<FormValues>();
     const user = useUserStore(state => state.user);
+    const updateAnswer = useTestStore(state => state.updateAnswer);
+    const setUpdatingAnswer = useTestStore(state => state.setUpdatingAnswer);
+    const removeAnswer = useTestStore(state => state.removeAnswer);
+    const updatingAnswer = useTestStore(state => state.updatingAnswer);
+    const likeAnswer = useTestStore(state => state.likeAnswer);
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         if (data.updatedAnswer.length) {
-            updateAnswer(data.updatedAnswer, id);
+            updateAnswer(data.updatedAnswer, answer._id);
             reset({ updatedAnswer: '' });
             setUpdatingAnswer('')
         }
     }
 
     function handleRemove() {
-        removeAnswer(id, parent);
+        removeAnswer(answer._id, answer.parentComment);
     }
 
     return (
         <div className={styles.comment}>
+            <UserIcon createdAt={answer.createdAt} username={answer.author.username} id={answer.author._id} avatarUrl={answer.author.avatarUrl} />
             <div className={styles.nameAndDropdown}>
-                {updatingAnswer === id ?
+                {updatingAnswer === answer._id ?
                     <form className={styles.submitForm} onSubmit={handleSubmit(onSubmit)}>
-                        <input defaultValue={answer} {...register('updatedAnswer', { required: 'This field is required' })} />
+                        <input defaultValue={answer.comment} {...register('updatedAnswer', { required: 'This field is required' })} />
                         <button className={styles.button} type='submit'>
                             Update comment
                         </button>
@@ -51,25 +50,27 @@ export default function Answer({ answer, author, id, likes, likeAnswer, removeAn
                         </button>
                     </form>
                     :
-                    <p>{answer}</p>
-                    }
-                <div className={styles.dropdown}>
+                    <div className={styles.answer}>
+                        <p>{answer.comment}</p>
+                    </div>
+                }
+                {user?._id === answer.author._id && <div className={styles.dropdown}>
                     <p className={`${styles.dropdownBtn} ${styles.answerLink}`}>Actions</p>
                     <div className={styles.dropdownContent}>
-                        <p onClick={() => setUpdatingAnswer(id)}>Update</p>
+                        <p onClick={() => setUpdatingAnswer(answer._id)}>Update</p>
                         <p onClick={() => handleRemove()}>Remove</p>
                     </div>
-                </div>
+                </div>}
+
             </div>
-            <span>— {author}</span>
             <LikesComments
-                            id={id}
-                            likesCount={likes}
-                            isLiked={(user?.likedAnswers as string[]).includes(id)}
-                            isComment={true}
-                            isAnswer={true}
-                            like={likeAnswer}
-                        />
+                id={answer._id}
+                likesCount={answer.likes}
+                isLiked={(user?.likedAnswers as string[]).includes(answer._id)}
+                isComment={true}
+                isAnswer={true}
+                like={likeAnswer}
+            />
         </div>
     )
 }

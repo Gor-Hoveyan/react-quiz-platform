@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Answer from '../answers/Answer';
 import LikesComments from '../likesComments/LikesComments';
 import useUserStore from '../../stores/userStore';
+import UserIcon from '../userIcon/UserIcon';
 
 type FormValues = {
     comment: string,
@@ -30,11 +31,6 @@ export default function Comments() {
     const setIsAnswering = useTestStore(state => state.setIsAnswering);
     const getAnswers = useTestStore(state => state.getAnswers);
     const isAnswering = useTestStore(state => state.isAnswering);
-    const likeAnswer = useTestStore(state => state.likeAnswer);
-    const removeAnswer = useTestStore(state => state.removeAnswer);
-    const updateAnswer = useTestStore(state => state.updateAnswer);
-    const updatingAnswer = useTestStore(state => state.updatingAnswer);
-    const setUpdatingAnswer = useTestStore(state => state.setUpdatingAnswer);
 
     useEffect(() => {
         if (testId) {
@@ -95,6 +91,7 @@ export default function Comments() {
             <ul className={styles.commentsList}>
                 {comments && comments.map((comment) => (
                     <li key={comment._id} className={styles.comment}>
+                        <UserIcon createdAt={comment.createdAt} username={comment.author.username} id={comment.author._id} avatarUrl={comment.author.avatarUrl} />
                         {isUpdating === comment._id ?
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <textarea
@@ -113,15 +110,14 @@ export default function Comments() {
                             :
                             <div className={styles.nameAndCircles}>
                                 <p>{comment.comment}</p>
-                                <div className={styles.dropdown}>
+                                {user?._id === comment.author._id && <div className={styles.dropdown}>
                                     <p className={`${styles.dropdownBtn} ${styles.answerLink}`}>Actions</p>
                                     <div className={styles.dropdownContent}>
                                         <p onClick={() => setIsUpdating(comment._id)}>Update</p>
                                         <p onClick={() => removeComment(comment._id)}>Remove</p>
                                     </div>
-                                </div>
+                                </div>}
                             </div>}
-                        <span>— {comment?.author?.username}</span>
                         <LikesComments
                             id={comment._id}
                             commentsCount={comment.answers.length}
@@ -135,9 +131,7 @@ export default function Comments() {
                         {comment.answers[0] && !comment.answers[0].comment ? <p className={styles.answerLink} onClick={() => getAnswers(comment._id)}>Show answers</p>
                             :
                             comment?.answers?.map((answer, index) => (
-                                <Answer key={index} updatingAnswer={updatingAnswer} parent={comment._id} setUpdatingAnswer={setUpdatingAnswer}
-                                    likeAnswer={likeAnswer} updateAnswer={updateAnswer} removeAnswer={removeAnswer}
-                                    answer={answer.comment} author={comment.author?.username} id={answer._id ? answer._id : String(answer)} likes={answer.likes} />
+                                <Answer answer={answer} key={index} />
                             ))
                         }
                     </li>
