@@ -14,7 +14,6 @@ export default function Tests({ tests }: IProps) {
     const like = useUserStore(state => state.like);
     const save = useUserStore(state => state.save);
     const user = useUserStore(state => state.user);
-
     return (
         <div>
             <ul className={styles.testList}>

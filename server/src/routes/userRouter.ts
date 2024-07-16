@@ -12,5 +12,9 @@ router.put('/unfollow/:id', authMiddleware, userController.unfollow);
 router.get('/userPage/:id', userController.getUserPage);
 router.put('/user', authMiddleware, userController.updateUser);
 router.put('/avatar', authMiddleware, userController.setAvatar);
+router.get('/likedPosts/:id?', authMiddleware, userController.getLikedPosts);
+router.get('/followers/:id?', authMiddleware, userController.getFollowers);
+router.get('/followings/:id?', authMiddleware, userController.getFollowings);
+router.get('/savedPosts', authMiddleware, userController.getSavedPosts);
 
 export const userRouter = router;

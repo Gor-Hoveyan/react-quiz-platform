@@ -257,7 +257,7 @@ async function getFollowers(userId: string) {
 }
 
 async function getFollowings(userId: string) {
-    const user = await User.findById(userId).populate('followings', ['username', 'avatarUrl']);
+const user = await User.findById(userId).populate('followings', ['username', 'avatarUrl']);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
     }

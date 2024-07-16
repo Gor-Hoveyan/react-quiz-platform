@@ -91,6 +91,46 @@ async function setAvatar(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function getLikedPosts(req: Request, res: Response, next: NextFunction) {
+    try {
+        let id = req.params.id || req.user.id;
+        const tests = await userService.getLikedPosts(id);
+        return res.status(200).json({ tests });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getSavedPosts(req: Request, res: Response, next: NextFunction) {
+    try {
+        const userId = req.user.id
+        const tests = await userService.getSavedPosts(userId);
+        return res.status(200).json({ tests });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getFollowers(req: Request, res: Response, next: NextFunction) {
+    try {
+        let id = req.params.id || req.user.id;
+        const followers = await userService.getFollowers(id);
+        return res.status(200).json({ followers });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getFollowings(req: Request, res: Response, next: NextFunction) {
+    try {
+        let id = req.params.id || req.user.id;
+        const followings = await userService.getFollowings(id);
+        return res.status(200).json({ followings });
+    } catch (err) {
+        next(err);
+    }
+}
+
 export const userController = {
     getUser,
     likeTest,
@@ -100,4 +140,8 @@ export const userController = {
     getUserPage,
     updateUser,
     setAvatar,
+    getLikedPosts,
+    getSavedPosts,
+    getFollowers,
+    getFollowings
 }

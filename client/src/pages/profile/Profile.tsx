@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
-import useUserStore from '../../stores/userStore';
+import useUserStore, { IUserIcon } from '../../stores/userStore';
 import Tests from '../../components/tests/Tests';
 import UserData from '../../components/userData/UserData';
 import { Navigate, useParams } from 'react-router-dom';
+import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
+import UsersList from '../../components/usersList/UsersList';
+import { Test } from '../../stores/testStore';
 
 export default function Profile() {
     const getUserPage = useUserStore(state => state.getUserPage);
@@ -14,6 +17,7 @@ export default function Profile() {
     const params = useParams();
     const follow = useUserStore(state => state.follow);
     const unfollow = useUserStore(state => state.unfollow);
+    const [pageState, setPageState] = useState<string>('Tests');
 
 
     useEffect(() => {
@@ -34,7 +38,9 @@ export default function Profile() {
                 <p className={styles.username}>{userPage?.username}</p>
             </div>
             <div className={styles.bio}>{userPage?.bio}</div>
-            <UserData likes={userPage.likes} tests={userPage.createdTests.length} followers={userPage.followers.length} followings={userPage.followings.length} />
+            <UserData likes={userPage.likes} tests={userPage.createdTests.length} setState={setPageState}
+                followers={userPage.followers.length} followings={userPage.followings.length} id={userPage._id}
+            />
             {isLogged &&
                 <div className={styles.actions}>
                     {(user?.followings as unknown[]).includes(userPage._id) ?
@@ -43,10 +49,10 @@ export default function Profile() {
                         <button className={styles.button} onClick={() => follow(userPage._id)}>Follow</button>}
                 </div>
             }
-            <div className={styles.posts}>
-                <h3 className={styles.postsHeader}>{userPage.username}'s posts</h3>
-                {tests?.length ? <Tests tests={tests} /> : <h3>{userPage.username} has no posts yet</h3>}
-            </div>
+            {pageState === 'Tests' && <UserProfilePosts tests={(tests as Test[])} />}
+            {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} tests={userPage.likedPosts as Test[]} />}
+            {pageState === 'Followers' && <UsersList icons={(userPage.followers as IUserIcon[])} isFollowers={true} />}
+            {pageState === 'Followings' && <UsersList icons={(userPage.followings as IUserIcon[])} isFollowers={false} />}
         </div> : <h1>Loading...</h1>}</> : <Navigate to={`/profile`} />
     );
 };

@@ -11,6 +11,7 @@ const userSchema = new Schema({
     followers: [{ type: Schema.Types.ObjectId, ref: 'User', required: true, default: [] }],
     followings: [{ type: Schema.Types.ObjectId, ref: 'User', required: true, default: [] }],
     likedPosts: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
+    showLikedPosts: {type: Boolean, required: true, default: false},
     savedPosts: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
     likedComments: [{ type: Schema.Types.ObjectId, ref: 'Comment', required: true, default: [] }],
     likedAnswers: [{ type: Schema.Types.ObjectId, ref: 'Answer', required: true, default: [] }],

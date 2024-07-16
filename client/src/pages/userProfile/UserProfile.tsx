@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './UserProfile.module.scss';
-import useUserStore from '../../stores/userStore';
+import useUserStore, { IUserIcon } from '../../stores/userStore';
 import { Navigate, NavLink } from 'react-router-dom';
-import Tests from '../../components/tests/Tests';
 import { MdSettings, MdChangeCircle } from "react-icons/md";
-import { FiPlusCircle } from "react-icons/fi";
 import DragAndDrop from '../../components/dragAndDrop/DragAndDrop';
 import UserData from '../../components/userData/UserData';
+import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
+import { Test } from '../../stores/testStore';
+import UsersList from '../../components/usersList/UsersList';
 
 
 export default function UserProfile() {
@@ -15,6 +16,7 @@ export default function UserProfile() {
     const user = useUserStore(state => state.user);
     const dropArea = useUserStore(state => state.dropArea);
     const handleDropArea = useUserStore(state => state.handleDropArea);
+    const [pageState, setPageState] = useState<string>('Tests');
 
     useEffect(() => {
         if (user) {
@@ -47,19 +49,18 @@ export default function UserProfile() {
             </div>
             <div className={styles.bio}>{user?.bio}</div>
             <UserData tests={user.createdTests.length} followers={user.followers.length}
-                likes={user.likes} followings={user.followings.length} likedTests={user.likedPosts.length} savedTests={user.savedPosts.length}
+                likes={user.likes} followings={user.followings.length} likedTests={user.likedPosts.length} 
+                savedTests={user.savedPosts.length} setState={setPageState}
             />
-            <div className={styles.posts}>
-                <h3 className={styles.postsHeader}>Your posts</h3>
-                {tests.length ? <Tests tests={tests} /> : <h3>You have no posts yet</h3>}
-            </div>
-            <div className={styles.addPost}>
-                <NavLink to='/test/create'><FiPlusCircle size={70} cursor={'pointer'} color='gray'
-                    onMouseMove={(target) => target.currentTarget.style.color = 'black'}
-                    onMouseOut={(target) => target.currentTarget.style.color = 'gray'}
-                    style={{ transitionDuration: '0.4s' }} />
-                </NavLink>
-            </div>
+
+            {pageState === 'Tests' && <UserProfilePosts tests={tests} />}
+            {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} tests={user.likedPosts as Test[]} />}
+            {pageState === 'Followers' && <UsersList icons={(user.followers as IUserIcon[])} isFollowers={true}/>}
+            {pageState === 'Followings' && <UsersList icons={(user.followings as IUserIcon[])} isFollowers={false}/>}
+
+            {pageState === 'Saves' && <UserProfilePosts isSavedPosts={true} tests={user.savedPosts as Test[]} />}
+
+            
         </div> : <Navigate to='/auth/login' />
     );
 };

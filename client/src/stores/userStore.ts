@@ -6,6 +6,13 @@ import { AxiosResponse } from 'axios';
 import { Test } from './testStore';
 import uploadImg from '../services/uploadService';
 
+
+export interface IUserIcon {
+    _id: string,
+    username: string,
+    avatarUrl: string,
+}
+
 interface IStore {
     errText: string,
     isUpdated: boolean,
@@ -35,7 +42,11 @@ interface IStore {
     follow: (userId: string) => void,
     unfollow: (userId: string) => void,
     getUserPage: (userid: string) => void,
-    setAvatar: (img: File) => void, 
+    setAvatar: (img: File) => void,
+    getFollowers: (id?: string) => void,
+    getFollowings: (id?: string) => void,
+    getLikedPosts: (id?: string) => void,
+    getSavedPosts: () => void,
 }
 
 type PassedTest = {
@@ -51,10 +62,10 @@ interface IUser {
     avatarUrl: string,
     isActivated: boolean,
     likes: number,
-    followers: [],
-    followings: [],
-    likedPosts: [],
-    savedPosts: [],
+    followers: (IUserIcon | Number)[],
+    followings: (IUserIcon | Number)[],
+    likedPosts: (Test | string)[],
+    savedPosts: (Test | string)[],
     passedTests: PassedTest[]
     likedComments: [],
     likedAnswers: [],
@@ -80,7 +91,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             if (res.data.message === 'Success') {
                 set({ isRegistered: true });
             }
-        }).catch(err => {new Error(err.response); set({errText: err.response.data.message});});
+        }).catch(err => { new Error(err.response); set({ errText: err.response.data.message }); });
     },
     login: async (email, password) => {
         await API.post(`/auth/login`, { email, password }).then((res: AxiosResponse<any>) => {
@@ -102,7 +113,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
                 set({ isLogged: false, isRegistered: false });
 
             }
-        }).catch(err => { new Error(err)});
+        }).catch(err => { new Error(err) });
     },
     refresh: async () => {
         await API.get(`/auth/refresh`).then(res => {
@@ -112,28 +123,28 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             } else {
                 set({ isLogged: false });
             }
-        }).catch(err => set({isLogged: false}));
+        }).catch(err => set({ isLogged: false }));
     },
     getUser: async () => {
         await API.get(`/user`).then(res => {
             if (res.data.user) {
                 set({ user: res.data.user });
             }
-        }).catch(err => { new Error(err)});
+        }).catch(err => { new Error(err) });
     },
     updateUser: async (username, bio) => {
-        await API.put(`/user`, {username, bio}).then(res => {
-            if(res.data.message !== 'Success') {
-                set({errText: res.data.message});
+        await API.put(`/user`, { username, bio }).then(res => {
+            if (res.data.message !== 'Success') {
+                set({ errText: res.data.message });
             }
-        }).catch(err => { new Error(err)});
+        }).catch(err => { new Error(err) });
     },
     getUserTests: async (userId) => {
         set({ isLoading: true });
         await API.get(`/tests/${userId}`).then(res => {
             set({ tests: res.data.tests });
             set({ isLoading: false });
-        }).catch(err => { new Error(err)})
+        }).catch(err => { new Error(err) })
     },
     setError: (err) => {
         set({ errText: err });
@@ -145,37 +156,131 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ isRegistered: val });
     },
     handleIsUpdated: (val) => {
-        set({isUpdated: val});
+        set({ isUpdated: val });
     },
     handleDropArea: (val) => {
-        set({dropArea: val});
+        set({ dropArea: val });
     },
     like: async (testId) => {
-        await API.put(`/likeTest/${testId}`).catch(err => { new Error(err)});
+        await API.put(`/likeTest/${testId}`).catch(err => { new Error(err) });
     },
     save: async (testId) => {
-        await API.put(`/saveTest/${testId}`).catch(err => { new Error(err)});
+        await API.put(`/saveTest/${testId}`).catch(err => { new Error(err) });
     },
     toggleMenu: () => {
         const isMenuOpen = get().isMenuOpen;
         set({ isMenuOpen: !isMenuOpen });
     },
     follow: async (userId) => {
-        await API.put(`/follow/${userId}`, { userId }).catch(err => { new Error(err)});
+        await API.put(`/follow/${userId}`, { userId }).catch(err => { new Error(err) });
     },
     unfollow: async (userId) => {
-        await API.put(`/unfollow/${userId}`).catch(err => { new Error(err)});
+        await API.put(`/unfollow/${userId}`).catch(err => { new Error(err) });
     },
     getUserPage: async (userId) => {
         await API.get(`/userPage/${userId}`).then(res => {
             if (res.data.user) {
                 set({ userPage: res.data.user });
             }
-        }).catch(err => { new Error(err)});
+        }).catch(err => { new Error(err) });
     },
     setAvatar: async (img) => {
         const avatarUrl = await uploadImg(img);
-        await API.put(`/avatar`, {avatarUrl}).catch(err => { new Error(err)});
+        await API.put(`/avatar`, { avatarUrl }).catch(err => { new Error(err) });
+    },
+    getFollowers: async (id) => {
+        if (id) {
+            await API.get(`/followers/${id}`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        userPage: {
+                            ...state.userPage,
+                            followers: res.data.followers,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        } else {
+            await API.get(`/followers`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            followers: res.data.followers,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        }
+    },
+    getFollowings: async (id) => {
+        if (id) {
+            await API.get(`/followings/${id}`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        userPage: {
+                            ...state.userPage,
+                            followings: res.data.followings,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        } else {
+            await API.get(`/followings`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            followings: res.data.followings,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        }
+    },
+    getLikedPosts: async (id) => {
+        if (id) {
+            await API.get(`/likedPosts/${id}`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        userPage: {
+                            ...state.userPage,
+                            likedPosts: res.data.tests,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        } else {
+            await API.get(`/likedPosts`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            likedPosts: res.data.tests,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        }
+    },
+    getSavedPosts: async () => {
+        await API.get(`/savedPosts`).then(res => {
+            set((state) => {
+                return {
+                    ...state,
+                    user: {
+                        ...state.user,
+                        savedPosts: res.data.tests,
+                    },
+                };
+            });
+        }).catch(err => console.log(err));
     }
 })
 ),
