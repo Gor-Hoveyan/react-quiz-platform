@@ -5,6 +5,7 @@ import useUserStore from '../../stores/userStore';
 import { Test } from '../../stores/testStore';
 import LikesComments from '../likesComments/LikesComments';
 import UserIcon from '../userIcon/UserIcon';
+import Loader from '../loader/Loader';
 
 interface IProps {
     tests: Test[]
@@ -17,7 +18,7 @@ export default function Tests({ tests }: IProps) {
     return (
         <div>
             <ul className={styles.testList}>
-                {tests.map(test => (
+                {tests[0]?._id ? tests.map(test => (
                     <NavLink key={test._id} className={styles.navLink} to={`/test/review/${test._id}`}>
                         <li className={styles.testItem}>
                             <UserIcon createdAt={test.createdAt} username={test.author.username} id={test.author._id} avatarUrl={test.author.avatarUrl} />
@@ -39,7 +40,7 @@ export default function Tests({ tests }: IProps) {
                             />
                         </li>
                     </NavLink>
-                ))}
+                )) : <Loader />}
             </ul>
         </div>
     );

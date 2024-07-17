@@ -3,6 +3,7 @@ import styles from './UserTests.module.scss';
 import { Navigate } from 'react-router-dom';
 import useUserStore from '../../stores/userStore';
 import Tests from '../../components/tests/Tests';
+import Loader from '../../components/loader/Loader';
 
 const UserTests = () => {
     const getTests = useUserStore(state => state.getUserTests);
@@ -26,7 +27,7 @@ const UserTests = () => {
                 {tests ? <>
                     <h1>{user?.username}'s tests</h1>
                     <Tests tests={tests} />
-                </> : <h1>{isLoading ? 'Loading...' : 'You haven\'t created any tests yet'}</h1>
+                </> : isLoading ? <Loader /> : <h1>You haven\'t created any tests yet</h1>
                 }
             </div> : <Navigate to={`/auth/login`} />}</>
     );

@@ -6,6 +6,7 @@ import useUserStore from "../../stores/userStore";
 import Comments from "../../components/comments/Comments";
 import LikesComments from "../../components/likesComments/LikesComments";
 import UserIcon from "../../components/userIcon/UserIcon";
+import Loader from "../../components/loader/Loader";
 
 
 export default function TestReview() {
@@ -50,7 +51,7 @@ export default function TestReview() {
                         passed={test.passed}
                     />
                     <Comments />
-                </div> : <h1>Loading...</h1>}
+                </div> : <Loader />}
         </div>
     );
 }

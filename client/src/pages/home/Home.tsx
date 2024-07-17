@@ -4,7 +4,7 @@ import useHomeStore from '../../stores/homeStore';
 import Search from '../../components/search/Search';
 import Pagination from '../../components/pagination/Pagination';
 import Tests from '../../components/tests/Tests';
-
+import Loader from '../../components/loader/Loader';
 const Home = () => {
     const getTestIcons = useHomeStore(state => state.getTests);
     const tests = useHomeStore(state => state.tests);
@@ -31,7 +31,7 @@ const Home = () => {
                 <h1>Some tests for you :D</h1>
                 <Tests tests={tests} />
                 <Pagination currentPage={currentPage} totalPages={totalPages} handlePagination={handlePagination} />
-            </> : <h1>{isLoading ? 'Loading...' : 'Tests not found'}</h1>
+            </> : isLoading ? <Loader /> : <h1>Tests not found</h1>
             }
         </div>
     );

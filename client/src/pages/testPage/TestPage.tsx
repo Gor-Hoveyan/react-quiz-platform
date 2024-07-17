@@ -3,6 +3,7 @@ import styles from './TestPage.module.scss';
 import { NavLink, useParams } from 'react-router-dom';
 import useTestStore, { Answer } from '../../stores/testStore';
 import { useForm, Controller, useFieldArray } from "react-hook-form";
+import Loader from '../../components/loader/Loader';
 
 type Question = {
     question: string;
@@ -21,7 +22,7 @@ export default function TestPage() {
     const params = useParams();
     const testId = params.id;
     const result = useTestStore(state => state.result);
-    const { control, handleSubmit, setValue, formState: {errors} } = useForm<TestPageFormValues>({
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm<TestPageFormValues>({
         defaultValues: {
             questions: []
         },
@@ -69,7 +70,7 @@ export default function TestPage() {
                                         <Controller
                                             name={`questions.${qIndex}.selectedAnswer`}
                                             control={control}
-                                            rules={{required: true}}
+                                            rules={{ required: true }}
                                             render={({ field }) => (
                                                 <input
                                                     type="radio"
@@ -86,12 +87,12 @@ export default function TestPage() {
                             </div>
                         ))}
 
-                        
-                            {!result ? <button type="submit">Submit</button> : <NavLink className={styles.navLink} to={`/test/${test._id}/result`}><button>View results</button></NavLink>}
-                        
+
+                        {!result ? <button type="submit">Submit</button> : <NavLink className={styles.navLink} to={`/test/${test._id}/result`}><button>View results</button></NavLink>}
+
                     </form>
                 </div>
-                : <div className={styles.testPage}><h1>Loading...</h1></div>}
+                : <Loader />}
         </div>
     );
 };

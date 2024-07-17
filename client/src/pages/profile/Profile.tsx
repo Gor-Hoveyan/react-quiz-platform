@@ -7,6 +7,7 @@ import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts
 import UsersList from '../../components/usersList/UsersList';
 import { Test } from '../../stores/testStore';
 import PassedTests from '../../components/passedTests/PassedTests';
+import Loader from '../../components/loader/Loader';
 
 export default function Profile() {
     const getUserPage = useUserStore(state => state.getUserPage);
@@ -57,6 +58,6 @@ export default function Profile() {
             {pageState === 'Followers' && <UsersList icons={(userPage.followers as IUserIcon[])} isFollowers={true} />}
             {pageState === 'Followings' && <UsersList icons={(userPage.followings as IUserIcon[])} isFollowers={false} />}
             {pageState === 'Passed' && userPage.showPassedTests && <PassedTests tests={(userPage.passedTests as IPassedTest[])} />}
-        </div> : <h1>Loading...</h1>}</> : <Navigate to={`/profile`} />
+        </div> : <Loader />}</> : <Navigate to={`/profile`} />
     );
 };

@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import useUserStore, { IPassedTest } from '../../stores/userStore';
 import LikesComments from '../likesComments/LikesComments';
 import UserIcon from '../userIcon/UserIcon';
+import Loader from '../loader/Loader';
 
 interface IProps {
     tests: IPassedTest[]
@@ -44,6 +45,6 @@ export default function PassedTests({ tests }: IProps) {
                     </NavLink>
                 ))}
             </ul>
-        </div> : <h1>Loading...</h1>}</> : <h3 className={styles.header}>No passed posts yet</h3>
+        </div> : <Loader />}</> : <h3 className={styles.header}>No passed posts yet</h3>
     );
 }
