@@ -14,6 +14,7 @@ router.put('/user', authMiddleware, userController.updateUser);
 router.put('/avatar', authMiddleware, userController.setAvatar);
 router.get('/likedPosts/:id?', authMiddleware, userController.getLikedPosts);
 router.get('/followers/:id?', authMiddleware, userController.getFollowers);
+router.get('/passedTests/:id?', authMiddleware, userController.getPassedTests);
 router.get('/followings/:id?', authMiddleware, userController.getFollowings);
 router.get('/savedPosts', authMiddleware, userController.getSavedPosts);
 

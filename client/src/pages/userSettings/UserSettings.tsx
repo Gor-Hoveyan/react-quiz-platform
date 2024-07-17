@@ -8,6 +8,8 @@ type FormValues = {
     username: string,
     email: string,
     bio: string,
+    showLikedPosts: boolean,
+    showPassedTests: boolean
 }
 
 export default function UserSettings() {
@@ -20,7 +22,7 @@ export default function UserSettings() {
     const handleIsUpdated = useUserStore(state => state.handleIsUpdated);
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
-        updateUser(data.username, data.bio);
+        updateUser(data.username, data.bio, data.showLikedPosts, data.showPassedTests);
         handleIsUpdated(true);
     }
 
@@ -28,13 +30,14 @@ export default function UserSettings() {
     return (user?._id ?
         <div className={styles.userSettings}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-            
+
                 <h3 className={styles.headers}>Username</h3>
                 <input className={styles.textInput} type='text'
                     {...register('username', {
                         minLength: { value: 3, message: 'Username must contain at least 3 characters' },
                         maxLength: { value: 24, message: 'Username can contain maximum 24 characters' },
-                        required: 'This field can\'t be empty' })}
+                        required: 'This field can\'t be empty'
+                    })}
                     defaultValue={user.username ? user.username : ''} placeholder='Username'
                 />
                 <p className={styles.error}>{errors.username?.message}</p>
@@ -54,8 +57,25 @@ export default function UserSettings() {
                 />
                 <p className={styles.error}>{errors.bio?.message}</p>
 
+                <div className={styles.detailsDIv}>
+                    <div className={styles.checkboxContainer}>
+                        <input className={styles.checkbox} id='showLikedPosts'
+                            type='checkbox' {...register('showLikedPosts')} defaultChecked={user.showLikedPosts}
+                        />
+                        <label htmlFor='showLikedPosts' >
+                            Show liked posts
+                        </label>
+                    </div>
+                    <div className={styles.checkboxContainer}>
+                        <input className={styles.checkbox} id='showPassedTests'
+                            type='checkbox' {...register('showPassedTests')} defaultChecked={user.showPassedTests}
+                        />
+                        <label htmlFor='showLikedPosts' >
+                            Show passed tests
+                        </label>
+                    </div>
+                </div>
                 <br />
-
                 {isUpdated ?
 
                     <NavLink className={styles.navLink} to={'/profile'} reloadDocument>

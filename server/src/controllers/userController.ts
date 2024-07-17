@@ -71,9 +71,9 @@ async function getUserPage(req: Request, res: Response, next: NextFunction) {
 
 async function updateUser(req: Request, res: Response, next: NextFunction) {
     try {
-        const { bio, username } = req.body;
+        const { bio, username, showLikedPosts, showPassedTests } = req.body;
         const userId = req.user.id
-        await userService.updateUser(userId, username, bio);
+        await userService.updateUser(userId, username, bio, showLikedPosts, showPassedTests);
         return res.status(200).json({ message: 'Success' });
     } catch (err) {
         next(err);
@@ -111,6 +111,16 @@ async function getSavedPosts(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function getPassedTests(req: Request, res: Response, next: NextFunction) {
+    try {
+        let id = req.params.id || req.user.id;
+        const tests = await userService.getPassedTests(id);
+        return res.status(200).json({ tests });
+    } catch (err) {
+        next(err);
+    }
+}
+
 async function getFollowers(req: Request, res: Response, next: NextFunction) {
     try {
         let id = req.params.id || req.user.id;
@@ -131,6 +141,7 @@ async function getFollowings(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+
 export const userController = {
     getUser,
     likeTest,
@@ -143,5 +154,6 @@ export const userController = {
     getLikedPosts,
     getSavedPosts,
     getFollowers,
-    getFollowings
+    getFollowings,
+    getPassedTests
 }

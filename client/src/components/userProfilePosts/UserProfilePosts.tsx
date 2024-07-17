@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 interface IProps {
     tests: Test[],
     isLikedPosts?: boolean,
-    isSavedPosts?: boolean
+    isSavedPosts?: boolean,
 }
 
 export default function UserProfilePosts({ tests, isLikedPosts, isSavedPosts }: IProps) {
@@ -22,9 +22,9 @@ export default function UserProfilePosts({ tests, isLikedPosts, isSavedPosts }: 
                     {!isLikedPosts && !isSavedPosts && 'Your Posts'}
                 </h3>
                 {tests.length && tests[0]._id ? <Tests tests={tests} /> : <h3>
-                    {isLikedPosts && 'You have no liked posts yet'}
+                    {isLikedPosts && 'No posts liked'}
                     {isSavedPosts && 'You have no saved posts yet'}
-                    {!isLikedPosts && !isSavedPosts && 'You have no posts yet'}
+                    {!isLikedPosts && !isSavedPosts && 'No posts yet'}
                 </h3>
                 }
             </div>

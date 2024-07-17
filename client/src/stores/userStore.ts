@@ -6,7 +6,6 @@ import { AxiosResponse } from 'axios';
 import { Test } from './testStore';
 import uploadImg from '../services/uploadService';
 
-
 export interface IUserIcon {
     _id: string,
     username: string,
@@ -30,7 +29,7 @@ interface IStore {
     logout: () => void,
     refresh: () => void,
     getUser: () => void,
-    updateUser: (username: string, bio: string) => void,
+    updateUser: (username: string, bio: string, showLikedPosts: boolean, showPassedTests: boolean) => void,
     getUserTests: (userId: string) => void,
     handleIsLogged: (val: boolean) => void,
     handleIsRegistered: (val: boolean) => void,
@@ -46,12 +45,17 @@ interface IStore {
     getFollowers: (id?: string) => void,
     getFollowings: (id?: string) => void,
     getLikedPosts: (id?: string) => void,
+    getPassedTests: (id?: string) => void,
     getSavedPosts: () => void,
 }
 
 type PassedTest = {
     testId: string,
     score: number
+}
+
+export interface IPassedTest extends Test {
+    finalResult: string
 }
 
 interface IUser {
@@ -65,8 +69,10 @@ interface IUser {
     followers: (IUserIcon | Number)[],
     followings: (IUserIcon | Number)[],
     likedPosts: (Test | string)[],
+    showLikedPosts: boolean,
+    showPassedTests: boolean,
     savedPosts: (Test | string)[],
-    passedTests: PassedTest[]
+    passedTests: (PassedTest | IPassedTest)[]
     likedComments: [],
     likedAnswers: [],
     createdTests: [],
@@ -132,8 +138,8 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             }
         }).catch(err => { new Error(err) });
     },
-    updateUser: async (username, bio) => {
-        await API.put(`/user`, { username, bio }).then(res => {
+    updateUser: async (username, bio, showLikedPosts, showPassedTests) => {
+        await API.put(`/user`, { username, bio, showLikedPosts, showPassedTests }).then(res => {
             if (res.data.message !== 'Success') {
                 set({ errText: res.data.message });
             }
@@ -281,7 +287,34 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
                 };
             });
         }).catch(err => console.log(err));
-    }
+    },
+    getPassedTests: async (id) => {
+        if (id) {
+            await API.get(`/passedTests/${id}`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        userPage: {
+                            ...state.userPage,
+                            passedTests: res.data.tests,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        } else {
+            await API.get(`/passedTests`).then(res => {
+                set((state) => {
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            passedTests: res.data.tests,
+                        },
+                    };
+                });
+            }).catch(err => console.log(err));
+        }
+    },
 })
 ),
 ),

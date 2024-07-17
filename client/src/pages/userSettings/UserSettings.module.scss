@@ -43,9 +43,23 @@
         padding: 10px 15px;
         text-decoration: none;
         transition: 1s;
+
         &:hover {
             background: #0056b3;
             color: #fff;
         }
+    }
+
+    .checkboxContainer {
+        display: flex;
+        .checkbox {
+            margin-right: 12px;
+        }
+    }
+
+    .detailsDIv {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }

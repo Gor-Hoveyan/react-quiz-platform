@@ -4,6 +4,7 @@ import User from './../models/userModel';
 import RefreshToken from './../models/refreshTokenModel';
 import dotenv from 'dotenv';
 import Test from './../models/testModel';
+import calculateResult from '../utils/dataUtils/calculateResult';
 dotenv.config();
 
 export interface UserJWTPayload extends JwtPayload {
@@ -39,7 +40,7 @@ async function registerUser(username: string, email: string, password: string) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ username, email, password: passwordHash, bio: '   ', passedTests: [] })
+    const newUser = new User({ username, email, password: passwordHash, bio: `${username}\'s bio`, passedTests: [] })
     await newUser.save();
     return newUser;
 }
@@ -200,7 +201,7 @@ async function getUserPage(userId: string) {
     return user;
 }
 
-async function updateUser(userId: string, username: string, bio: string) {
+async function updateUser(userId: string, username: string, bio: string, showLikedPosts: boolean, showPassedTests: boolean) {
     const user = await User.findById(userId);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
@@ -209,7 +210,7 @@ async function updateUser(userId: string, username: string, bio: string) {
     if (!checkUsername) {
         throw ({ status: 409, message: 'Username already exists' });
     }
-    await User.findByIdAndUpdate(userId, { $set: { username, bio } });
+    await User.findByIdAndUpdate(userId, { $set: { username, bio, showLikedPosts, showPassedTests } });
 }
 
 async function setAvatar(userId: string, avatarUrl: string) {
@@ -232,6 +233,27 @@ async function getLikedPosts(userId: string) {
         throw ({ status: 404, message: 'User not found' });
     }
     return user.likedPosts;
+}
+
+async function getPassedTests(userId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+
+    const passedTests = [];
+    for (let i = 0; i < user.passedTests.length; i++) {
+        const test = await Test.findById(user.passedTests[i].testId).populate({
+            path: 'author',
+            select: ['username', 'avatarUrl']
+        });
+        if (!test) {
+            throw { status: 404, message: 'Test not found' };
+        }
+        const finalResult = calculateResult(test?.results, user.passedTests[i].score);
+        passedTests[i] = {...test.toObject(), finalResult};
+    }
+    return passedTests;
 }
 
 async function getSavedPosts(userId: string) {
@@ -257,12 +279,13 @@ async function getFollowers(userId: string) {
 }
 
 async function getFollowings(userId: string) {
-const user = await User.findById(userId).populate('followings', ['username', 'avatarUrl']);
+    const user = await User.findById(userId).populate('followings', ['username', 'avatarUrl']);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
     }
     return user.followings;
 }
+
 
 export const userService = {
     registerUser,
@@ -279,6 +302,7 @@ export const userService = {
     setAvatar,
     getLikedPosts,
     getSavedPosts,
+    getPassedTests,
     getFollowers,
-    getFollowings
+    getFollowings,
 };

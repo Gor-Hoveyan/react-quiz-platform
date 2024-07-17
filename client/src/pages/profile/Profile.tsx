@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
-import useUserStore, { IUserIcon } from '../../stores/userStore';
-import Tests from '../../components/tests/Tests';
+import useUserStore, { IPassedTest, IUserIcon } from '../../stores/userStore';
 import UserData from '../../components/userData/UserData';
 import { Navigate, useParams } from 'react-router-dom';
 import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
 import UsersList from '../../components/usersList/UsersList';
 import { Test } from '../../stores/testStore';
+import PassedTests from '../../components/passedTests/PassedTests';
 
 export default function Profile() {
     const getUserPage = useUserStore(state => state.getUserPage);
@@ -38,8 +38,11 @@ export default function Profile() {
                 <p className={styles.username}>{userPage?.username}</p>
             </div>
             <div className={styles.bio}>{userPage?.bio}</div>
-            <UserData likes={userPage.likes} tests={userPage.createdTests.length} setState={setPageState}
-                followers={userPage.followers.length} followings={userPage.followings.length} id={userPage._id}
+            <UserData likes={userPage.likes} tests={userPage.createdTests.length}
+                setState={setPageState} followers={userPage.followers.length}
+                followings={userPage.followings.length} id={userPage._id} 
+                passedTests={userPage.showPassedTests ? userPage.passedTests.length : undefined}
+                likedTests={userPage?.showLikedPosts ? userPage.likedPosts.length : undefined}
             />
             {isLogged &&
                 <div className={styles.actions}>
@@ -53,6 +56,7 @@ export default function Profile() {
             {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} tests={userPage.likedPosts as Test[]} />}
             {pageState === 'Followers' && <UsersList icons={(userPage.followers as IUserIcon[])} isFollowers={true} />}
             {pageState === 'Followings' && <UsersList icons={(userPage.followings as IUserIcon[])} isFollowers={false} />}
+            {pageState === 'Passed' && userPage.showPassedTests && <PassedTests tests={(userPage.passedTests as IPassedTest[])} />}
         </div> : <h1>Loading...</h1>}</> : <Navigate to={`/profile`} />
     );
 };

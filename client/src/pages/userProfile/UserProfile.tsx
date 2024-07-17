@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './UserProfile.module.scss';
-import useUserStore, { IUserIcon } from '../../stores/userStore';
+import useUserStore, { IPassedTest, IUserIcon } from '../../stores/userStore';
 import { Navigate, NavLink } from 'react-router-dom';
 import { MdSettings, MdChangeCircle } from "react-icons/md";
 import DragAndDrop from '../../components/dragAndDrop/DragAndDrop';
@@ -8,6 +8,7 @@ import UserData from '../../components/userData/UserData';
 import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
 import { Test } from '../../stores/testStore';
 import UsersList from '../../components/usersList/UsersList';
+import PassedTests from '../../components/passedTests/PassedTests';
 
 
 export default function UserProfile() {
@@ -50,7 +51,7 @@ export default function UserProfile() {
             <div className={styles.bio}>{user?.bio}</div>
             <UserData tests={user.createdTests.length} followers={user.followers.length}
                 likes={user.likes} followings={user.followings.length} likedTests={user.likedPosts.length} 
-                savedTests={user.savedPosts.length} setState={setPageState}
+                savedTests={user.savedPosts.length} passedTests={user.passedTests.length} setState={setPageState}
             />
 
             {pageState === 'Tests' && <UserProfilePosts tests={tests} />}
@@ -59,7 +60,7 @@ export default function UserProfile() {
             {pageState === 'Followings' && <UsersList icons={(user.followings as IUserIcon[])} isFollowers={false}/>}
 
             {pageState === 'Saves' && <UserProfilePosts isSavedPosts={true} tests={user.savedPosts as Test[]} />}
-
+            {pageState === 'Passed' && <PassedTests tests={(user.passedTests as IPassedTest[])} />}
             
         </div> : <Navigate to='/auth/login' />
     );

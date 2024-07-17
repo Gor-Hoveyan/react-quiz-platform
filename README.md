@@ -9,7 +9,7 @@ The Quiz Platform is an engaging web application designed for users to craft the
 
   JWT authorization with refresh and access tokens.
   
-  A form that allows users to create tests with any number of questions and scores based on the number of correct answers.
+  A form that allows users to create tests with any number of questions and results based on the number of correct answers.
 
   A sophisticated like and comment system enables users to rate quizzes and provide valuable feedback, enhancing the interactive and community-driven experience.
 
