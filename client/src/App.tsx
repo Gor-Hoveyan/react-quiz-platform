@@ -14,6 +14,7 @@ import TestReview from './pages/testReview/TestReview';
 import UserProfile from './pages/userProfile/UserProfile';
 import Profile from './pages/profile/Profile';
 import UserSettings from './pages/userSettings/UserSettings';
+import Verification from './pages/verification/Verification';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
           <Route path='profile' element={<UserProfile />} />
           <Route path='profile/:id' element={<Profile />} />
           <Route path='/settings' element={<UserSettings />} />
+          <Route path='/verify' element={<Verification />} />
         </Routes>
         <Footer />
     </BrowserRouter>

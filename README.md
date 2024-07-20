@@ -45,7 +45,7 @@ The Quiz Platform is an engaging web application designed for users to craft the
 <h2>Installation and Running</h2>
 
   
-  Clone the repository: git clone https://github.com/Gor-Hoveyan/CryptoList
+  Clone the repository: git clone https://github.com/Gor-Hoveyan/reactQuizPlatfrom
   
   Navigate to the server directory
   

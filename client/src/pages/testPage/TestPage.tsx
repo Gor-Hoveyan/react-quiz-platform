@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import styles from './TestPage.module.scss';
-import { NavLink, useParams } from 'react-router-dom';
+import { Navigate, NavLink, useParams } from 'react-router-dom';
 import useTestStore, { Answer } from '../../stores/testStore';
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import Loader from '../../components/loader/Loader';
+import useUserStore from '../../stores/userStore';
 
 type Question = {
     question: string;
@@ -18,7 +19,8 @@ export type TestPageFormValues = {
 export default function TestPage() {
     const getTest = useTestStore(state => state.getTest);
     const test = useTestStore(state => state.test);
-    const submitTest = useTestStore(state => state.submitTest)
+    const submitTest = useTestStore(state => state.submitTest);
+    const user = useUserStore(state => state.user)
     const params = useParams();
     const testId = params.id;
     const result = useTestStore(state => state.result);
@@ -55,7 +57,7 @@ export default function TestPage() {
     }
 
     return (
-        <div className={styles.main}>
+        user?.isActivated ? <div className={styles.main}>
             {test ?
                 <div className={styles.testPage} >
                     <h1>{test.name}</h1>
@@ -93,6 +95,6 @@ export default function TestPage() {
                     </form>
                 </div>
                 : <Loader />}
-        </div>
+        </div> : <Navigate to={`/verify`} />
     );
 };

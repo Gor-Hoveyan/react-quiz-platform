@@ -5,6 +5,26 @@ async function register(req: Request, res: Response, next: NextFunction) {
     try {
         const { username, email, password } = req.body;
         const newUser = await userService.registerUser(username, email, password);
+        return res.status(200).json({message: 'Success'});
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function verifyEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { code } = req.params;
+        await userService.verifyEmail(code);
+        return res.redirect(`${process.env.CLIENT_DOMAIN}/`)
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function newVerificationCode(req: Request, res: Response, next: NextFunction) {
+    try {
+        const userId = req.user.id;
+        await userService.newVerificationCode(userId);
         return res.status(200).json('Success');
     } catch (err) {
         next(err);
@@ -66,5 +86,7 @@ export const authController = {
     register,
     login,
     logout,
+    verifyEmail,
+    newVerificationCode,
     refreshToken
 };

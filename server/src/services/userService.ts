@@ -2,9 +2,12 @@ import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from './../models/userModel';
 import RefreshToken from './../models/refreshTokenModel';
+import VerificationCode from './../models/verificationCodeModel';
 import dotenv from 'dotenv';
 import Test from './../models/testModel';
 import calculateResult from '../utils/dataUtils/calculateResult';
+import generateCode from '../utils/dataUtils/generateCode';
+import sendCode from '../utils/emailVerification';
 dotenv.config();
 
 export interface UserJWTPayload extends JwtPayload {
@@ -42,7 +45,40 @@ async function registerUser(username: string, email: string, password: string) {
 
     const newUser = new User({ username, email, password: passwordHash, bio: `${username}\'s bio`, passedTests: [] })
     await newUser.save();
+    const code = generateCode(128);
+    const verification = new VerificationCode({ code, userId: newUser._id });
+    const url = `${process.env.DOMAIN}/api/verify/${code}`;
+    await sendCode(email, url);
+    verification.save();
     return newUser;
+}
+
+async function verifyEmail(code: string) {
+    const checkCode = await VerificationCode.findOne({ code });
+    if (!checkCode) {
+        throw ({ status: 400, message: 'Invalid verification code' });
+    }
+    await User.findByIdAndUpdate(checkCode.userId, { $set: { isActivated: true } });
+    await VerificationCode.findByIdAndDelete(checkCode._id)
+}
+
+async function newVerificationCode(userId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    const oldCode = await VerificationCode.findOne({ userId: user._id });
+    if (oldCode) {
+        await VerificationCode.findOneAndDelete({ userId: user._id })
+        if (Date.now() - Number(oldCode.createdAt) < 120000) {
+            throw ({ status: 503, message: 'Please try later' });
+        }
+    }
+    const code = generateCode(128);
+    const newCode = new VerificationCode({ userId: user._id, code });
+    const url = `${process.env.DOMAIN}/api/verify/${code}`;
+    await sendCode(user.email, url);
+    await newCode.save();
 }
 
 async function login(email: string, pass: string) {
@@ -251,7 +287,7 @@ async function getPassedTests(userId: string) {
             throw { status: 404, message: 'Test not found' };
         }
         const finalResult = calculateResult(test?.results, user.passedTests[i].score);
-        passedTests[i] = {...test.toObject(), finalResult};
+        passedTests[i] = { ...test.toObject(), finalResult };
     }
     return passedTests;
 }
@@ -289,9 +325,11 @@ async function getFollowings(userId: string) {
 
 export const userService = {
     registerUser,
+    verifyEmail,
     login,
     logout,
     refreshToken,
+    newVerificationCode,
     getUser,
     likeTest,
     saveTest,

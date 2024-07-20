@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './TestForm.module.scss';
 import useTestStore, { IQuestion, Result } from '../../stores/testStore';
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
+import useUserStore from '../../stores/userStore';
 
 type FormValues = {
     name: string,
@@ -13,6 +14,7 @@ type FormValues = {
 
 
 export default function TestForm() {
+    const user = useUserStore(state => state.user);
     const formError = useTestStore(state => state.formError);
     const setError = useTestStore(state => state.setFormError);
     const setScore = useTestStore(state => state.setScore);
@@ -121,7 +123,7 @@ export default function TestForm() {
     }
 
     return (
-        <div className={styles.main}>
+        user?.isActivated ? <div className={styles.main}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Name</label>
@@ -209,6 +211,6 @@ export default function TestForm() {
                 <p className={styles.error}>{formError && formError}</p>
                 {id ? <NavLink className={styles.navLink} to={`/test/${id}`}><button className={styles.button} type='button'>View test</button></NavLink> : <button className={styles.button} type="submit">Submit</button>}
             </form >
-        </div>
+        </div> : <Navigate to={`/verify`} />
     );
 };

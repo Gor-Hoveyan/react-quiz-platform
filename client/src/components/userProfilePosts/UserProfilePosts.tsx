@@ -22,12 +22,7 @@ export default function UserProfilePosts({ tests, isLikedPosts, isSavedPosts }: 
                     {isSavedPosts && 'Saved posts'}
                     {!isLikedPosts && !isSavedPosts && 'Your Posts'}
                 </h3>
-                {tests.length && tests[0]._id ? <Tests tests={tests} /> : <Loader />}
-                {!tests.length && <h3>
-                    {isLikedPosts && 'No posts liked'}
-                    {isSavedPosts && 'You have no saved posts yet'}
-                    {!isLikedPosts && !isSavedPosts && 'No posts yet'}
-                </h3>}
+                {tests.length ? `${!tests[0]._id ? <Loader /> : <Tests tests={tests} />}` : <h4>No posts yet</h4>}
             </div>
             {!isLikedPosts && !isSavedPosts && <div className={styles.addPost}>
                 <NavLink to='/test/create'><FiPlusCircle size={70} cursor={'pointer'} color='gray'

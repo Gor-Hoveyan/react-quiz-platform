@@ -47,6 +47,7 @@ interface IStore {
     getLikedPosts: (id?: string) => void,
     getPassedTests: (id?: string) => void,
     getSavedPosts: () => void,
+    newVerificationCode: () => void,
 }
 
 type PassedTest = {
@@ -150,7 +151,8 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         await API.get(`/tests/${userId}`).then(res => {
             set({ tests: res.data.tests });
             set({ isLoading: false });
-        }).catch(err => { new Error(err) })
+        }).catch(err => { new Error(err) });
+        set({isLoading: false});
     },
     setError: (err) => {
         set({ errText: err });
@@ -315,6 +317,9 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             }).catch(err => console.log(err));
         }
     },
+    newVerificationCode: async () => {
+        await API.get(`/newCode`).catch(err => console.log(err));
+    }
 })
 ),
 ),

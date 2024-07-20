@@ -1,44 +1,50 @@
-.testList {
-    margin: 0px auto;
-    list-style-type: none;
-    list-style: none;
-    padding: 0;
-    width: fit-content;
+.main {
+    text-align: center;
 
-    .navLink {
-        text-decoration: none;
-    }
+    .testList {
+        margin: 0px auto;
+        list-style-type: none;
+        list-style: none;
+        padding: 0;
+        width: fit-content;
 
-    .testItem {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 15px;
-        margin-bottom: 10px;
-        transition-duration: 0.5s;
-        min-width: 400px;
-
-        &:hover {
-            background-color: #dfdfdf;
-            border: 1px solid #9c9c9c;
+        .navLink {
+            text-decoration: none;
         }
 
-        .testDescription {
-            margin: 5px 0 0;
-            color: #666;
+        .testItem {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition-duration: 0.5s;
+            min-width: 400px;
+
+            &:hover {
+                background-color: #dfdfdf;
+                border: 1px solid #9c9c9c;
+            }
+
+            .testDescription {
+                margin: 5px 0 0;
+                color: #666;
+                text-align: left;
+            }
+        }
+
+        .testTitle {
+            margin: 5px 0;
+            font-size: 1.5rem;
+            color: black;
             text-align: left;
         }
-    }
-    .testTitle {
-        margin: 5px 0;
-        font-size: 1.5rem;
-        color: black;
-        text-align: left;
-    }
-    .result {
-        color: black;
-        margin: 10px;
-        font-weight: bold;
+
+        .result {
+            color: black;
+            margin: 10px;
+            font-weight: bold;
+        }
     }
     .header {
         margin: 20px 0;

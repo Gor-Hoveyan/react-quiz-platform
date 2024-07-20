@@ -24,7 +24,7 @@ const UserTests = () => {
     return (
         <>{isLogged ?
             <div className={styles.main}>
-                {tests ? <>
+                {tests[0]._id ? <>
                     <h1>{user?.username}'s tests</h1>
                     <Tests tests={tests} />
                 </> : isLoading ? <Loader /> : <h1>You haven\'t created any tests yet</h1>

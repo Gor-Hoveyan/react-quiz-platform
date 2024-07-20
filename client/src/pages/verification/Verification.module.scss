@@ -1,0 +1,27 @@
+.main {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    max-height: fit-content;
+    background-color: #eee;
+    z-index: 12;
+    padding: 5%;
+    display: flex;
+}
+
+.verification {
+    background-color: white;
+    border-radius: 4px;
+    margin: 0px auto;
+    padding: 2rem;
+    height: fit-content;
+    
+    .verificationLink {
+        color: blue;
+        cursor: pointer;
+        width: fit-content;
+        text-decoration: underline;
+        margin-top: 15px;
+    }
+}
