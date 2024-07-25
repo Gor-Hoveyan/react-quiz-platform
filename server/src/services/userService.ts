@@ -48,7 +48,7 @@ async function registerUser(username: string, email: string, password: string) {
     const code = generateCode(128);
     const verification = new VerificationCode({ code, userId: newUser._id });
     const url = `${process.env.DOMAIN}/api/verify/${code}`;
-    await sendCode(email, url);
+    await sendCode(email, url, username);
     verification.save();
     return newUser;
 }
@@ -68,17 +68,17 @@ async function newVerificationCode(userId: string) {
         throw ({ status: 404, message: 'User not found' });
     }
     const oldCode = await VerificationCode.findOne({ userId: user._id });
-    if (oldCode) {
-        await VerificationCode.findOneAndDelete({ userId: user._id })
-        if (Date.now() - Number(oldCode.createdAt) < 120000) {
-            throw ({ status: 503, message: 'Please try later' });
-        }
+    if (oldCode && Date.now() - Number(oldCode?.createdAt) < 120000) {
+        throw ({ status: 503, message: `Please try after ${Math.floor((120000 - (Date.now() - Number(oldCode.createdAt))) / 1000)} seconds` });
+    } else if (oldCode && Date.now() - Number(oldCode?.createdAt) > 120000) {
+        await VerificationCode.findOneAndDelete({ userId: user._id });
+    } else {
+        const code = generateCode(128);
+        const newCode = new VerificationCode({ userId: user._id, code });
+        const url = `${process.env.DOMAIN}/api/verify/${code}`;
+        await sendCode(user.email, url, user.username);
+        await newCode.save();
     }
-    const code = generateCode(128);
-    const newCode = new VerificationCode({ userId: user._id, code });
-    const url = `${process.env.DOMAIN}/api/verify/${code}`;
-    await sendCode(user.email, url);
-    await newCode.save();
 }
 
 async function login(email: string, pass: string) {

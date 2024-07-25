@@ -23,6 +23,7 @@ interface IStore {
     userPage: IUser | null,
     tests: Test[],
     isLoading: boolean,
+    verificationTimer: number,
     register: (email: string, username: string, password: string) => void,
     login: (email: string, password: string) => void,
     setError: (err: string) => void,
@@ -48,6 +49,7 @@ interface IStore {
     getPassedTests: (id?: string) => void,
     getSavedPosts: () => void,
     newVerificationCode: () => void,
+    setVerificationTimer: (seconds: number) => void
 }
 
 type PassedTest = {
@@ -88,6 +90,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     isMenuOpen: false,
     isRegistered: false,
     dropArea: false,
+    verificationTimer: 0,
     user: null,
     userPage: null,
     tests: [],
@@ -318,7 +321,19 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         }
     },
     newVerificationCode: async () => {
-        await API.get(`/newCode`).catch(err => console.log(err));
+        await API.get(`/newCode`).then(() => {
+            set({verificationTimer: 120});
+        }).catch(err => {
+            
+            if(err.response.data.status === 503) {debugger
+                set({verificationTimer: Number(err.response.data.message.split(' ')[3])})
+                console.log(Number(err.response.data.message.split(' ')[3]))
+            }
+            console.log(err);
+        });
+    },
+    setVerificationTimer: (seconds) => {
+        set({verificationTimer: seconds});
     }
 })
 ),

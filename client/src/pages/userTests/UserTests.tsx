@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import useUserStore from '../../stores/userStore';
 import Tests from '../../components/tests/Tests';
 import Loader from '../../components/loader/Loader';
+import AddPostBtn from '../../components/addPostBtn/AddPostBtn';
 
 const UserTests = () => {
     const getTests = useUserStore(state => state.getUserTests);
@@ -24,11 +25,12 @@ const UserTests = () => {
     return (
         <>{isLogged ?
             <div className={styles.main}>
-                {tests[0]._id ? <>
+                {tests[0]?._id ? <>
                     <h1>{user?.username}'s tests</h1>
                     <Tests tests={tests} />
-                </> : isLoading ? <Loader /> : <h1>You haven\'t created any tests yet</h1>
+                </> : isLoading ? <Loader /> : <h1>You haven't created any tests yet</h1>
                 }
+                <AddPostBtn />
             </div> : <Navigate to={`/auth/login`} />}</>
     );
 };

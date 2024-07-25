@@ -11,15 +11,19 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-export default async function sendCode(email: string, url: string) {
+export default async function sendCode(email: string, url: string, username: string) {
     const info = await transporter.sendMail({
         from: process.env.EMAIL,
         to: email,
         subject: 'Account verification',
-        html: `<a href='${url}'>Click on the link to verify your account</a>`
+        html: `
+                Hello ${username},
+                You registered an account on Testhetic, before being able to use your account you need to verify that this is your email address by clicking here: <a href='${url}'>Link</a>
+                Kind Regards, Testhetic 
+            `
     }, (error, info) => {
-        if(error) {
-            throw({status: 500, message: error.message});
+        if (error) {
+            throw ({ status: 500, message: error.message });
         }
         transporter.close();
     });

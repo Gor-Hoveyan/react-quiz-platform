@@ -15,7 +15,7 @@ async function verifyEmail(req: Request, res: Response, next: NextFunction) {
     try {
         const { code } = req.params;
         await userService.verifyEmail(code);
-        return res.redirect(`${process.env.CLIENT_DOMAIN}/`)
+        return res.status(200).json({message: 'Success'});
     } catch (err) {
         next(err);
     }
