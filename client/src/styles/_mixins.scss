@@ -51,3 +51,43 @@
         }
     }
 }
+
+@mixin button {
+    .button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+    
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+    .button:disabled {
+        background-color: gray;
+    }
+}
+
+@mixin cancelButton {
+    .cancelButton {
+        margin: 10px 20px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: tomato;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color 0.6s;
+
+        &:hover {
+            background-color: orangered;
+        }
+    }
+}

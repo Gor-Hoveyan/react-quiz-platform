@@ -26,8 +26,8 @@ const Home = () => {
 
     return (
         <div className={styles.main}>
-            <Search />
             {tests ? <>
+                <Search />
                 <h1>Some tests for you :D</h1>
                 <Tests tests={tests} />
                 <Pagination currentPage={currentPage} totalPages={totalPages} handlePagination={handlePagination} />

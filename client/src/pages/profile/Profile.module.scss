@@ -1,9 +1,12 @@
+@import '../../styles/mixins.scss';
+
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     min-height: 100vh;
+    @include button;
 }
 
 .avatar {
@@ -45,19 +48,4 @@
     .postsHeader {
         margin: 20px 0;
     }
-}
-
-.button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #0056b3;
 }

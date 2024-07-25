@@ -1,3 +1,5 @@
+@import '../../styles/mixins.scss';
+
 .main {
     top: 0;
     padding: 5%;
@@ -6,6 +8,7 @@
     max-height: fit-content;
     background-color: #eee;
     z-index: 12;
+    @include button;
 }
 
 .formContainer {
@@ -38,22 +41,6 @@
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-}
-
-.button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
 }
 
 .error {

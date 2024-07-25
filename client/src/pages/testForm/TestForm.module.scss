@@ -1,9 +1,12 @@
+@import '../../styles/mixins.scss';
+
 .main {
     width: 100%;
     min-height: 100vh;
     max-height: fit-content;
     background-color: #eee;
     padding: 100px 0;
+    @include button;
 
     input,
     textarea,
@@ -51,23 +54,6 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-}
-
-.button {
-    width: 100%;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
 }
 
 .error {
