@@ -71,7 +71,11 @@ export default function Comments() {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <textarea
                             placeholder="Your answer"
-                            {...register('answer')}
+                            {...register('answer', {
+                                required: 'This field is required',
+                                minLength: { value: 3, message: 'Answer must contain at least 3 characters' },
+                                maxLength: { value: 1000, message: 'Answer can contain maximum 1000 characters' },
+                            })}
                             className={styles.textarea}
                         />
                         <button className={styles.button} type='submit'>
@@ -97,7 +101,11 @@ export default function Comments() {
                                 <textarea
                                     defaultValue={comment.comment}
                                     placeholder="Updated comment"
-                                    {...register('updatingComment')}
+                                    {...register('updatingComment', {
+                                        required: 'This field is required',
+                                        minLength: { value: 3, message: 'Comment must contain at least 3 characters' },
+                                        maxLength: { value: 1000, message: 'Comment can contain maximum 1000 characters' },
+                                    })}
                                     className={styles.textarea}
                                 />
                                 <button className={styles.button} type='submit'>
@@ -142,7 +150,11 @@ export default function Comments() {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <textarea
                         placeholder="Your comment"
-                        {...register('comment')}
+                        {...register('comment', {
+                            required: 'This field is required',
+                            minLength: { value: 3, message: 'Comment must contain at least 3 characters' },
+                            maxLength: { value: 1000, message: 'Comment can contain maximum 1000 characters' },
+                        })}
                         className={styles.textarea}
                     />
                     <p className={styles.error}>{errors.comment?.message && errors.comment.message}</p>

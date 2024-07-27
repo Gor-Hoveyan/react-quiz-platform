@@ -88,6 +88,7 @@ interface IStore {
     setIsAnswering: (val: string) => void,
     setIsUpdating: (val: string) => void,
     setUpdatingAnswer: (val: string) => void,
+    resetCreatedTestId: () => void,
 }
 
 
@@ -246,6 +247,9 @@ const useTestStore = create<IStore>()(devtools(immer((set, get) => ({
     setUpdatingAnswer: (val) => {
         set({ updatingAnswer: val });
     },
+    resetCreatedTestId: () => {
+        set({createdTestId: ''});
+    }
 }))));
 
 export default useTestStore;

@@ -90,7 +90,7 @@ export default function TestPage() {
                         ))}
 
 
-                        {!result ? <button type="submit">Submit</button> : <NavLink className={styles.navLink} to={`/test/${test._id}/result`}><button>View results</button></NavLink>}
+                        {!result ? <button className={styles.button} type="submit">Submit</button> : <NavLink className={styles.navLink} to={`/test/${test._id}/result`}><button  className={styles.button}>View results</button></NavLink>}
 
                     </form>
                 </div>

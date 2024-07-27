@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './TestForm.module.scss';
 import useTestStore, { IQuestion, Result } from '../../stores/testStore';
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
@@ -20,6 +20,7 @@ export default function TestForm() {
     const setScore = useTestStore(state => state.setScore);
     const createPost = useTestStore(state => state.createTest);
     const id = useTestStore(state => state.createdTestId)
+    const resetCreatedTestId = useTestStore(state => state.resetCreatedTestId);
 
     const { register, control, handleSubmit, formState: { errors }, unregister } = useForm<FormValues>({
         mode: 'onBlur'
@@ -32,6 +33,10 @@ export default function TestForm() {
         control,
         name: 'results'
     });
+
+    useEffect(() => {
+        resetCreatedTestId();
+    }, [resetCreatedTestId]);
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         if (data.questions.length < 2) {
@@ -164,7 +169,7 @@ export default function TestForm() {
                                         type="text"
                                         {...register(`questions.${index}.answers.${aIndex}.answer`, {
                                             required: 'This field is required',
-                                            minLength: { value: 1, message: 'Answer must contain at least 1 character' },
+                                            minLength: { value: 2, message: 'Question must contain at least 2 characters' },
                                             maxLength: { value: 200, message: 'Answer can contain maximum 200 characters' },
 
                                         })}

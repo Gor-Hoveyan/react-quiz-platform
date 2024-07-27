@@ -6,15 +6,6 @@ async function createTest(req: Request, res: Response, next: NextFunction) {
     try {
         const { name, description, questions, results, score } = req.body;
 
-        if (!req.user) {
-            return res.status(403).json({ message: 'Access denied' });
-        }
-        if (!questions.length) {
-            return res.status(404).json({ message: 'Questions can\'t be empty' })
-        }
-        if (!results.length) {
-            return res.status(404).json({ message: 'Results can\'t be empty' })
-        }
         const test = await testService.create(name, description, req.user.id, questions, results, score);
         return res.status(200).json({ id: test._id });
     } catch (err) {
