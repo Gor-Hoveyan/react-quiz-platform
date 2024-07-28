@@ -4,7 +4,7 @@ type Result = {
     maxScore: number,
 }
 
-export default function calculateResult(results: Result[], score: number) {
+export default function calculateTestResult(results: Result[], score: number) {
     let computedResult = '';
     for (let i = 0; i < results.length; i++) {
         const res = results[i];

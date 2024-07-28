@@ -102,11 +102,35 @@ async function pagination(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-async function submit(req: Request, res: Response, next: NextFunction) {
+async function likeTest(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+        return await testService.likeTest(userId, id).then(() => {
+            return res.status(200).json({ message: 'Success' });
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function saveTest(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+        return await testService.saveTest(userId, id).then(() => {
+            return res.status(200).json({ message: 'Success' });
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function submitTest(req: Request, res: Response, next: NextFunction) {
     try {
         const { testId, score } = req.body;
         const userId = req.user.id;
-        const result = await testService.submit(userId, testId, score);
+        const result = await testService.submitTest(userId, testId, score);
         return res.status(200).json({ result });
     } catch (err) {
         next(err);
@@ -122,5 +146,7 @@ export const testController = {
     getUserTests,
     search,
     pagination,
-    submit
+    likeTest,
+    saveTest,
+    submitTest
 };

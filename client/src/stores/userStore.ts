@@ -173,10 +173,10 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ dropArea: val });
     },
     like: async (testId) => {
-        await API.put(`/likeTest/${testId}`).catch(err => { new Error(err) });
+        await API.put(`/test/like/${testId}`).catch(err => { new Error(err) });
     },
     save: async (testId) => {
-        await API.put(`/saveTest/${testId}`).catch(err => { new Error(err) });
+        await API.put(`/test/save/${testId}`).catch(err => { new Error(err) });
     },
     toggleMenu: () => {
         const isMenuOpen = get().isMenuOpen;

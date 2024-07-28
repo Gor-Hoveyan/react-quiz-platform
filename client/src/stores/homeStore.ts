@@ -46,7 +46,7 @@ const useHomeStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ searchVal: val });
     },
     setPagination: async () => {
-        await API.get(`/testsPagination?page=${get().currentPage}&limit=10`).then(res => {
+        await API.get(`/tests/pagination?page=${get().currentPage}&limit=10`).then(res => {
             if(res.data.totalPages && res.data.tests.length) {
                 set({totalPages: Number(res.data.totalPages)});
                 set({tests: res.data.tests});

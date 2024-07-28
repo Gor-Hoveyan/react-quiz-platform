@@ -8,6 +8,7 @@ import { authRouter } from './routes/authRouter';
 import { testRouter } from './routes/testRouter';
 import { userRouter } from './routes/userRouter';
 import { commentRouter } from './routes/commentRouter';
+import { quizRouter } from './routes/quizRouter';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', authRouter);
 app.use('/api', testRouter);
+app.use('/api', quizRouter);
 app.use('/api', userRouter);
 app.use('/api', commentRouter);
 connectDB();

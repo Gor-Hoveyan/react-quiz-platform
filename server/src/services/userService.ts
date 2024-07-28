@@ -5,8 +5,7 @@ import RefreshToken from './../models/refreshTokenModel';
 import VerificationCode from './../models/verificationCodeModel';
 import dotenv from 'dotenv';
 import Test from './../models/testModel';
-import calculateResult from '../utils/dataUtils/calculateResult';
-import generateCode from '../utils/dataUtils/generateCode';
+import generateVerificationCode from '../utils/dataUtils/generateVerificationCode';
 import sendCode from '../utils/emailVerification';
 dotenv.config();
 
@@ -45,7 +44,7 @@ async function registerUser(username: string, email: string, password: string) {
 
     const newUser = new User({ username, email, password: passwordHash, bio: `${username}\'s bio`, passedTests: [] })
     await newUser.save();
-    const code = generateCode(128);
+    const code = generateVerificationCode(128);
     const verification = new VerificationCode({ code, userId: newUser._id });
     const url = `${process.env.DOMAIN}/api/verify/${code}`;
     await sendCode(email, url, username);
@@ -73,7 +72,7 @@ async function newVerificationCode(userId: string) {
     } else if (oldCode && Date.now() - Number(oldCode?.createdAt) > 120000) {
         await VerificationCode.findOneAndDelete({ userId: user._id });
     } else {
-        const code = generateCode(128);
+        const code = generateVerificationCode(128);
         const newCode = new VerificationCode({ userId: user._id, code });
         const url = `${process.env.DOMAIN}/api/verify/${code}`;
         await sendCode(user.email, url, user.username);
@@ -144,44 +143,6 @@ async function getUser(userId: string) {
 
     const { password, ...user } = userData.toObject();
     return user;
-}
-
-async function likeTest(userId: string, testId: string) {
-    const user = await User.findById(userId);
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-    const test = await Test.findById(testId);
-    if (!test) {
-        throw ({ status: 404, message: 'Test not found' });
-    }
-    if ((user.likedPosts as unknown[]).includes(testId)) {
-        await Test.findByIdAndUpdate(testId, { $inc: { likes: -1 } });
-        await User.findByIdAndUpdate(userId, { $pull: { likedPosts: test._id } });
-        await User.findByIdAndUpdate(test.author, { $inc: { likes: - 1 } })
-    } else {
-        await Test.findByIdAndUpdate(testId, { $inc: { likes: +1 } });
-        await User.findByIdAndUpdate(userId, { $set: { likedPosts: [...user.likedPosts, test._id] } });
-        await User.findByIdAndUpdate(test.author, { $inc: { likes: +1 } })
-    }
-}
-
-async function saveTest(userId: string, testId: string) {
-    const user = await User.findById(userId);
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-    const test = await Test.findById(testId);
-    if (!test) {
-        throw ({ status: 404, message: 'Test not found' });
-    }
-    if ((user.savedPosts as unknown[]).includes(testId)) {
-        await Test.findByIdAndUpdate(testId, { $inc: { saves: -1 } });
-        await User.findByIdAndUpdate(userId, { $pull: { savedPosts: test._id } });
-    } else {
-        await Test.findByIdAndUpdate(testId, { $inc: { saves: +1 } });
-        await User.findByIdAndUpdate(userId, { $set: { savedPosts: [...user.savedPosts, test._id] } });
-    }
 }
 
 async function follow(userId: string, subscriberId: string) {
@@ -286,8 +247,8 @@ async function getPassedTests(userId: string) {
         if (!test) {
             throw { status: 404, message: 'Test not found' };
         }
-        const finalResult = calculateResult(test?.results, user.passedTests[i].score);
-        passedTests[i] = { ...test.toObject(), finalResult };
+        const result = user.passedTests[i].result;
+        passedTests[i] = { ...test.toObject(), result };
     }
     return passedTests;
 }
@@ -331,8 +292,6 @@ export const userService = {
     refreshToken,
     newVerificationCode,
     getUser,
-    likeTest,
-    saveTest,
     follow,
     unfollow,
     getUserPage,

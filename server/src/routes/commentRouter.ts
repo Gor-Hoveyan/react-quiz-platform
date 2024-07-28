@@ -9,12 +9,12 @@ const router = Router();
 router.post('/comment', createCommentValidation, validationMiddleware, authMiddleware, commentController.createComment);
 router.delete('/comment', authMiddleware, commentController.removeComment);
 router.put('/comment', updateCommentValidation, validationMiddleware, authMiddleware, commentController.updateComment);
-router.post('/likeComment/:id', authMiddleware, commentController.likeComment);
+router.post('/comment/like/:id', authMiddleware, commentController.likeComment);
 router.get('/comment/:id', commentController.getComments);
 router.post('/answer', createAnswerValidation,  validationMiddleware, authMiddleware, commentController.createAnswer);
 router.put('/answer', updateAnswerValidation,  validationMiddleware, authMiddleware, commentController.updateAnswer);
 router.delete('/answer', authMiddleware, commentController.removeAnswer);
-router.post('/likeAnswer/:id', authMiddleware, commentController.likeAnswer);
+router.post('/answer/like/:id', authMiddleware, commentController.likeAnswer);
 router.get('/answer/:id', commentController.getAnswers);
 
 export const commentRouter = router;

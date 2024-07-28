@@ -1,4 +1,4 @@
-export default function generateCode(length: number) {
+export default function generateVerificationCode(length: number) {
     const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for(let i = 0; i < length; i++) {

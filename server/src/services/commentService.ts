@@ -2,21 +2,32 @@ import Comment from './../models/commentModel';
 import Answer from './../models/answerModel';
 import User from './../models/userModel';
 import Test from './../models/testModel';
+import Quiz from './../models/quizModel';
 
 async function createComment(comment: string, userId: string, testId: string) {
-    const test = await Test.findById(testId);
-    if (!test) {
-        throw ({ status: 404, message: 'Test not found' });
-    }
     const user = await User.findById(userId);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
     }
-    const comm = new Comment({ comment, author: userId, test: testId });
-    await comm.save();
-    await Test.findByIdAndUpdate(testId, { $set: { comments: [...test.comments, comm._id] } });
-    await User.findByIdAndUpdate(userId, { $set: { comments: [...user.comments, comm._id] } });
-    return await comm.populate('author', ['username', 'avatarUrl']);
+    const test = await Test.findById(testId);
+    if (!test) {
+        const quiz = await Quiz.findById(testId);
+        if(!quiz) {
+            throw ({ status: 404, message: 'Post not found' });
+        }
+        const comm = new Comment({ comment, author: userId, quiz: testId });
+        await comm.save();
+        await Quiz.findByIdAndUpdate(testId, { $set: { comments: [...quiz.comments, comm._id] } });
+        await User.findByIdAndUpdate(userId, { $set: { comments: [...user.comments, comm._id] } });
+        return await comm.populate('author', ['username', 'avatarUrl'])
+    } else {
+        const comm = new Comment({ comment, author: userId, test: testId });
+        await comm.save();
+        await Test.findByIdAndUpdate(testId, { $set: { comments: [...test.comments, comm._id] } });
+        await User.findByIdAndUpdate(userId, { $set: { comments: [...user.comments, comm._id] } });
+        return await comm.populate('author', ['username', 'avatarUrl']);
+    }
+
 }
 
 async function updateComment(commentId: string, testId: string, userId: string, newComment: string) {
@@ -108,24 +119,39 @@ async function getComments(testId: string) {
 }
 
 async function createAnswer(answer: string, userId: string, testId: string, parentId: string) {
-    const test = await Test.findById(testId);
-    if (!test) {
-        throw ({ status: 404, message: 'Test not found' });
-    }
     const user = await User.findById(userId);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
     }
+
     const comment = await Comment.findById(parentId);
     if (!comment) {
         throw ({ status: 404, message: 'Comment not found' });
     }
-    const answ = new Answer({ comment: answer, author: userId, test: testId, parentComment: parentId });
-    await answ.save();
-    await Test.findByIdAndUpdate(testId, { $set: { commentAnswers: [...test.commentAnswers, answ._id] } });
-    await User.findByIdAndUpdate(userId, { $set: { answers: [...user.comments, answ._id] } });
-    await Comment.findByIdAndUpdate(parentId, { $set: { answers: [...comment.answers, answ._id] } });
-    return answ;
+
+    const test = await Test.findById(testId);
+    if (!test) {
+        const quiz = await Quiz.findById(testId);
+        if(!quiz) {
+            throw ({ status: 404, message: 'Post not found' });
+        }
+        const answ = new Answer({ comment: answer, author: userId, quiz: testId, parentComment: parentId });
+        await answ.save();
+        await Quiz.findByIdAndUpdate(testId, { $set: { commentAnswers: [...quiz.commentAnswers, answ._id] } });
+        await User.findByIdAndUpdate(userId, { $set: { answers: [...user.comments, answ._id] } });
+        await Comment.findByIdAndUpdate(parentId, { $set: { answers: [...comment.answers, answ._id] } });
+        return answ;
+    } else {
+        const answ = new Answer({ comment: answer, author: userId, test: testId, parentComment: parentId });
+        await answ.save();
+        await Test.findByIdAndUpdate(testId, { $set: { commentAnswers: [...test.commentAnswers, answ._id] } });
+        await User.findByIdAndUpdate(userId, { $set: { answers: [...user.comments, answ._id] } });
+        await Comment.findByIdAndUpdate(parentId, { $set: { answers: [...comment.answers, answ._id] } });
+        return answ;
+    }
+
+
+
 }
 
 async function updateAnswer(answerId: string, userId: string, newComment: string) {

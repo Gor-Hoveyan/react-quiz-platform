@@ -11,30 +11,6 @@ async function getUser(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-async function likeTest(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { id } = req.params;
-        const userId = req.user.id;
-        return await userService.likeTest(userId, id).then(() => {
-            return res.status(200).json({ message: 'Success' });
-        });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function saveTest(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { id } = req.params;
-        const userId = req.user.id;
-        return await userService.saveTest(userId, id).then(() => {
-            return res.status(200).json({ message: 'Success' });
-        });
-    } catch (err) {
-        next(err);
-    }
-}
-
 async function follow(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
@@ -141,11 +117,8 @@ async function getFollowings(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-
 export const userController = {
     getUser,
-    likeTest,
-    saveTest,
     follow,
     unfollow,
     getUserPage,

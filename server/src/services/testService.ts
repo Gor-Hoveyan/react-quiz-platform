@@ -2,7 +2,7 @@ import User from './../models/userModel';
 import Test from './../models/testModel';
 import Comment from './../models/commentModel';
 import Answer from './../models/answerModel';
-import calculateResult from '../utils/dataUtils/calculateResult';
+import calculateTestResult from '../utils/dataUtils/calculateTestResult';
 
 async function create(name: string, description: string, author: string, questions: [], results: [], score: number) {
     const user = await User.findById({ _id: author });
@@ -149,7 +149,45 @@ async function pagination(page: number, limit: number) {
     return { tests, totalPages };
 }
 
-async function submit(userId: string, testId: string, score: number) {
+async function likeTest(userId: string, testId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    const test = await Test.findById(testId);
+    if (!test) {
+        throw ({ status: 404, message: 'Test not found' });
+    }
+    if ((user.likedPosts as unknown[]).includes(testId)) {
+        await Test.findByIdAndUpdate(testId, { $inc: { likes: -1 } });
+        await User.findByIdAndUpdate(userId, { $pull: { likedPosts: test._id } });
+        await User.findByIdAndUpdate(test.author, { $inc: { likes: - 1 } })
+    } else {
+        await Test.findByIdAndUpdate(testId, { $inc: { likes: +1 } });
+        await User.findByIdAndUpdate(userId, { $set: { likedPosts: [...user.likedPosts, test._id] } });
+        await User.findByIdAndUpdate(test.author, { $inc: { likes: +1 } })
+    }
+}
+
+async function saveTest(userId: string, testId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    const test = await Test.findById(testId);
+    if (!test) {
+        throw ({ status: 404, message: 'Test not found' });
+    }
+    if ((user.savedPosts as unknown[]).includes(testId)) {
+        await Test.findByIdAndUpdate(testId, { $inc: { saves: -1 } });
+        await User.findByIdAndUpdate(userId, { $pull: { savedPosts: test._id } });
+    } else {
+        await Test.findByIdAndUpdate(testId, { $inc: { saves: +1 } });
+        await User.findByIdAndUpdate(userId, { $set: { savedPosts: [...user.savedPosts, test._id] } });
+    }
+}
+
+async function submitTest(userId: string, testId: string, score: number) {
     const user = await User.findById(userId);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
@@ -159,8 +197,8 @@ async function submit(userId: string, testId: string, score: number) {
         throw ({ status: 404, message: 'Test not found' });
     }
 
-    const result = calculateResult(test.results, score);
-    await User.findByIdAndUpdate(userId, { $set: { passedTests: [...user.passedTests, { testId, score }] } });
+    const result = calculateTestResult(test.results, score);
+    await User.findByIdAndUpdate(userId, { $set: { passedTests: [...user.passedTests, { testId, result }] } });
     await Test.findByIdAndUpdate(testId, { $inc: { passed: +1 } });
     return result;
 }
@@ -174,5 +212,7 @@ export const testService = {
     getUserTests,
     searchTests,
     pagination,
-    submit,
+    submitTest,
+    likeTest,
+    saveTest,
 };

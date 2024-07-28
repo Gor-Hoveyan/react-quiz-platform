@@ -136,7 +136,7 @@ const useTestStore = create<IStore>()(devtools(immer((set, get) => ({
             }
         });
         const testId = get().test?._id;
-        await API.post('/submitTest', {testId, score}).then(res => {
+        await API.post('/test/submit', {testId, score}).then(res => {
             set({ result: res.data.result });
         }).catch(err => console.log(err));
     },
@@ -183,7 +183,7 @@ const useTestStore = create<IStore>()(devtools(immer((set, get) => ({
         });
     },
     likeComment: async (comment) =>{
-        await API.post(`/likeComment/${comment}`).catch(err => console.log(err));
+        await API.post(`/comment/like/${comment}`).catch(err => console.log(err));
     },
     createAnswer: async (answer) => {
         const testId = get().test?._id;
@@ -236,7 +236,7 @@ const useTestStore = create<IStore>()(devtools(immer((set, get) => ({
         });
     },
     likeAnswer: async (answer) =>{
-        await API.post(`/likeAnswer/${answer}`).catch(err => console.log(err));
+        await API.post(`/answer/like/${answer}`).catch(err => console.log(err));
     },
     setIsAnswering: (val) => {
         set({ isAnswering: val });

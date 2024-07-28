@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
-const testSchema = new Schema({
+const quizSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -11,20 +11,12 @@ const testSchema = new Schema({
                 type: [
                     {
                         answer: { type: String, required: true },
-                        points: { type: Number, required: true, enum: [0, 1, 2, 3] }
+                        isRight: { type: Boolean, required: true }
                     }
                 ]
             },
         }
     ],
-    results: [
-        {
-            result: { type: String, required: true },
-            minScore: { type: Number, required: true },
-            maxScore: { type: Number, required: true }
-        }
-    ],
-    score: { type: Number, required: true },
     likes: { type: Number, default: 0, required: true },
     saves: { type: Number, default: 0, required: true },
     passed: { type: Number, default: 0, required: true },
@@ -35,5 +27,4 @@ const testSchema = new Schema({
     isUpdated: [Date]
 });
 
-
-export default mongoose.model('Test', testSchema);
+export default mongoose.model('Quiz', quizSchema);

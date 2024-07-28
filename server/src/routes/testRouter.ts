@@ -14,7 +14,9 @@ router.delete('/test/:id', authMiddleware, testController.deleteTest);
 router.get('/tests', testController.getTen);
 router.get('/tests/:id', authMiddleware, testController.getUserTests);
 router.post('/tests/search', testController.search);
-router.get('/testsPagination', testController.pagination);
-router.post('/submitTest', authMiddleware, testController.submit);
+router.get('/tests/pagination', testController.pagination);
+router.put('/test/like/:id', authMiddleware, testController.likeTest);
+router.put('/test/save/:id', authMiddleware, testController.saveTest);
+router.post('/test/submit', authMiddleware, testController.submitTest);
 
 export const testRouter = router;
