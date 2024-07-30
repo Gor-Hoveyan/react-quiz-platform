@@ -141,17 +141,16 @@ async function createAnswer(answer: string, userId: string, testId: string, pare
         await User.findByIdAndUpdate(userId, { $set: { answers: [...user.comments, answ._id] } });
         await Comment.findByIdAndUpdate(parentId, { $set: { answers: [...comment.answers, answ._id] } });
         return answ;
-    } else {
+    } else if(test) {
         const answ = new Answer({ comment: answer, author: userId, test: testId, parentComment: parentId });
         await answ.save();
         await Test.findByIdAndUpdate(testId, { $set: { commentAnswers: [...test.commentAnswers, answ._id] } });
         await User.findByIdAndUpdate(userId, { $set: { answers: [...user.comments, answ._id] } });
         await Comment.findByIdAndUpdate(parentId, { $set: { answers: [...comment.answers, answ._id] } });
         return answ;
+    } else {
+        throw({status: 400, message: 'Invalid request'});
     }
-
-
-
 }
 
 async function updateAnswer(answerId: string, userId: string, newComment: string) {

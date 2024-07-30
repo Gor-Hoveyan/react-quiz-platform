@@ -58,6 +58,9 @@ export default function Comments() {
                 setIsUpdating('');
             }
         }
+    }
+
+    function onAnswerSubmit() {
 
     }
 
@@ -72,14 +75,13 @@ export default function Comments() {
                         <textarea
                             placeholder="Your answer"
                             {...register('answer', {
-                                required: 'This field is required',
                                 minLength: { value: 3, message: 'Answer must contain at least 3 characters' },
                                 maxLength: { value: 1000, message: 'Answer can contain maximum 1000 characters' },
                             })}
                             className={styles.textarea}
                         />
                         <button className={styles.button} type='submit'>
-                            Add Comment
+                            Add Answer
                         </button>
                         <button onClick={() => setIsAnswering('')} type='button' className={styles.cancelButton}>
                             Cancel
@@ -102,7 +104,6 @@ export default function Comments() {
                                     defaultValue={comment.comment}
                                     placeholder="Updated comment"
                                     {...register('updatingComment', {
-                                        required: 'This field is required',
                                         minLength: { value: 3, message: 'Comment must contain at least 3 characters' },
                                         maxLength: { value: 1000, message: 'Comment can contain maximum 1000 characters' },
                                     })}
@@ -151,7 +152,6 @@ export default function Comments() {
                     <textarea
                         placeholder="Your comment"
                         {...register('comment', {
-                            required: 'This field is required',
                             minLength: { value: 3, message: 'Comment must contain at least 3 characters' },
                             maxLength: { value: 1000, message: 'Comment can contain maximum 1000 characters' },
                         })}

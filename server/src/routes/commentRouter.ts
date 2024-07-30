@@ -4,7 +4,7 @@ import { authMiddleware } from "../utils/middlewares/authMiddleware";
 import { createAnswerValidation, createCommentValidation, updateAnswerValidation, updateCommentValidation } from "../validations/commentValidation";
 import { validationMiddleware } from "../utils/middlewares/validationMiddleware";
 
-const router = Router();
+const router = Router({strict: true});
 
 router.post('/comment', createCommentValidation, validationMiddleware, authMiddleware, commentController.createComment);
 router.delete('/comment', authMiddleware, commentController.removeComment);

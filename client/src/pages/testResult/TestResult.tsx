@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './ResultPage.module.scss';
+import styles from './TestResult.module.scss';
 import useTestStore from '../../stores/testStore';
 
-const ResultPage = () => {
+export default function TestResult() {
     const result = useTestStore(state => state.result);
     return (
         <div className={styles.resultPage}>
@@ -13,5 +13,3 @@ const ResultPage = () => {
         </div>
     );
 }
-
-export default ResultPage;

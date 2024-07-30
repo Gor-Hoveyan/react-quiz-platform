@@ -4,18 +4,18 @@ import { authMiddleware } from "./../utils/middlewares/authMiddleware";
 import { validationMiddleware } from "../utils/middlewares/validationMiddleware";
 
 
-const router = Router();
+const router = Router({strict: true});
 
-router.get('/test/:id', quizController.getQuiz);
-router.post('/test', /*createTestValidation*/ validationMiddleware, authMiddleware, quizController.createQuiz);
-router.put('/test/:id', authMiddleware, quizController.updateQuiz);
-router.delete('/test/:id', authMiddleware, quizController.deleteQuiz);
-router.get('/tests', quizController.getTen);
-router.get('/tests/:id', authMiddleware, quizController.getUserQuizzes);
-router.post('/tests/search', quizController.search);
-router.get('/tests/pagination', quizController.pagination);
-router.put('/test/like/:id', authMiddleware, quizController.likeQuiz);
-router.put('/test/save/:id', authMiddleware, quizController.saveQuiz);
-router.post('/test/submit', authMiddleware, quizController.submitQuiz);
+router.get('/quiz/:id', quizController.getQuiz);
+router.post('/quiz', /*createTestValidation*/ validationMiddleware, authMiddleware, quizController.createQuiz);
+router.put('/quiz/:id', authMiddleware, quizController.updateQuiz);
+router.delete('/quiz/:id', authMiddleware, quizController.deleteQuiz);
+router.get('/quizzes', quizController.getTen);
+router.get('/quizzes/:id', authMiddleware, quizController.getUserQuizzes);
+router.post('/quizzes/search/', quizController.search);
+router.get('/quizzes/pagination/', quizController.pagination);
+router.put('/quiz/like/:id', authMiddleware, quizController.likeQuiz);
+router.put('/quiz/save/:id', authMiddleware, quizController.saveQuiz);
+router.post('/quiz/submit', authMiddleware, quizController.submitQuiz);
 
 export const quizRouter = router;

@@ -1,4 +1,4 @@
-@mixin dropdown() {
+@mixin dropdown {
     .dropdown {
         text-align: right !important;
 
@@ -64,7 +64,7 @@
         transition: background-color 0.3s ease;
         margin-top: 10px;
     }
-    
+
     .button:hover {
         background-color: #0056b3;
     }
@@ -89,5 +89,220 @@
         &:hover {
             background-color: orangered;
         }
+    }
+}
+
+@mixin testForm {
+
+    width: 100%;
+    min-height: 100vh;
+    max-height: fit-content;
+    background-color: #eee;
+    padding: 100px 0;
+    @include button;
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    input[type='radio'] {
+        width: auto;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .formGroup {
+        margin-bottom: 15px;
+    }
+
+    .nestedFormGroup {
+        margin-left: 20px;
+        margin-bottom: 10px;
+    }
+
+    .answerGroup {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .error {
+        color: tomato;
+        margin: 10px 0;
+        text-align: left;
+
+    }
+
+    .textarea {
+        resize: vertical;
+    }
+
+    .navLink {
+        text-decoration: none;
+        color: white;
+    }
+}
+
+@mixin postReview {
+    min-height: 100vh;
+
+    .testContainer {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin: 100px auto;
+    }
+
+    @media (min-width: 1000px) {
+        .testContainer {
+            width: 50%;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .testContainer {
+            width: 80%;
+        }
+    }
+
+    .testReviewHeader {
+        margin-bottom: 20px;
+        border-bottom: 1px solid black;
+
+        .navLink {
+            text-decoration: none;
+            color: black;
+
+            &:hover {
+                color: rgb(0, 153, 255);
+            }
+        }
+    }
+
+    .navLink {
+
+        color: rgb(0, 153, 255);
+
+        &:hover {
+            color: blue;
+        }
+    }
+
+    .testReviewH5,
+    .testReviewH3 {
+        margin: 10px 0;
+    }
+
+    .testReviewH3 {
+        color: rgb(97, 97, 97);
+    }
+
+    .testReviewH5 {
+        font-size: 1.1rem;
+    }
+
+    .testComments,
+    .testLikes {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .questions {
+        margin-bottom: 20px;
+    }
+
+    .question {
+        margin-bottom: 10px;
+    }
+
+    .ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .li {
+        padding: 5px 0;
+    }
+
+    .results {
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+    }
+
+    .result {
+        margin-bottom: 10px;
+    }
+}
+
+@mixin postPage {
+    width: 100%;
+    min-height: 100vh;
+    max-height: fit-content;
+    background-color: #eee;
+    padding: 100px 0;
+
+    .testPage {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+
+            h3 {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+
+            .answer {
+                margin-bottom: 10px;
+                display: flex;
+
+                input {
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        @include button;
     }
 }

@@ -4,7 +4,7 @@ import { authMiddleware } from "../utils/middlewares/authMiddleware";
 import { setAvatarValidation, updateUserValidation } from "../validations/userValidation";
 import { validationMiddleware } from "../utils/middlewares/validationMiddleware";
 
-const router = Router();
+const router = Router({strict: true});
 
 router.get('/user', authMiddleware, userController.getUser);
 router.put('/follow/:id', authMiddleware, userController.follow);

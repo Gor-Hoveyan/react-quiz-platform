@@ -2,16 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
 import { UserJWTPayload } from './../../services/userService';
 
-
-
-export function authMiddleware( req: Request, res: Response, next: NextFunction) {
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        throw new Error('Access denied');
+        throw({status: 403, message: 'Access denied'});
     }
     jwt.verify(token, process.env.ACCESS_SECRET as Secret, (err, payload) => {
-        if(err) {
-            throw new Error('Invalid bearer')
+        if (err) {
+            throw({status: 400, message: 'Invalid bearer'});
         }
 
         const userPayload = payload as UserJWTPayload;
@@ -20,7 +18,6 @@ export function authMiddleware( req: Request, res: Response, next: NextFunction)
             id: userPayload.id,
             email: userPayload.id
         }
-
         next();
     })
 };

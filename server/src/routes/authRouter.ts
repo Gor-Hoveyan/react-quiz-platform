@@ -4,7 +4,7 @@ import { authMiddleware } from "../utils/middlewares/authMiddleware";
 import { registrationValidation } from "../validations/userValidation";
 import { validationMiddleware } from "../utils/middlewares/validationMiddleware";
 
-const router = Router();
+const router = Router({strict: true});
 
 router.post('/auth/register', registrationValidation, validationMiddleware, authController.register);
 router.post('/auth/login', authController.login);

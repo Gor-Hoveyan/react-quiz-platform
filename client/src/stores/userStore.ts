@@ -38,6 +38,8 @@ interface IStore {
     handleDropArea: (val: boolean) => void,
     like: (testId: string) => void,
     save: (testId: string) => void,
+    likeQuiz: (quizId: string) => void,
+    saveQuiz: (quizId: string) => void,
     toggleMenu: () => void,
     follow: (userId: string) => void,
     unfollow: (userId: string) => void,
@@ -75,7 +77,7 @@ interface IUser {
     showLikedPosts: boolean,
     showPassedTests: boolean,
     savedPosts: (Test | string)[],
-    passedTests: (PassedTest | IPassedTest)[]
+    passedTests: (PassedTest | IPassedTest)[],
     likedComments: [],
     likedAnswers: [],
     createdTests: [],
@@ -133,7 +135,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
             } else {
                 set({ isLogged: false });
             }
-        }).catch(err => set({ isLogged: false }));
+        }).catch(err =>{ console.log(err); set({ isLogged: false });});
     },
     getUser: async () => {
         await API.get(`/user`).then(res => {
@@ -177,6 +179,12 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     save: async (testId) => {
         await API.put(`/test/save/${testId}`).catch(err => { new Error(err) });
+    },    
+    likeQuiz: async (quizId) => {
+        await API.put(`/quiz/like/${quizId}`).catch(err => { new Error(err) });
+    },
+    saveQuiz: async (quizId) => {
+        await API.put(`/quiz/save/${quizId}`).catch(err => { new Error(err) });
     },
     toggleMenu: () => {
         const isMenuOpen = get().isMenuOpen;

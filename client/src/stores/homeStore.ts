@@ -32,7 +32,7 @@ const useHomeStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     searchTests: async () => {
         set({ isLoading: true });
-        await API.post(`/tests/search`, { name: get().searchVal }).then(res => {
+        await API.post(`/tests/search/`, { name: get().searchVal }).then(res => {
             if (res.data.tests.length) {
                 set({ tests: res.data.tests });
                 set({ isLoading: false });
@@ -46,7 +46,7 @@ const useHomeStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ searchVal: val });
     },
     setPagination: async () => {
-        await API.get(`/tests/pagination?page=${get().currentPage}&limit=10`).then(res => {
+        await API.get(`/tests/pagination/?page=${get().currentPage}&limit=10`).then(res => {
             if(res.data.totalPages && res.data.tests.length) {
                 set({totalPages: Number(res.data.totalPages)});
                 set({tests: res.data.tests});

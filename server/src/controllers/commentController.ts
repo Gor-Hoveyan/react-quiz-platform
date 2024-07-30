@@ -55,7 +55,7 @@ async function getComments(req: Request, res: Response, next: NextFunction) {
             throw new Error('Test not found');
         }
         const comments = await commentService.getComments(id);
-        res.status(200).json(comments);
+        return res.status(200).json(comments);
     } catch (err) {
         next(err);
     }

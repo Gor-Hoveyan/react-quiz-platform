@@ -7,11 +7,11 @@ const quizSchema = new Schema({
     questions: [
         {
             question: { type: String, require: true },
+            rightAnswer: Number,
             answers: {
                 type: [
                     {
                         answer: { type: String, required: true },
-                        isRight: { type: Boolean, required: true }
                     }
                 ]
             },

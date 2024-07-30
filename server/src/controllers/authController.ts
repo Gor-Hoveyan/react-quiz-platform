@@ -67,7 +67,7 @@ async function refreshToken(req: Request, res: Response, next: NextFunction) {
     try {
         const { refreshToken } = req.cookies;
         if (!refreshToken) {
-            return res.status(401).json({ message: 'Not authorized' });
+            throw({status: 401, message: 'Not authorized'});
         }
         const { newRefreshToken, newAccessToken, user } = await userService.refreshToken(refreshToken) as { newRefreshToken: string, newAccessToken: string, user: unknown };
         res.cookie('refreshToken', await newRefreshToken, {

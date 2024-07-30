@@ -68,8 +68,7 @@ async function getUserTests(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
         if (id !== req.user.id) {
-            res.status(403);
-            throw new Error('Access denied');
+            throw({status: 403, message: 'Access denied'});
         }
         const tests = await testService.getUserTests(id);
         return res.status(200).json({ tests });
@@ -91,9 +90,8 @@ async function search(req: Request, res: Response, next: NextFunction) {
 async function pagination(req: Request, res: Response, next: NextFunction) {
     try {
         const { page, limit } = req.query;
-
         if (!Number(page) || !Number(limit)) {
-            throw new Error('Invalid request');
+            throw ({status: 400, message: 'Invalid request'});
         }
         const { tests, totalPages } = await testService.pagination(Number(page), Number(limit));
         return res.status(200).json({ tests, totalPages });

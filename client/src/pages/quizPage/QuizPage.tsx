@@ -1,30 +1,31 @@
 import React, { useEffect } from 'react';
-import styles from './TestPage.module.scss';
+import styles from './QuizPage.module.scss';
 import { Navigate, NavLink, useParams } from 'react-router-dom';
-import useTestStore, { Answer } from '../../stores/testStore';
+import useQuizStore, { IQuizAnswer } from '../../stores/quizStore';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import Loader from '../../components/loader/Loader';
 import useUserStore from '../../stores/userStore';
 
 type Question = {
     question: string;
-    answers: Answer[];
+    rightAnswer: number;
+    answers: IQuizAnswer[];
     selectedAnswer: string;
 }
 
-export type TestPageFormValues = {
+export type QuizPageFormValues = {
     questions: Question[]
 }
 
-export default function TestPage() {
-    const getTest = useTestStore(state => state.getTest);
-    const test = useTestStore(state => state.test);
-    const submitTest = useTestStore(state => state.submitTest);
+export default function QuizPage() {
+    const getQuiz = useQuizStore(state => state.getQuiz);
+    const quiz = useQuizStore(state => state.quiz);
+    const submitQuiz = useQuizStore(state => state.submitQuiz);
     const user = useUserStore(state => state.user)
     const params = useParams();
-    const testId = params.id;
-    const result = useTestStore(state => state.result);
-    const { control, handleSubmit, setValue, formState: { errors } } = useForm<TestPageFormValues>({
+    const quizId = params.id;
+    const result = useQuizStore(state => state.result);
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm<QuizPageFormValues>({
         defaultValues: {
             questions: []
         },
@@ -37,31 +38,41 @@ export default function TestPage() {
     });
 
     useEffect(() => {
-        if (testId) {
-            getTest(testId);
+        if (quizId) {
+            getQuiz(quizId);
         }
-    }, [testId, getTest]);
+    }, [quizId, getQuiz]);
 
     useEffect(() => {
-        if (test) {
-            setValue('questions', test.questions.map(q => ({
+        if (quiz) {
+            setValue('questions', quiz.questions.map(q => ({
                 question: q.question,
+                rightAnswer: Number(q.rightAnswer),
                 answers: q.answers,
                 selectedAnswer: ''
             })));
         }
-    }, [test, setValue]);
+    }, [quiz, setValue]);
 
-    const onSubmit = (data: TestPageFormValues) => {
-        submitTest(data);
+    const onSubmit = (data: QuizPageFormValues) => {
+        console.log(data);
+        let rightAnswers = 0;
+        for (let i = 0; i < data.questions.length; i++) {
+            if (data.questions[i].rightAnswer === Number(data.questions[i].selectedAnswer)) {
+                rightAnswers++;
+            }
+        }
+        if (quiz) {
+            submitQuiz(quiz._id, rightAnswers);
+        }
     }
 
     return (
         user?.isActivated ? <div className={styles.main}>
-            {test ?
+            {quiz ?
                 <div className={styles.testPage} >
-                    <h1>{test.name}</h1>
-                    <p>{test.description}</p>
+                    <h1>{quiz.name}</h1>
+                    <p>{quiz.description}</p>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {fields.map((question, qIndex) => (
@@ -77,9 +88,9 @@ export default function TestPage() {
                                                 <input
                                                     type='radio'
                                                     name={`questions.${qIndex}.selectedAnswer`}
-                                                    value={String(answer.points)}
-                                                    checked={String(field.value) === String(answer.points)}
-                                                    onChange={() => field.onChange(String(answer.points))}
+                                                    value={String(aIndex)}
+                                                    checked={String(field.value) === String(aIndex)}
+                                                    onChange={() => field.onChange(String(aIndex))}
                                                 />
                                             )}
                                         />
@@ -90,11 +101,11 @@ export default function TestPage() {
                         ))}
 
 
-                        {!result ? <button className={styles.button} type='submit'>Submit</button> : <NavLink className={styles.navLink} to={`/test/${test._id}/result`}><button  className={styles.button}>View results</button></NavLink>}
+                        {!result ? <button className={styles.button} type='submit'>Submit</button> : <NavLink className={styles.navLink} to={`/quiz/${quiz._id}/result`}><button className={styles.button}>View results</button></NavLink>}
 
                     </form>
                 </div>
                 : <Loader />}
         </div> : <Navigate to={`/verify`} />
     );
-};
+}

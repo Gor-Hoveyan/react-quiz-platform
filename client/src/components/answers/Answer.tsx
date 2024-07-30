@@ -47,7 +47,7 @@ export default function Answer({ answer }: Props) {
                                         maxLength: { value: 1000, message: 'Answer can contain maximum 1000 characters' },
                                     })} />
                         <button className={styles.button} type='submit'>
-                            Update comment
+                            Update answer
                         </button>
                         <button onClick={() => setUpdatingAnswer('')} type='button' className={styles.cancelButton}>
                             Cancel

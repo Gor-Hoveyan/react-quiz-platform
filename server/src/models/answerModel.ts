@@ -10,12 +10,4 @@ const answerSchema = new Schema({
     createdAt: { type: Date, default: Date.now() },
 });
 
-answerSchema.pre('validate', function (next) {
-    if (!this.test && !this.quiz) {
-        next(new Error('Either quizId or testId must be present.'));
-    } else if (this.test && this.quiz) {
-        next(new Error('Only one of quizId or testId can be present.'));
-    }
-});
-
 export default mongoose.model('Answer', answerSchema)
