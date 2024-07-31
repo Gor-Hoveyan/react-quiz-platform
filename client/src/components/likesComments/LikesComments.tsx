@@ -34,7 +34,7 @@ export default function LikesComments({ id, isAnswer, passed, views, commentsCou
                     {commentsCount}
                 </p>}
             {!isComment &&
-                <p className={styles.Saves}>
+                <p className={styles.saves}>
                     <BsBookmarkFill color={isSaved ? 'black' : 'gray'} onClick={(e) => { save && save(id); e.preventDefault() }} />
                     {savesCount}
                 </p>

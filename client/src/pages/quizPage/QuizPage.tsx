@@ -83,7 +83,7 @@ export default function QuizPage() {
                                         <Controller
                                             name={`questions.${qIndex}.selectedAnswer`}
                                             control={control}
-                                            rules={{ required: true }}
+                                            rules={{ required: 'You need to select an answer' }}
                                             render={({ field }) => (
                                                 <input
                                                     type='radio'
@@ -97,11 +97,12 @@ export default function QuizPage() {
                                         <label>{answer.answer}</label>
                                     </div>
                                 ))}
+                                <p className={styles.error}>{errors.questions && errors.questions[qIndex]?.selectedAnswer?.message}</p>
                             </div>
                         ))}
 
 
-                        {!result ? <button className={styles.button} type='submit'>Submit</button> : <NavLink className={styles.navLink} to={`/quiz/${quiz._id}/result`}><button className={styles.button}>View results</button></NavLink>}
+                        {!result ? <button className={styles.button} onClick={() => console.log(errors)} type='submit'>Submit</button> : <NavLink className={styles.navLink} to={`/quiz/${quiz._id}/result`}><button className={styles.button}>View results</button></NavLink>}
 
                     </form>
                 </div>

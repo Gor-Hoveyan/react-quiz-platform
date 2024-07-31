@@ -19,6 +19,7 @@ import QuizForm from './pages/quizForm/QuizForm';
 import QuizReview from './pages/quizReview/QuizReview';
 import QuizPage from './pages/quizPage/QuizPage';
 import QuizResult from './pages/quizResult/QuizResult';
+import UserQuizzes from './pages/userQuizzes/UserQuizzes';
 
 function App() {
 
@@ -35,7 +36,8 @@ function App() {
         <Route path='quiz/:id/result' element={<QuizResult />} />
         <Route path='test/create' element={<TestForm />} />
         <Route path='quiz/create' element={<QuizForm />} />
-        <Route path='user/myTests' element={<UserTests />} />
+        <Route path='user/tests' element={<UserTests />} />
+        <Route path='user/quizzes' element={<UserQuizzes />} />
         <Route path='test/review/:id' element={<TestReview />} />
         <Route path='quiz/review/:id' element={<QuizReview />} />
         <Route path='profile' element={<UserProfile />} />

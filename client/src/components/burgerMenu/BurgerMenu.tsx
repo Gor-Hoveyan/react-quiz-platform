@@ -21,13 +21,16 @@ export default function BurgerMenu({ isLogged, toggleMenu, isMenuOpen, logout }:
                 <ul className={styles.navList}>
                     <li><NavLink to='/' className={styles.navItem} onClick={toggleMenu}>Home</NavLink></li>
                     {isLogged && <>
+
                         <li><NavLink to='/profile' className={styles.navItem} onClick={toggleMenu}>My Profile</NavLink></li>
-                        <li><NavLink to='/user/myTests' className={styles.navItem} onClick={toggleMenu}>My Tests</NavLink></li>
+                        <li><NavLink to='/user/tests' className={styles.navItem} onClick={toggleMenu}>My Tests</NavLink></li>
+                        <li><NavLink to='/user/quizzes' className={styles.navItem} onClick={toggleMenu}>My Quizzes</NavLink></li>
                         <li><NavLink to='/test/create' className={styles.navItem} onClick={toggleMenu}>Create test</NavLink></li>
+                        <li><NavLink to='/quiz/create' className={styles.navItem} onClick={toggleMenu}>Create quiz</NavLink></li>
                     </>}
                     <div className={styles.authButtons}>
                         {isLogged ?
-                            <li><NavLink className={styles.navItem} to={'auth/login'} onClick={() => {logout(); toggleMenu()}}>Log Out</NavLink></li>
+                            <li><NavLink className={styles.navItem} to={'auth/login'} onClick={() => { logout(); toggleMenu() }}>Log Out</NavLink></li>
                             :
                             <>
                                 <li><NavLink className={styles.navItem} to={'auth/login'} onClick={toggleMenu}>Login</NavLink></li>

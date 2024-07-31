@@ -247,8 +247,8 @@ async function getPassedTests(userId: string) {
         if (!test) {
             throw { status: 404, message: 'Test not found' };
         }
-        const result = user.passedTests[i].result;
-        passedTests[i] = { ...test.toObject(), result };
+        const finalResult = user.passedTests[i].result;
+        passedTests[i] = { ...test.toObject(), finalResult };
     }
     return passedTests;
 }

@@ -1,6 +1,6 @@
 @media (max-width: 800px) {
     .burgerMenu {
-        position: fixed;
+        position: absolute;
         z-index: 10022;
     }
 
@@ -65,14 +65,24 @@
             color: white;
         }
 
-        .navItem {
-            margin: 10px 0;
+        .navList li {
+            margin-bottom: 40px;
         }
 
-        .navList li {
-            margin: 100px 0;
+        .navItem {
+            text-decoration: none;
+        }
+
+        .navList:first-child {
+            margin-top: 75px;
+        }
+
+        .navList {
+            padding: 0 15px;
+            list-style: none;
         }
     }
+
 }
 
 @media (min-width: 800px) {

@@ -13,6 +13,7 @@ interface IProps {
 export default function PassedTests({ tests }: IProps) {
     const like = useUserStore(state => state.like);
     const save = useUserStore(state => state.save);
+    console.log(tests)
     const user = useUserStore(state => state.user);
     return (
         <div className={styles.main}>

@@ -28,24 +28,32 @@ const Header = () => {
 
             <nav className={styles.nav}>
                 <BurgerMenu isLogged={isLogged} toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} logout={logout} />
-
-                <NavLink to='/' className={styles.navItem}>Home</NavLink>
+                <NavLink to='/' className={`${styles.navItem} ${styles.homeNav}`}>Home</NavLink>
                 {isLogged && <>
-                    <NavLink to='/profile' className={styles.navItem}>My Profile</NavLink>
-                    <NavLink to='/user/myTests' className={styles.navItem}>My Tests</NavLink>
+                    <div className={styles.dropdown}>
+                        <div className={`${styles.navItem} ${styles.dropdownButton}`}>My Posts</div>
+                        <div className={styles.dropdownContent}>
+                            <NavLink to='/user/tests' className={styles.navItem}>Tests</NavLink>
+                            <NavLink to='/user/quizzes' className={styles.navItem}>Quizzes</NavLink>
+                        </div>
+                    </div>
                     <div className={styles.dropdown}>
                         <div className={`${styles.navItem} ${styles.dropdownButton}`}>Create</div>
                         <div className={styles.dropdownContent}>
-                            <NavLink to='/test/create' className={styles.navItem}>Create Test</NavLink>
-                            <NavLink to='/quiz/create' className={styles.navItem}>Create Quiz</NavLink>
+                            <NavLink to='/test/create' className={styles.navItem}>Test</NavLink>
+                            <NavLink to='/quiz/create' className={styles.navItem}>Quiz</NavLink>
                         </div>
                     </div>
-
+                    <div className={styles.dropdown}>
+                        <div className={`${styles.navItem} ${styles.dropdownButton}`}>My Profile</div>
+                        <div className={styles.dropdownContent}>
+                            <NavLink to='/profile' className={styles.navItem}>View Profile</NavLink>
+                            <NavLink className={styles.navItem} to={'auth/login'} onClick={() => logout()}>Logout</NavLink>
+                        </div>
+                    </div>
                 </>}
                 <div className={styles.authButtons}>
-                    {isLogged ?
-                        <NavLink to={'auth/login'}><button onClick={() => logout()} className={styles.button}>Logout</button></NavLink>
-                        :
+                    {!isLogged &&
                         <>
                             <NavLink to={'auth/login'}><button className={styles.button}>Login</button></NavLink>
                             <NavLink to={'auth/registration'}><button className={styles.button}>Sign Up</button></NavLink>

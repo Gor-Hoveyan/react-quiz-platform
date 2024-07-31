@@ -5,6 +5,7 @@ import API from '../api/axiosConfig';
 import { AxiosResponse } from 'axios';
 import { Test } from './testStore';
 import uploadImg from '../services/uploadService';
+import { IQuiz } from './quizStore';
 
 export interface IUserIcon {
     _id: string,
@@ -22,6 +23,7 @@ interface IStore {
     user: IUser | null,
     userPage: IUser | null,
     tests: Test[],
+    quizzes: IQuiz[],
     isLoading: boolean,
     verificationTimer: number,
     register: (email: string, username: string, password: string) => void,
@@ -32,6 +34,7 @@ interface IStore {
     getUser: () => void,
     updateUser: (username: string, bio: string, showLikedPosts: boolean, showPassedTests: boolean) => void,
     getUserTests: (userId: string) => void,
+    getUserQuizzes: (userId: string) => void,
     handleIsLogged: (val: boolean) => void,
     handleIsRegistered: (val: boolean) => void,
     handleIsUpdated: (val: boolean) => void,
@@ -96,6 +99,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     user: null,
     userPage: null,
     tests: [],
+    quizzes: [],
     isLoading: false,
     register: async (email, username, password) => {
         await API.post(`/auth/register`, { email, username, password }).then(res => {
@@ -155,6 +159,14 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ isLoading: true });
         await API.get(`/tests/${userId}`).then(res => {
             set({ tests: res.data.tests });
+            set({ isLoading: false });
+        }).catch(err => { new Error(err) });
+        set({isLoading: false});
+    },
+    getUserQuizzes: async (userId) => {
+        set({ isLoading: true });
+        await API.get(`/quizzes/${userId}`).then(res => {
+            set({ quizzes: res.data.quizzes });
             set({ isLoading: false });
         }).catch(err => { new Error(err) });
         set({isLoading: false});

@@ -17,7 +17,7 @@ export default function Search() {
             <input
                 type='text'
                 className={styles.searchInput}
-                placeholder='&#x1F50E;&#xFE0E; Search for tests...'
+                placeholder='&#x1F50E;&#xFE0E; Search for some tests...'
                 value={searchVal}
                 onChange={e => handleChange(e.target.value)}
             />
