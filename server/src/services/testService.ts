@@ -129,7 +129,7 @@ async function getUserTests(userId: string) {
         throw ({ status: 404, message: 'User not found' });
     }
     return user.createdTests;
-}
+} // Added in postService
 
 async function searchTests(name: string) {
     const tests = await Test.find({ name: new RegExp(name, 'i') }).populate('author', ['username', 'avatarUrl']);
@@ -137,7 +137,7 @@ async function searchTests(name: string) {
         throw ({ status: 404, message: 'Tests not found' });
     }
     return tests;
-}
+} // Added in postService
 
 async function pagination(page: number, limit: number) {
     const skip = (page - 1) * limit;
@@ -158,13 +158,13 @@ async function likeTest(userId: string, testId: string) {
     if (!test) {
         throw ({ status: 404, message: 'Test not found' });
     }
-    if ((user.likedPosts as unknown[]).includes(testId)) {
+    if ((user.likedTests as unknown[]).includes(testId)) {
         await Test.findByIdAndUpdate(testId, { $inc: { likes: -1 } });
-        await User.findByIdAndUpdate(userId, { $pull: { likedPosts: test._id } });
+        await User.findByIdAndUpdate(userId, { $pull: { likedTests: test._id } });
         await User.findByIdAndUpdate(test.author, { $inc: { likes: - 1 } })
     } else {
         await Test.findByIdAndUpdate(testId, { $inc: { likes: +1 } });
-        await User.findByIdAndUpdate(userId, { $set: { likedPosts: [...user.likedPosts, test._id] } });
+        await User.findByIdAndUpdate(userId, { $set: { likedTests: [...user.likedTests, test._id] } });
         await User.findByIdAndUpdate(test.author, { $inc: { likes: +1 } })
     }
 }
@@ -178,12 +178,12 @@ async function saveTest(userId: string, testId: string) {
     if (!test) {
         throw ({ status: 404, message: 'Test not found' });
     }
-    if ((user.savedPosts as unknown[]).includes(testId)) {
+    if ((user.savedTests as unknown[]).includes(testId)) {
         await Test.findByIdAndUpdate(testId, { $inc: { saves: -1 } });
-        await User.findByIdAndUpdate(userId, { $pull: { savedPosts: test._id } });
+        await User.findByIdAndUpdate(userId, { $pull: { savedTests: test._id } });
     } else {
         await Test.findByIdAndUpdate(testId, { $inc: { saves: +1 } });
-        await User.findByIdAndUpdate(userId, { $set: { savedPosts: [...user.savedPosts, test._id] } });
+        await User.findByIdAndUpdate(userId, { $set: { savedTests: [...user.savedTests, test._id] } });
     }
 }
 

@@ -68,7 +68,7 @@ export default function UserSettings() {
                     </div>
                     <div className={styles.checkboxContainer}>
                         <input className={styles.checkbox} id='showPassedTests'
-                            type='checkbox' {...register('showPassedTests')} defaultChecked={user.showPassedTests}
+                            type='checkbox' {...register('showPassedTests')} defaultChecked={user.showPassedPosts}
                         />
                         <label htmlFor='showLikedPosts' >
                             Show passed tests

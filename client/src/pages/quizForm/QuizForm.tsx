@@ -84,6 +84,7 @@ export default function QuizForm() {
         user?.isActivated ?
             <div className={styles.main}>
                 <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+                    <h1 className={styles.header}>New quiz</h1>
                     <div className={styles.formGroup}>
                         <label htmlFor='name'>Name</label>
                         <input type='text' id='name' {...register('name', {
@@ -145,7 +146,7 @@ export default function QuizForm() {
                         <button className={styles.button} type='button' onClick={() => addQuestion()}>Add question</button>
                     </div>
                     <p className={styles.error}>{formError && formError}</p>
-                    {id ? <NavLink className={styles.navLink} to={`/test/${id}`}><button className={styles.button} type='button'>View test</button></NavLink> : <button className={styles.button} type='submit'>Submit</button>}
+                    {id ? <NavLink className={styles.navLink} to={`/quiz/${id}`}><button className={styles.button} type='button'>View test</button></NavLink> : <button className={styles.button} type='submit'>Submit</button>}
                 </form >
             </div> : <Navigate to={`/verify`} />);
 };

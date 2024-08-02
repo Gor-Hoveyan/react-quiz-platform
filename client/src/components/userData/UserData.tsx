@@ -7,35 +7,39 @@ interface IProps {
     followers: number,
     followings: number,
     likes: number,
-    savedTests?: number,
-    likedTests?: number,
-    passedTests?: number,
+    savedPosts?: number,
+    likedPosts?: number,
+    passedPosts?: number,
     id?: string,
     setState: (val: string) => void,
 }
 
-export default function UserData({ tests, followers, followings, likes, savedTests, likedTests, passedTests, setState, id }: IProps) {
-    const getLikedTests = useUserStore(state => state.getLikedPosts);
-    const getSavedTests = useUserStore(state => state.getSavedPosts);
+export default function UserData({ tests, followers, followings, likes, savedPosts, likedPosts, passedPosts, setState, id }: IProps) {
+    const getLikedPosts = useUserStore(state => state.getLikedPosts);
+    const getSavedPosts = useUserStore(state => state.getSavedPosts);
+    const getUserPosts = useUserStore(state => state.getUserPosts);
     const getFollowers = useUserStore(state => state.getFollowers);
     const getFollowings = useUserStore(state => state.getFollowings);
-    const getPassedTests = useUserStore(state => state.getPassedTests);
+    const getPassedPosts = useUserStore(state => state.getPassedPosts);
 
     function handleSetTests() {
         setState('Tests');
+        if(id) {
+            getUserPosts(id);
+        }
     }
 
     function handleSetSaves() {
         setState('Saves');
-        getSavedTests();
+        getSavedPosts();
     }
 
     function handleSetLikes() {
         setState('Likes');
         if (id) {
-            getLikedTests(id);
+            getLikedPosts(id);
         } else {
-            getLikedTests();
+            getLikedPosts();
         }
     }
 
@@ -60,9 +64,9 @@ export default function UserData({ tests, followers, followings, likes, savedTes
     function handleSetPassed() {
         setState('Passed');
         if (id) {
-            getPassedTests(id);
+            getPassedPosts(id);
         } else {
-            getPassedTests();
+            getPassedPosts();
         }
     }
 
@@ -72,20 +76,20 @@ export default function UserData({ tests, followers, followings, likes, savedTes
                 Likes <br />{likes}
             </div>
             <div className={styles.tests} onClick={() => handleSetTests()}>
-                Tests <br />{tests}
+                posts <br />{tests}
             </div>
             <div className={styles.followers} onClick={() => handleSetFollowers()}>
                 Followers <br />{followers}
             </div>
             <div className={styles.followings} onClick={() => handleSetFollowings()}>Followings <br />{followings}</div>
-            {Number(likedTests) >= 0 && <div className={styles.likedTests} onClick={() => handleSetLikes()}>
-                Liked tests <br /> {likedTests}
+            {Number(likedPosts) >= 0 && <div className={styles.likedTests} onClick={() => handleSetLikes()}>
+                Liked posts <br /> {likedPosts}
             </div>}
-            {Number(passedTests) >= 0 && <div className={styles.passedTests} onClick={() => handleSetPassed()}>
-                Passed tests <br /> {passedTests}
+            {Number(passedPosts) >= 0 && <div className={styles.passedTests} onClick={() => handleSetPassed()}>
+                Passed tests <br /> {passedPosts}
             </div>}
-            {Number(savedTests) >= 0 && <div className={styles.savedTests} onClick={() => handleSetSaves()}>
-                Saved tests <br /> {savedTests}
+            {Number(savedPosts) >= 0 && <div className={styles.savedTests} onClick={() => handleSetSaves()}>
+                Saved tests <br /> {savedPosts}
             </div>}
         </div>
     );

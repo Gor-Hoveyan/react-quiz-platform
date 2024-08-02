@@ -130,6 +130,7 @@ export default function TestForm() {
     return (
         user?.isActivated ? <div className={styles.main}>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+            <h1 className={styles.header}>New test</h1>
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Name</label>
                     <input type="text" id="name" {...register('name', {

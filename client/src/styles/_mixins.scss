@@ -167,6 +167,13 @@
         text-decoration: none;
         color: white;
     }
+
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid darkgray;
+    }
 }
 
 @mixin postReview {
@@ -359,36 +366,40 @@
     list-style: none;
     padding: 0;
     width: fit-content;
+}
+
+@mixin post {
+    text-align: left;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition-duration: 0.5s;
+    min-width: 400px;
 
     .navLink {
         text-decoration: none;
+        color: black;
     }
 
-    .testItem {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 15px;
-        margin-bottom: 10px;
-        transition-duration: 0.5s;
-        min-width: 400px;
-
-        &:hover {
-            background-color: #dfdfdf;
-            border: 1px solid #9c9c9c;
-        }
-
-        .testDescription {
-            margin: 5px 0 0;
-            color: #666;
-            text-align: left;
-        }
+    &:hover {
+        background-color: #dfdfdf;
+        border: 1px solid #9c9c9c;
     }
 
-    .testTitle {
+    .postDescription {
+        margin: 5px 0 0;
+        color: #666;
+        text-align: left;
+    }
+
+    .postTitle {
         margin: 5px 0;
         font-size: 1.5rem;
         color: black;
         text-align: left;
     }
+
+
 }

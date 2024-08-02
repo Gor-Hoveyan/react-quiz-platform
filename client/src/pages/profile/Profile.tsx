@@ -6,20 +6,22 @@ import { Navigate, useParams } from 'react-router-dom';
 import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
 import UsersList from '../../components/usersList/UsersList';
 import { Test } from '../../stores/testStore';
-import PassedTests from '../../components/passedTests/PassedTests';
+import PassedTests from '../../components/passedPosts/PassedPosts';
 import Loader from '../../components/loader/Loader';
+import { IQuiz } from '../../stores/quizStore';
 
 export default function Profile() {
     const getUserPage = useUserStore(state => state.getUserPage);
     const user = useUserStore(state => state.user);
     const userPage = useUserStore(state => state.userPage);
     const isLogged = useUserStore(state => state.isLogged);
-    const tests = userPage?.createdTests;
     const params = useParams();
     const follow = useUserStore(state => state.follow);
     const unfollow = useUserStore(state => state.unfollow);
     const [pageState, setPageState] = useState<string>('Tests');
-
+    const posts = useUserStore(state => state.posts);
+    const passedPosts = useUserStore(state => state.passedPosts);
+    const likedPosts = useUserStore(state => state.likedPosts);
 
     useEffect(() => {
         if (params.id) {
@@ -39,11 +41,11 @@ export default function Profile() {
                 <p className={styles.username}>{userPage?.username}</p>
             </div>
             <div className={styles.bio}>{userPage?.bio}</div>
-            <UserData likes={userPage.likes} tests={userPage.createdTests.length}
+            <UserData likes={userPage.likes} tests={userPage.createdTests.length + userPage.createdQuizzes.length}
                 setState={setPageState} followers={userPage.followers.length}
                 followings={userPage.followings.length} id={userPage._id} 
-                passedTests={userPage.showPassedTests ? userPage.passedTests.length : undefined}
-                likedTests={userPage?.showLikedPosts ? userPage.likedPosts.length : undefined}
+                passedPosts={userPage.showPassedPosts ? userPage.passedTests.length + userPage.passedQuizzes.length : undefined}
+                likedPosts={userPage?.showLikedPosts ? userPage.likedTests.length + userPage.likedQuizzes.length : undefined}
             />
             {isLogged &&
                 <div className={styles.actions}>
@@ -53,11 +55,11 @@ export default function Profile() {
                         <button className={styles.button} onClick={() => follow(userPage._id)}>Follow</button>}
                 </div>
             }
-            {pageState === 'Tests' && <UserProfilePosts tests={(tests as Test[])} />}
-            {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} tests={userPage.likedPosts as Test[]} />}
+            {pageState === 'Tests' && <UserProfilePosts posts={(posts as Test[])} />}
+            {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} posts={likedPosts} />}
             {pageState === 'Followers' && <UsersList icons={(userPage.followers as IUserIcon[])} isFollowers={true} />}
             {pageState === 'Followings' && <UsersList icons={(userPage.followings as IUserIcon[])} isFollowers={false} />}
-            {pageState === 'Passed' && userPage.showPassedTests && <PassedTests tests={(userPage.passedTests as IPassedTest[])} />}
+            {pageState === 'Passed' && userPage.showPassedPosts && <PassedTests posts={passedPosts} />}
         </div> : <Loader />}</> : <Navigate to={`/profile`} />
     );
 };

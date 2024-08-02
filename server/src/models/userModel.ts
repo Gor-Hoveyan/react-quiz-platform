@@ -10,22 +10,22 @@ const userSchema = new Schema({
     likes: { type: Number, required: true, default: 0 },
     followers: [{ type: Schema.Types.ObjectId, ref: 'User', required: true, default: [] }],
     followings: [{ type: Schema.Types.ObjectId, ref: 'User', required: true, default: [] }],
-    likedPosts: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
-    savedPosts: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
+    likedTests: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
+    savedTests: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
     createdTests: [{ type: Schema.Types.ObjectId, ref: 'Test', required: true, default: [] }],
-    showLikedPosts: { type: Boolean, required: true, default: false },
-    showPassedTests: { type: Boolean, required: true, default: false },
-    likedComments: [{ type: Schema.Types.ObjectId, ref: 'Comment', required: true, default: [] }],
-    likedAnswers: [{ type: Schema.Types.ObjectId, ref: 'Answer', required: true, default: [] }],
-    createdQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz', required: true, default: [] }],
-    likedQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz', required: true, default: [] }],
-    savedQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz', required: true, default: [] }],
     passedTests: [
         {
             testId: { type: Schema.Types.ObjectId, ref: 'Test', required: true  },
             result: { type: String, required: true },
         }
     ],
+    showLikedPosts: { type: Boolean, required: true, default: false },
+    showPassedPosts: { type: Boolean, required: true, default: false },
+    likedComments: [{ type: Schema.Types.ObjectId, ref: 'Comment', required: true, default: [] }],
+    likedAnswers: [{ type: Schema.Types.ObjectId, ref: 'Answer', required: true, default: [] }],
+    createdQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz', required: true, default: [] }],
+    likedQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz', required: true, default: [] }],
+    savedQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz', required: true, default: [] }],
     passedQuizzes: [
         {
             quizId: { type: Schema.Types.ObjectId, ref: 'Quiz' },

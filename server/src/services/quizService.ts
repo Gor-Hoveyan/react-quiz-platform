@@ -157,7 +157,7 @@ async function likeQuiz(userId: string, quizId: string) {
     if (!quiz) {
         throw ({ status: 404, message: 'Quiz not found' });
     }
-    if ((user.likedPosts as unknown[]).includes(quizId)) {
+    if ((user.likedQuizzes as unknown[]).includes(quizId)) {
         await Quiz.findByIdAndUpdate(quizId, { $inc: { likes: -1 } });
         await User.findByIdAndUpdate(userId, { $pull: { likedQuizzes: quiz._id } });
         await User.findByIdAndUpdate(quiz.author, { $inc: { likes: - 1 } })

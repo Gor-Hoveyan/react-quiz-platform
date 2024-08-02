@@ -9,6 +9,7 @@ import { testRouter } from './routes/testRouter';
 import { userRouter } from './routes/userRouter';
 import { commentRouter } from './routes/commentRouter';
 import { quizRouter } from './routes/quizRouter';
+import { postRouter } from './routes/postRouter';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,8 @@ app.use('/api', testRouter);
 app.use('/api', quizRouter);
 app.use('/api', userRouter);
 app.use('/api', commentRouter);
+app.use('/api', postRouter);
+
 connectDB();
 app.use(errorMiddleware);
 app.listen(PORT, () => {

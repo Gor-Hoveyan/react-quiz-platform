@@ -1,28 +1,21 @@
-import React from 'react';
-import styles from './PassedTests.module.scss';
-import { NavLink } from 'react-router-dom';
-import useUserStore, { IPassedTest } from '../../stores/userStore';
-import LikesComments from '../likesComments/LikesComments';
-import UserIcon from '../userIcon/UserIcon';
-import Loader from '../loader/Loader';
+import React from "react";
+import styles from './PassedTest.module.scss';
+import { NavLink } from "react-router-dom";
+import UserIcon from "../userIcon/UserIcon";
+import LikesComments from "../likesComments/LikesComments";
+import useUserStore, { IPassedTest } from "../../stores/userStore";
+
 
 interface IProps {
-    tests: IPassedTest[]
+    test: IPassedTest,
 }
 
-export default function PassedTests({ tests }: IProps) {
+export default function PassedTest({test}: IProps) {
     const like = useUserStore(state => state.like);
     const save = useUserStore(state => state.save);
-    console.log(tests)
     const user = useUserStore(state => state.user);
     return (
         <div className={styles.main}>
-            <h3 className={styles.header}>Passed tests</h3>
-            {tests[0] ? <>{tests[0]?.author ? <div>
-
-                <ul className={styles.testList}>
-
-                    {tests.map(test => (
                         <NavLink key={test._id} className={styles.navLink} to={`/test/review/${test._id}`}>
                             <li className={styles.testItem}>
                                 <UserIcon createdAt={test.createdAt} username={test.author?.username} id={test.author?._id} avatarUrl={test.author?.avatarUrl} />
@@ -33,8 +26,8 @@ export default function PassedTests({ tests }: IProps) {
                                     commentsCount={test.comments?.length + test.commentAnswers?.length}
                                     likesCount={test?.likes}
                                     savesCount={test?.saves}
-                                    isSaved={(user?.savedPosts as string[])?.includes(test._id)}
-                                    isLiked={(user?.likedPosts as string[])?.includes(test._id)}
+                                    isSaved={(user?.savedTests as string[])?.includes(test._id)}
+                                    isLiked={(user?.likedTests as string[])?.includes(test._id)}
                                     isComment={false}
                                     isAnswer={false}
                                     like={like}
@@ -46,8 +39,6 @@ export default function PassedTests({ tests }: IProps) {
                             </li>
 
                         </NavLink>
-                    ))}
-                </ul>
-            </div> : <Loader />}</> : <h4 className={styles.header}>No passed tests yet</h4>}</div>
-    );
+        </div>
+    )
 }

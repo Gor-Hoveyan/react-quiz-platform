@@ -41,8 +41,8 @@ export default function QuizReview() {
                         commentsCount={quiz.comments.length + quiz.commentAnswers?.length}
                         likesCount={quiz.likes}
                         savesCount={quiz.saves}
-                        isSaved={(user?.savedPosts as string[])?.includes(quiz._id)}
-                        isLiked={(user?.likedPosts as string[])?.includes(quiz._id)}
+                        isSaved={(user?.savedQuizzes as string[])?.includes(quiz._id)}
+                        isLiked={(user?.likedQuizzes as string[])?.includes(quiz._id)}
                         isComment={false}
                         isAnswer={false}
                         like={like}

@@ -13,6 +13,8 @@ export interface IUserIcon {
     avatarUrl: string,
 }
 
+type PostType = IQuiz | Test;
+
 interface IStore {
     errText: string,
     isUpdated: boolean,
@@ -24,6 +26,10 @@ interface IStore {
     userPage: IUser | null,
     tests: Test[],
     quizzes: IQuiz[],
+    posts: PostType[],
+    likedPosts: PostType[],
+    savedPosts: PostType[],
+    passedPosts: (IPassedQuiz | IPassedTest)[],
     isLoading: boolean,
     verificationTimer: number,
     register: (email: string, username: string, password: string) => void,
@@ -35,6 +41,7 @@ interface IStore {
     updateUser: (username: string, bio: string, showLikedPosts: boolean, showPassedTests: boolean) => void,
     getUserTests: (userId: string) => void,
     getUserQuizzes: (userId: string) => void,
+    getUserPosts: (userId: string) => void,
     handleIsLogged: (val: boolean) => void,
     handleIsRegistered: (val: boolean) => void,
     handleIsUpdated: (val: boolean) => void,
@@ -51,7 +58,7 @@ interface IStore {
     getFollowers: (id?: string) => void,
     getFollowings: (id?: string) => void,
     getLikedPosts: (id?: string) => void,
-    getPassedTests: (id?: string) => void,
+    getPassedPosts: (id?: string) => void,
     getSavedPosts: () => void,
     newVerificationCode: () => void,
     setVerificationTimer: (seconds: number) => void
@@ -59,11 +66,20 @@ interface IStore {
 
 type PassedTest = {
     testId: string,
-    score: number
+    result: string
 }
 
 export interface IPassedTest extends Test {
     finalResult: string
+}
+
+type PassedQuiz = {
+    quizId: string,
+    result: number,
+}
+
+export interface IPassedQuiz extends IQuiz {
+    finalResult: number
 }
 
 interface IUser {
@@ -76,14 +92,19 @@ interface IUser {
     likes: number,
     followers: (IUserIcon | Number)[],
     followings: (IUserIcon | Number)[],
-    likedPosts: (Test | string)[],
-    showLikedPosts: boolean,
-    showPassedTests: boolean,
-    savedPosts: (Test | string)[],
+    likedTests: (Test | string)[],
+    savedTests: (Test | string)[],
     passedTests: (PassedTest | IPassedTest)[],
+    createdTests: [],
+    likedQuizzes: (IQuiz | string)[],
+    savedQuizzes: (IQuiz | string)[],
+    passedQuizzes: (PassedQuiz | IPassedQuiz)[],
+    createdQuizzes: [],
+    showLikedPosts: boolean,
+    showPassedPosts: boolean,
     likedComments: [],
     likedAnswers: [],
-    createdTests: [],
+
     posts: [],
     __v: number,
 }
@@ -100,6 +121,10 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     userPage: null,
     tests: [],
     quizzes: [],
+    posts: [],
+    likedPosts: [],
+    savedPosts: [],
+    passedPosts: [],
     isLoading: false,
     register: async (email, username, password) => {
         await API.post(`/auth/register`, { email, username, password }).then(res => {
@@ -167,6 +192,14 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
         set({ isLoading: true });
         await API.get(`/quizzes/${userId}`).then(res => {
             set({ quizzes: res.data.quizzes });
+            set({ isLoading: false });
+        }).catch(err => { new Error(err) });
+        set({isLoading: false});
+    },
+    getUserPosts:  async (userId) => {
+        set({ isLoading: true });
+        await API.get(`/posts/user/${userId}`).then(res => {
+            set({ posts: res.data.posts });
             set({ isLoading: false });
         }).catch(err => { new Error(err) });
         set({isLoading: false});
@@ -275,68 +308,28 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     getLikedPosts: async (id) => {
         if (id) {
-            await API.get(`/likedPosts/${id}`).then(res => {
-                set((state) => {
-                    return {
-                        ...state,
-                        userPage: {
-                            ...state.userPage,
-                            likedPosts: res.data.tests,
-                        },
-                    };
-                });
+            await API.get(`/posts/liked/${id}`).then(res => {
+                set({likedPosts: res.data.posts});
             }).catch(err => console.log(err));
         } else {
-            await API.get(`/likedPosts`).then(res => {
-                set((state) => {
-                    return {
-                        ...state,
-                        user: {
-                            ...state.user,
-                            likedPosts: res.data.tests,
-                        },
-                    };
-                });
+            await API.get(`/posts/liked`).then(res => {
+                set({likedPosts: res.data.posts});
             }).catch(err => console.log(err));
         }
     },
     getSavedPosts: async () => {
-        await API.get(`/savedPosts`).then(res => {
-            set((state) => {
-                return {
-                    ...state,
-                    user: {
-                        ...state.user,
-                        savedPosts: res.data.tests,
-                    },
-                };
-            });
+        await API.get(`/posts/saved`).then(res => {
+            set({savedPosts: res.data.posts});
         }).catch(err => console.log(err));
     },
-    getPassedTests: async (id) => {
+    getPassedPosts: async (id) => {
         if (id) {
-            await API.get(`/passedTests/${id}`).then(res => {
-                set((state) => {
-                    return {
-                        ...state,
-                        userPage: {
-                            ...state.userPage,
-                            passedTests: res.data.tests,
-                        },
-                    };
-                });
+            await API.get(`/posts/passed/${id}`).then(res => {
+                set({passedPosts: res.data.posts});
             }).catch(err => console.log(err));
         } else {
-            await API.get(`/passedTests`).then(res => {
-                set((state) => {
-                    return {
-                        ...state,
-                        user: {
-                            ...state.user,
-                            passedTests: res.data.tests,
-                        },
-                    };
-                });
+            await API.get(`/posts/passed`).then(res => {
+                set({passedPosts: res.data.posts});
             }).catch(err => console.log(err));
         }
     },

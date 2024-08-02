@@ -41,8 +41,8 @@ export default function TestReview() {
                         commentsCount={test.comments.length + test.commentAnswers?.length}
                         likesCount={test.likes}
                         savesCount={test.saves}
-                        isSaved={(user?.savedPosts as string[])?.includes(test._id)}
-                        isLiked={(user?.likedPosts as string[])?.includes(test._id)}
+                        isSaved={(user?.savedTests as string[])?.includes(test._id)}
+                        isLiked={(user?.likedTests as string[])?.includes(test._id)}
                         isComment={false}
                         isAnswer={false}
                         like={like}

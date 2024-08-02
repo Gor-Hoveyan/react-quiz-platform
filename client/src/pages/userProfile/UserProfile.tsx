@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './UserProfile.module.scss';
-import useUserStore, { IPassedTest, IUserIcon } from '../../stores/userStore';
+import useUserStore, { IPassedQuiz, IPassedTest, IUserIcon } from '../../stores/userStore';
 import { Navigate, NavLink } from 'react-router-dom';
 import { MdSettings, MdChangeCircle } from "react-icons/md";
 import DragAndDrop from '../../components/dragAndDrop/DragAndDrop';
@@ -8,12 +8,16 @@ import UserData from '../../components/userData/UserData';
 import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
 import { Test } from '../../stores/testStore';
 import UsersList from '../../components/usersList/UsersList';
-import PassedTests from '../../components/passedTests/PassedTests';
+import PassedTests from '../../components/passedPosts/PassedPosts';
+import { IQuiz } from '../../stores/quizStore';
 
 
 export default function UserProfile() {
-    const getTests = useUserStore(state => state.getUserTests);
-    const tests = useUserStore(state => state.tests);
+    const getUserPosts = useUserStore(state => state.getUserPosts);
+    const posts = useUserStore(state => state.posts);
+    const likedPosts = useUserStore(state => state.likedPosts);
+    const savedPosts = useUserStore(state => state.savedPosts);
+    const passedPosts = useUserStore(state => state.passedPosts);
     const user = useUserStore(state => state.user);
     const dropArea = useUserStore(state => state.dropArea);
     const handleDropArea = useUserStore(state => state.handleDropArea);
@@ -21,9 +25,9 @@ export default function UserProfile() {
 
     useEffect(() => {
         if (user) {
-            getTests(user._id);
+            getUserPosts(user._id);
         }
-    }, [user, getTests]);
+    }, [user, getUserPosts]);
 
     return (user !== null ?
         <div className={styles.container}>
@@ -49,18 +53,20 @@ export default function UserProfile() {
                 </NavLink>
             </div>
             <div className={styles.bio}>{user?.bio}</div>
-            <UserData tests={user.createdTests.length} followers={user.followers.length}
-                likes={user.likes} followings={user.followings.length} likedTests={user.likedPosts.length} 
-                savedTests={user.savedPosts.length} passedTests={user.passedTests.length} setState={setPageState}
+            <UserData tests={user.createdTests.length + user.createdQuizzes.length} followers={user.followers.length}
+                likes={user.likes} followings={user.followings.length} setState={setPageState}
+                likedPosts={user.likedTests.length + user.likedQuizzes.length} 
+                savedPosts={user.savedTests.length + user.savedQuizzes.length} 
+                passedPosts={user.passedTests.length + user.passedQuizzes.length}
             />
 
-            {pageState === 'Tests' && <UserProfilePosts tests={tests} />}
-            {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} tests={user.likedPosts as Test[]} />}
+            {pageState === 'Tests' && <UserProfilePosts posts={posts} />}
+            {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} posts={likedPosts as (Test | IQuiz)[]} />}
             {pageState === 'Followers' && <UsersList icons={(user.followers as IUserIcon[])} isFollowers={true}/>}
             {pageState === 'Followings' && <UsersList icons={(user.followings as IUserIcon[])} isFollowers={false}/>}
 
-            {pageState === 'Saves' && <UserProfilePosts isSavedPosts={true} tests={user.savedPosts as Test[]} />}
-            {pageState === 'Passed' && <PassedTests tests={(user.passedTests as IPassedTest[])} />}
+            {pageState === 'Saves' && <UserProfilePosts isSavedPosts={true} posts={savedPosts  as (Test | IQuiz)[]} />}
+            {pageState === 'Passed' && <PassedTests posts={passedPosts} />}
             
         </div> : <Navigate to='/auth/login' />
     );

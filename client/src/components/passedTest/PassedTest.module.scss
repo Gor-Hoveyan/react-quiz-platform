@@ -1,0 +1,12 @@
+@import '../../styles/_mixins.scss';
+
+.main {
+    @include post;
+
+    .result {
+        color: black;
+        margin: 10px;
+        font-weight: bold;
+        text-align: left;
+    }
+}
