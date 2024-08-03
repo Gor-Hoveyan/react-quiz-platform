@@ -110,7 +110,7 @@ export default function QuizForm() {
                         <label>Questions</label>
                         {questionFields.map((field, index) => (
                             <div key={field.id} className={styles.nestedFormGroup}>
-                                <label>Question  №{index}</label>
+                                <label>Question  №{index + 1}</label>
                                 <input type='text' {...register(`questions.${index}.question`, {
                                     required: 'This field is required',
                                     minLength: { value: 10, message: 'Question must contain at least 10 characters' },
@@ -146,7 +146,7 @@ export default function QuizForm() {
                         <button className={styles.button} type='button' onClick={() => addQuestion()}>Add question</button>
                     </div>
                     <p className={styles.error}>{formError && formError}</p>
-                    {id ? <NavLink className={styles.navLink} to={`/quiz/${id}`}><button className={styles.button} type='button'>View test</button></NavLink> : <button className={styles.button} type='submit'>Submit</button>}
+                    {id ? <NavLink className={styles.navLink} to={`/quiz/${id}`}><button className={styles.button} type='button'>View quiz</button></NavLink> : <button className={styles.button} type='submit'>Submit</button>}
                 </form >
             </div> : <Navigate to={`/verify`} />);
 };

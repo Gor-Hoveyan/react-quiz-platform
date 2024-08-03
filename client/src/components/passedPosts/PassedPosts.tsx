@@ -13,7 +13,7 @@ export default function PassedPosts({ posts }: IProps) {
 
     return (
         <div className={styles.main}>
-            <h3 className={styles.header}>Passed tests</h3>
+            <h3 className={styles.header}>Passed posts</h3>
             {posts[0] ? <>{posts[0]?.author ? <div>
 
                 <ul className={styles.testList}>
@@ -22,6 +22,6 @@ export default function PassedPosts({ posts }: IProps) {
                         'results' in post ? (<PassedTest test={post} />) : (<PassedQuiz quiz={post} />)
                     ))}
                 </ul>
-            </div> : <Loader />}</> : <h4 className={styles.header}>No passed tests yet</h4>}</div>
+            </div> : <Loader />}</> : <h4 className={styles.header}>No passed posts yet</h4>}</div>
     );
 }

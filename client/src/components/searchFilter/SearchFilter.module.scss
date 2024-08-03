@@ -1,0 +1,48 @@
+.main {
+    user-select: none;
+    max-width: 130px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    margin-right: 0;
+    .dropdown {
+        display: none;
+    }
+    .activeDropdown {
+        background-color: white;
+        display: flex;
+        border: 1px solid #ccc;
+        flex-direction: column;
+        position: fixed;
+        padding: 10px;
+        border-radius: 10px;
+        border-top-left-radius: 0;
+    }
+    .dropdownButton, .activeDropdownButton {
+        border: 1px solid #ccc;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+    .activeDropdownButton {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+    }
+    .filter {
+        border: 1px solid black;
+    }
+    .filter, .activeFilter {
+        padding: 10px 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        margin: 10px 0;
+    }
+    .activeFilter {
+        border:  1px solid #007bff;
+        color: #007bff;
+    }
+}

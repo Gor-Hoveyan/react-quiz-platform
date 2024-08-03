@@ -4,9 +4,23 @@
     @include post;
 
     .result {
-        color: black;
-        margin: 10px;
-        font-weight: bold;
-        text-align: left;
+        .resultParagraph {
+            color: black;
+            margin: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .resultDisplayContainer {
+            border-radius: 5px;
+            height: 15px;
+            border: 1px solid rgb(180, 180, 180);
+        }
+
+        .resultDisplay {
+            height: 15px;
+            background-color: #007bff;
+        }
     }
+
 }

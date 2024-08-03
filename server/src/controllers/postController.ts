@@ -13,8 +13,9 @@ async function getUserPosts(req: Request, res: Response, next: NextFunction) {
 
 async function searchPosts(req: Request, res: Response, next: NextFunction) {
     try {
-        const { name } = req.params;
-        const posts = await postService.searchPosts(name);
+        const { name, filter } = req.query;
+        console.log(String(name))
+        const posts = await postService.searchPosts(name, String(filter));
         return res.status(200).json({ posts });
     } catch (err) {
         next(err);

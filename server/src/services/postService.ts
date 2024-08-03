@@ -30,11 +30,26 @@ async function getUserPosts(userId: string) {
     return posts;
 }
 
-async function searchPosts(name: string) {
-    const tests = await Test.find({ name: new RegExp(name, 'i') }).populate('author', ['username', 'avatarUrl']);
-    const quizzes = await Quiz.find({ name: new RegExp(name, 'i') }).populate('author', ['username', 'avatarUrl'])
+async function searchPosts(name: any, filter: string) {
+    if(filter === 'test') {
+        const tests = await Test.find(name ? { name: new RegExp(name, 'i') } : {}).populate('author', ['username', 'avatarUrl']);
+        if (!tests) {
+            throw ({ status: 404, message: 'Posts not found' });
+        }
+        sortPosts(tests);
+        return tests;
+    } else if(filter === 'quiz') {
+        const quizzes = await Quiz.find(name ? { name: new RegExp(name, 'i') } : {}).populate('author', ['username', 'avatarUrl'])
+        if (!quizzes) {
+            throw ({ status: 404, message: 'Posts not found' });
+        }
+        sortPosts(quizzes);
+        return quizzes;
+    }
+    const tests = await Test.find(name ? { name: new RegExp(name, 'i') } : {}).populate('author', ['username', 'avatarUrl']);
+    const quizzes = await Quiz.find(name ? { name: new RegExp(name, 'i') } : {}).populate('author', ['username', 'avatarUrl'])
     if (!tests && !quizzes) {
-        throw ({ status: 404, message: 'Tests not found' });
+        throw ({ status: 404, message: 'Posts not found' });
     }
     const posts: PostType[] = [...tests, ...quizzes];
     sortPosts(posts);
@@ -45,13 +60,11 @@ async function pagination(page: number, limit: number) {
     const skip = (page - 1) * limit;
     limit = limit / 2;
     const tests = await Test.find({}, null, { skip, limit }).populate('author', ['username', 'avatarUrl']);
-    const testTotalPages = Math.ceil(await Test.countDocuments() / limit)
     const quizzes = await Quiz.find({}, null, { skip, limit }).populate('author', ['username', 'avatarUrl']);
-    const quizTotalPages = Math.ceil(await Quiz.countDocuments() / limit)
-    const totalPages = quizTotalPages + testTotalPages;
+    const totalPages = Math.ceil((tests.length + quizzes.length) / limit * 2);
 
-    if (tests.length === 0) {
-        throw ({ status: 404, message: 'Tests not found' });
+    if (tests.length === 0 && quizzes.length === 0) {
+        throw ({ status: 404, message: 'Posts not found' });
     }
     return { posts: [...tests, ...quizzes], totalPages };
 }

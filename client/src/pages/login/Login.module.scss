@@ -1,49 +1,5 @@
 @import '../../styles/mixins.scss';
 
 .main {
-    top: 0;
-    padding: 5%;
-    width: 100%;
-    min-height: 100vh;
-    max-height: fit-content;
-    background-color: #eee;
-    z-index: 12;
-    @include button;
-}
-
-.formContainer {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 2rem;
-    margin: 150px auto;
-    width: 300px;
-    border-radius: 4px;
-}
-
-.header {
-    margin-bottom: 1rem;
-}
-
-
-.inputField {
-    margin-bottom: 1rem;
-    width: 100%;
-}
-
-.label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-.input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.error {
-    color: tomato;
-    margin: 10px 0;
+    @include authorization;
 }

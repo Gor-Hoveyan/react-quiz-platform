@@ -82,14 +82,14 @@ export default function TestForm() {
                     let jMinScore = Number(data.results[j].minScore);
                     let jMaxScore = Number(data.results[j].maxScore);
                     if (iMinScore < jMinScore && iMaxScore > jMaxScore) {
-                        return setError(`Invalid scores in results  №${i} and  №${j}`);
+                        return setError(`Invalid scores in results  №${i + 1} and  №${j + 1}`);
                     } else if (iMinScore > jMinScore && iMaxScore < jMaxScore) {
 
-                        return setError(`Invalid scores in results  №${i} and  №${j}`);
+                        return setError(`Invalid scores in results  №${i + 1} and  №${j + 1}`);
                     } else if (iMinScore === jMinScore || iMaxScore === jMaxScore) {
-                        return setError(`Invalid scores in results  №${i} and  №${j}`);
+                        return setError(`Invalid scores in results  №${i + 1} and  №${j + 1}`);
                     } else if (iMinScore === jMaxScore) {
-                        return setError(`Invalid scores in results  №${i} and  №${j}`);
+                        return setError(`Invalid scores in results  №${i + 1} and  №${j + 1}`);
                     }
                 }
             }
@@ -156,7 +156,7 @@ export default function TestForm() {
                     <label>Questions</label>
                     {questionFields.map((field, index) => (
                         <div key={field.id} className={styles.nestedFormGroup}>
-                            <label>Question  №{index}</label>
+                            <label>Question  №{index + 1}</label>
                             <input type='text' {...register(`questions.${index}.question`, {
                                 required: 'This field is required',
                                 minLength: { value: 10, message: 'Question must contain at least 5 characters' },
@@ -198,7 +198,7 @@ export default function TestForm() {
                     <label>Results</label>
                     {resultFields.map((field, index) => (
                         <div key={field.id} className={styles.nestedFormGroup}>
-                            <label>Result  №{index}</label>
+                            <label>Result  №{index + 1}</label>
                             <input id={`results[${index}].result`} {...register(`results.${index}.result`, {
                                 required: 'This field is required',
                                 minLength: { value: 10, message: 'Result must contain at least 10 characters' },

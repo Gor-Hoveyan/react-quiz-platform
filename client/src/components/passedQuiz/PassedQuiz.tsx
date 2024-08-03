@@ -34,7 +34,14 @@ export default function PassedQuiz({quiz}: IProps) {
                                     views={quiz?.views}
                                     passed={quiz?.passed}
                                 />
-                                <p className={styles.result}>Result: {quiz?.finalResult}</p>
+                                <div className={styles.result}>
+                                <p className={styles.resultParagraph}>Result: {quiz.finalResult}%</p>
+                                <div className={styles.resultDisplayContainer}>
+                                    <div className={styles.resultDisplay} style={{width: `${quiz.finalResult}%`}}></div>
+                                </div>
+                                
+                                </div>
+                                
                             </li>
 
                         </NavLink>

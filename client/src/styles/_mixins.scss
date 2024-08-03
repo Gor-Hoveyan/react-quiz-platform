@@ -389,7 +389,7 @@
     }
 
     .postDescription {
-        margin: 5px 0 0;
+        margin: 5px 0;
         color: #666;
         text-align: left;
     }
@@ -402,4 +402,62 @@
     }
 
 
+}
+
+@mixin authorization {
+    top: 0;
+    padding: 5%;
+    width: 100%;
+    min-height: 100vh;
+    max-height: fit-content;
+    background-color: #eee;
+    z-index: 12;
+    @include button;
+
+    .formContainer {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 2rem;
+        margin: 100px auto;
+        width: 30%;
+        border-radius: 4px;
+    }
+
+    .header {
+        margin-bottom: 1rem;
+    }
+
+
+    .inputField {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+
+    .label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    .input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .error {
+        color: tomato;
+        margin: 10px 0;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    @media (max-width: 800px) {
+        .formContainer {
+            width: 80%;
+        }
+    }
 }
