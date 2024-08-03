@@ -30,7 +30,7 @@ export default function UserQuizzes() {
                     <Quizzes quizzes={quizzes} />
                 </> : isLoading ? <Loader /> : <h1>You haven't created any quizzes yet</h1>
                 }
-                <AddPostBtn />
+                <AddPostBtn postType='quiz'/>
             </div> : <Navigate to={`/auth/login`} />}</>
     );
 };

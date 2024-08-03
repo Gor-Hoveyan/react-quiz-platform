@@ -1,0 +1,20 @@
+@import '../../styles/mixins.scss';
+
+.main {
+    min-height: 90vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    @include button;
+
+    .header {
+        margin: 50px 0;
+        font-size: 3rem;
+    }
+
+    .img {
+        max-width: 375px;
+    }
+}

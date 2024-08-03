@@ -20,6 +20,7 @@ import QuizReview from './pages/quizReview/QuizReview';
 import QuizPage from './pages/quizPage/QuizPage';
 import QuizResult from './pages/quizResult/QuizResult';
 import UserQuizzes from './pages/userQuizzes/UserQuizzes';
+import NotFound from './pages/notFound/NotFound';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
         <Route path='profile/:id' element={<Profile />} />
         <Route path='/settings' element={<UserSettings />} />
         <Route path='/verify' element={<Verification />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

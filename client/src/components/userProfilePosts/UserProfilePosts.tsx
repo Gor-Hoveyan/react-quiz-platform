@@ -22,7 +22,7 @@ export default function UserProfilePosts({ posts, isLikedPosts, isSavedPosts }: 
                 </h3>
                 {posts?.length ? <Posts posts={posts} /> : <h4>No posts yet</h4>}
             </div>
-            {!isLikedPosts && !isSavedPosts && <AddPostBtn />
+            {!isLikedPosts && !isSavedPosts && <AddPostBtn postType='quiz' />
             }
         </>
     );

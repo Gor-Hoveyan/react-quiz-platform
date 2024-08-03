@@ -30,7 +30,7 @@ export default function UserTests() {
                     <Tests tests={tests} />
                 </> : isLoading ? <Loader /> : <h1>You haven't created any tests yet</h1>
                 }
-                <AddPostBtn />
+                <AddPostBtn postType='test'/>
             </div> : <Navigate to={`/auth/login`} />}</>
     );
 };
