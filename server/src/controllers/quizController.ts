@@ -51,53 +51,6 @@ async function getQuiz(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-async function getTen(req: Request, res: Response, next: NextFunction) {
-    try {
-        const quizzes = await quizService.getTen();
-        return res.status(200).json({ quizzes });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function getUserQuizzes(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { id } = req.params;
-        if (id !== req.user.id) {
-            res.status(403);
-            throw new Error('Access denied');
-        }
-        const quizzes = await quizService.getUserQuizzes(id);
-        return res.status(200).json({ quizzes });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function search(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { name } = req.body;
-        const quizzes = await quizService.searchQuizzes(name);
-        return res.status(200).json({ quizzes });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function pagination(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { page, limit } = req.query;
-
-        if (!Number(page) || !Number(limit)) {
-            throw new Error('Invalid request');
-        }
-        const { quizzes, totalPages } = await quizService.pagination(Number(page), Number(limit));
-        return res.status(200).json({ quizzes, totalPages });
-    } catch (err) {
-        next(err);
-    }
-}
-
 async function likeQuiz(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
@@ -138,10 +91,6 @@ export const quizController = {
     deleteQuiz,
     updateQuiz,
     getQuiz,
-    getTen,
-    getUserQuizzes,
-    search,
-    pagination,
     likeQuiz,
     saveQuiz,
     submitQuiz

@@ -13,7 +13,6 @@ interface IStore {
     currentPage: number,
     totalPages: number,
     isLoading: boolean,
-    getTests: () => void,
     searchPosts: () => void,
     handleSearchVal: (val: string) => void,
     setPagination: () => void,
@@ -28,13 +27,6 @@ const useHomeStore = create<IStore>()(devtools(immer((set, get) => ({
     currentPage: 1,
     totalPages: 10,
     isLoading: false,
-    getTests: async () => {
-        set({ isLoading: true });
-        await API.get(`/tests`).then(res => {
-            set({ posts: res.data.tests });
-            set({ isLoading: false });
-        })
-    },
     searchPosts: async () => {
         set({ isLoading: true });
         if(get().filter && get().searchVal) {

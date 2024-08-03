@@ -88,66 +88,6 @@ async function getOne(id: string) {
     return quiz;
 }
 
-async function getTen() {
-    let quizzes = await Quiz.aggregate([
-        { $sample: { size: 10 } },
-        {
-            $lookup: {
-                from: 'users',
-                let: { authorId: '$author' },
-                pipeline: [
-                    { $match: { $expr: { $eq: ['$_id', '$$authorId'] } } },
-                    { $project: { username: 1, avatarUrl: 1 } }
-                ],
-                as: 'author'
-            }
-        },
-        {
-            $unwind: {
-                path: '$author',
-                preserveNullAndEmptyArrays: true
-            }
-        }
-    ]);
-    if (!quizzes) {
-        throw ({ status: 404, message: 'Quizzes not found' });
-    }
-    return quizzes;
-
-}
-
-async function getUserQuizzes(userId: string) {
-    const user = await User.findById(userId).populate({
-        path: 'createdQuizzes',
-        populate: {
-            path: 'author',
-            select: ['username', 'avatarUrl']
-        }
-    });
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-    return user.createdQuizzes;
-}
-
-async function searchQuizzes(name: string) {
-    const quizzes = await Quiz.find({ name: new RegExp(name, 'i') }).populate('author', ['username', 'avatarUrl']);
-    if (!quizzes) {
-        throw ({ status: 404, message: 'Quizzes not found' });
-    }
-    return quizzes;
-}
-
-async function pagination(page: number, limit: number) {
-    const skip = (page - 1) * limit;
-    const quizzes = await Quiz.find({}, null, { skip, limit }).populate('author', ['username', 'avatarUrl']);
-    const totalPages = Math.ceil(await Quiz.countDocuments() / limit)
-    if (quizzes.length === 0) {
-        throw ({ status: 404, message: 'Quizzes not found' });
-    }
-    return { quizzes, totalPages };
-}
-
 async function likeQuiz(userId: string, quizId: string) {
     const user = await User.findById(userId);
     if (!user) {
@@ -207,10 +147,6 @@ export const quizService = {
     remove,
     update,
     getOne,
-    getTen,
-    getUserQuizzes,
-    searchQuizzes,
-    pagination,
     likeQuiz,
     saveQuiz,
     submitQuiz

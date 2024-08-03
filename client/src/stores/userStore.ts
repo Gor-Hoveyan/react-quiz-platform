@@ -182,7 +182,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     getUserTests: async (userId) => {
         set({ isLoading: true });
-        await API.get(`/tests/${userId}`).then(res => {
+        await API.get(`/user/tests/${userId}`).then(res => {
             set({ tests: res.data.tests });
             set({ isLoading: false });
         }).catch(err => { new Error(err) });
@@ -190,7 +190,7 @@ const useUserStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     getUserQuizzes: async (userId) => {
         set({ isLoading: true });
-        await API.get(`/quizzes/${userId}`).then(res => {
+        await API.get(`/user/quizzes/${userId}`).then(res => {
             set({ quizzes: res.data.quizzes });
             set({ isLoading: false });
         }).catch(err => { new Error(err) });

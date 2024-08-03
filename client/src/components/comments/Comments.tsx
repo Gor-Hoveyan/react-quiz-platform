@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from './Comments.module.scss';
 import useTestStore from '../../stores/testStore';
+import useCommentStore from '../../stores/commentStore';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Answer from '../answers/Answer';
 import LikesComments from '../likesComments/LikesComments';
@@ -18,52 +19,47 @@ export default function Comments() {
     const user = useUserStore(state => state.user);
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>();
 
-    const getComments = useTestStore(state => state.getComments);
-    const createComment = useTestStore(state => state.createComment);
-    const comments = useTestStore(state => state.comments);
-    const isUpdating = useTestStore(state => state.isUpdating);
-    const setIsUpdating = useTestStore(state => state.setIsUpdating);
-    const updateComment = useTestStore(state => state.updateComment);
-    const removeComment = useTestStore(state => state.removeComment);
-    const likeComment = useTestStore(state => state.likeComment);
+    const getComments = useCommentStore(state => state.getComments);
+    const createComment = useCommentStore(state => state.createComment);
+    const comments = useCommentStore(state => state.comments);
+    const isUpdating = useCommentStore(state => state.isUpdating);
+    const setIsUpdating = useCommentStore(state => state.setIsUpdating);
+    const updateComment = useCommentStore(state => state.updateComment);
+    const removeComment = useCommentStore(state => state.removeComment);
+    const likeComment = useCommentStore(state => state.likeComment);
 
-    const createAnswer = useTestStore(state => state.createAnswer);
-    const setIsAnswering = useTestStore(state => state.setIsAnswering);
-    const getAnswers = useTestStore(state => state.getAnswers);
-    const isAnswering = useTestStore(state => state.isAnswering);
+    const createAnswer = useCommentStore(state => state.createAnswer);
+    const setIsAnswering = useCommentStore(state => state.setIsAnswering);
+    const getAnswers = useCommentStore(state => state.getAnswers);
+    const isAnswering = useCommentStore(state => state.isAnswering);
 
     useEffect(() => {
         if (testId) {
-            getComments();
+            getComments(testId);
         }
     }, [getComments, testId]);
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
-        if (!isAnswering && !isUpdating) {
+        if (!isAnswering && !isUpdating && testId) {
             if (data.comment.length) {
-                createComment(data.comment);
+                createComment(data.comment, testId);
                 reset({ comment: '' });
             }
 
         } else if (isAnswering && !isUpdating) {
-            if (data.answer.length) {
-                createAnswer(data.answer);
+            if (data.answer.length && testId) {
+                createAnswer(data.answer, testId);
                 reset({ answer: '' });
                 setIsAnswering('');
             }
-        } else if (!isAnswering && isUpdating) {
+        } else if (!isAnswering && isUpdating && testId) {
             if (data.updatingComment.length) {
-                updateComment(data.updatingComment, isUpdating);
+                updateComment(data.updatingComment, isUpdating, testId);
                 reset({ updatingComment: '' });
                 setIsUpdating('');
             }
         }
     }
-
-    function onAnswerSubmit() {
-
-    }
-
 
     function handleAnswer(commentId: string) {
         if (isAnswering !== commentId) {
@@ -123,7 +119,7 @@ export default function Comments() {
                                     <p className={`${styles.dropdownBtn} ${styles.answerLink}`}>Actions</p>
                                     <div className={styles.dropdownContent}>
                                         <p onClick={() => setIsUpdating(comment._id)}>Update</p>
-                                        <p onClick={() => removeComment(comment._id)}>Remove</p>
+                                        <p onClick={() => removeComment(comment._id, String(testId))}>Remove</p>
                                     </div>
                                 </div>}
                             </div>}

@@ -1,4 +1,3 @@
-import Test from './../models/testModel';
 import User from './../models/userModel';
 
 async function getUser(userId: string) {
@@ -70,7 +69,7 @@ async function getUserPage(userId: string) {
     return user;
 }
 
-async function updateUser(userId: string, username: string, bio: string, showLikedPosts: boolean, showPassedTests: boolean) {
+async function updateUser(userId: string, username: string, bio: string, showLikedPosts: boolean, showPassedPosts: boolean) {
     const user = await User.findById(userId);
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
@@ -79,7 +78,7 @@ async function updateUser(userId: string, username: string, bio: string, showLik
     if (!checkUsername) {
         throw ({ status: 409, message: 'Username already exists' });
     }
-    await User.findByIdAndUpdate(userId, { $set: { username, bio, showLikedPosts, showPassedTests } });
+    await User.findByIdAndUpdate(userId, { $set: { username, bio, showLikedPosts, showPassedPosts } });
 }
 
 async function setAvatar(userId: string, avatarUrl: string) {
@@ -88,55 +87,6 @@ async function setAvatar(userId: string, avatarUrl: string) {
         throw ({ status: 404, message: 'User not found' });
     }
     await User.findByIdAndUpdate(userId, { $set: { avatarUrl } });
-}
-
-async function getLikedPosts(userId: string) {
-    const user = await User.findById(userId).populate({
-        path: 'likedTests',
-        populate: {
-            path: 'author',
-            select: ['username', 'avatarUrl']
-        }
-    });
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-    return user.likedTests;
-}
-
-async function getPassedTests(userId: string) {
-    const user = await User.findById(userId);
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-
-    const passedTests = [];
-    for (let i = 0; i < user.passedTests.length; i++) {
-        const test = await Test.findById(user.passedTests[i].testId).populate({
-            path: 'author',
-            select: ['username', 'avatarUrl']
-        });
-        if (!test) {
-            throw { status: 404, message: 'Test not found' };
-        }
-        const finalResult = user.passedTests[i].result;
-        passedTests[i] = { ...test.toObject(), finalResult };
-    }
-    return passedTests;
-}
-
-async function getSavedPosts(userId: string) {
-    const user = await User.findById(userId).populate({
-        path: 'savedTests',
-        populate: {
-            path: 'author',
-            select: ['username', 'avatarUrl']
-        }
-    });
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-    return user.savedTests;
 }
 
 async function getFollowers(userId: string) {
@@ -155,6 +105,33 @@ async function getFollowings(userId: string) {
     return user.followings;
 }
 
+async function getUserQuizzes(userId: string) {
+    const user = await User.findById(userId).populate({
+        path: 'createdQuizzes',
+        populate: {
+            path: 'author',
+            select: ['username', 'avatarUrl']
+        }
+    });
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    return user.createdQuizzes;
+}
+
+async function getUserTests(userId: string) {
+    const user = await User.findById(userId).populate({
+        path: 'createdTests',
+        populate: {
+            path: 'author',
+            select: ['username', 'avatarUrl']
+        }
+    });
+    if (!user) {
+        throw ({ status: 404, message: 'User not found' });
+    }
+    return user.createdTests;
+}
 
 export const userService = {
     getUser,
@@ -163,9 +140,8 @@ export const userService = {
     getUserPage,
     updateUser,
     setAvatar,
-    getLikedPosts,
-    getSavedPosts,
-    getPassedTests,
     getFollowers,
     getFollowings,
+    getUserQuizzes,
+    getUserTests
 };

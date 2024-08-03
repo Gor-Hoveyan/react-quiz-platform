@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import API from './../api/axiosConfig';
-import { IComment } from './testStore';
+import { IComment } from './commentStore';
 
 export interface IQuiz {
     _id: string,

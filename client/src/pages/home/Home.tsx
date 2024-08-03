@@ -8,7 +8,6 @@ import Posts from '../../components/posts/Posts';
 
 
 const Home = () => {
-    const getTestIcons = useHomeStore(state => state.getTests);
     const posts = useHomeStore(state => state.posts);
     const isLoading = useHomeStore(state => state.isLoading);
     const setPagination = useHomeStore(state => state.setPagination);

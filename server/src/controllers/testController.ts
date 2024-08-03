@@ -55,51 +55,6 @@ async function getTest(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-async function getTen(req: Request, res: Response, next: NextFunction) {
-    try {
-        const tests = await testService.getTen();
-        return res.status(200).json({ tests });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function getUserTests(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { id } = req.params;
-        if (id !== req.user.id) {
-            throw({status: 403, message: 'Access denied'});
-        }
-        const tests = await testService.getUserTests(id);
-        return res.status(200).json({ tests });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function search(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { name } = req.body;
-        const tests = await testService.searchTests(name);
-        return res.status(200).json({ tests });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function pagination(req: Request, res: Response, next: NextFunction) {
-    try {
-        const { page, limit } = req.query;
-        if (!Number(page) || !Number(limit)) {
-            throw ({status: 400, message: 'Invalid request'});
-        }
-        const { tests, totalPages } = await testService.pagination(Number(page), Number(limit));
-        return res.status(200).json({ tests, totalPages });
-    } catch (err) {
-        next(err);
-    }
-}
-
 async function likeTest(req: Request, res: Response, next: NextFunction) {
     try {
         const { id } = req.params;
@@ -140,10 +95,6 @@ export const testController = {
     deleteTest,
     updateTest,
     getTest,
-    getTen,
-    getUserTests,
-    search,
-    pagination,
     likeTest,
     saveTest,
     submitTest

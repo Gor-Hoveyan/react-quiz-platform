@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import useUserStore from "../../stores/userStore";
 import LikesComments from "../likesComments/LikesComments";
 import UserIcon from "../userIcon/UserIcon";
-import useTestStore, { ICommentAnswer } from "../../stores/testStore";
+import useCommentStore, { ICommentAnswer } from "../../stores/commentStore";
 
 type FormValues = {
     updatedAnswer: string
@@ -17,11 +17,11 @@ interface Props {
 export default function Answer({ answer }: Props) {
     const { register, handleSubmit, reset } = useForm<FormValues>();
     const user = useUserStore(state => state.user);
-    const updateAnswer = useTestStore(state => state.updateAnswer);
-    const setUpdatingAnswer = useTestStore(state => state.setUpdatingAnswer);
-    const removeAnswer = useTestStore(state => state.removeAnswer);
-    const updatingAnswer = useTestStore(state => state.updatingAnswer);
-    const likeAnswer = useTestStore(state => state.likeAnswer);
+    const updateAnswer = useCommentStore(state => state.updateAnswer);
+    const setUpdatingAnswer = useCommentStore(state => state.setUpdatingAnswer);
+    const removeAnswer = useCommentStore(state => state.removeAnswer);
+    const updatingAnswer = useCommentStore(state => state.updatingAnswer);
+    const likeAnswer = useCommentStore(state => state.likeAnswer);
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         if (data.updatedAnswer.length) {
@@ -41,7 +41,7 @@ export default function Answer({ answer }: Props) {
             <div className={styles.nameAndDropdown}>
                 {updatingAnswer === answer._id ?
                     <form className={styles.submitForm} onSubmit={handleSubmit(onSubmit)}>
-                        <input defaultValue={answer.comment} {...register('updatedAnswer', {
+                        <textarea className={styles.textarea} defaultValue={answer.comment} {...register('updatedAnswer', {
                                         required: 'This field is required',
                                         minLength: { value: 3, message: 'Answer must contain at least 2 characters' },
                                         maxLength: { value: 1000, message: 'Answer can contain maximum 1000 characters' },

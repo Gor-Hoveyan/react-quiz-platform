@@ -47,9 +47,9 @@ async function getUserPage(req: Request, res: Response, next: NextFunction) {
 
 async function updateUser(req: Request, res: Response, next: NextFunction) {
     try {
-        const { bio, username, showLikedPosts, showPassedTests } = req.body;
+        const { bio, username, showLikedPosts, showPassedPosts } = req.body;
         const userId = req.user.id
-        await userService.updateUser(userId, username, bio, showLikedPosts, showPassedTests);
+        await userService.updateUser(userId, username, bio, showLikedPosts, showPassedPosts);
         return res.status(200).json({ message: 'Success' });
     } catch (err) {
         next(err);
@@ -62,36 +62,6 @@ async function setAvatar(req: Request, res: Response, next: NextFunction) {
         const userId = req.user.id
         await userService.setAvatar(userId, avatarUrl);
         return res.status(200).json({ message: 'Success' });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function getLikedPosts(req: Request, res: Response, next: NextFunction) {
-    try {
-        let id = req.params.id || req.user.id;
-        const tests = await userService.getLikedPosts(id);
-        return res.status(200).json({ tests });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function getSavedPosts(req: Request, res: Response, next: NextFunction) {
-    try {
-        const userId = req.user.id
-        const tests = await userService.getSavedPosts(userId);
-        return res.status(200).json({ tests });
-    } catch (err) {
-        next(err);
-    }
-}
-
-async function getPassedTests(req: Request, res: Response, next: NextFunction) {
-    try {
-        let id = req.params.id || req.user.id;
-        const tests = await userService.getPassedTests(id);
-        return res.status(200).json({ tests });
     } catch (err) {
         next(err);
     }
@@ -117,6 +87,33 @@ async function getFollowings(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function getUserQuizzes(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { id } = req.params;
+        if (id !== req.user.id) {
+            res.status(403);
+            throw new Error('Access denied');
+        }
+        const quizzes = await userService.getUserQuizzes(id);
+        return res.status(200).json({ quizzes });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getUserTests(req: Request, res: Response, next: NextFunction) {
+    try {
+        const { id } = req.params;
+        if (id !== req.user.id) {
+            throw({status: 403, message: 'Access denied'});
+        }
+        const tests = await userService.getUserTests(id);
+        return res.status(200).json({ tests });
+    } catch (err) {
+        next(err);
+    }
+}
+
 export const userController = {
     getUser,
     follow,
@@ -124,9 +121,8 @@ export const userController = {
     getUserPage,
     updateUser,
     setAvatar,
-    getLikedPosts,
-    getSavedPosts,
     getFollowers,
     getFollowings,
-    getPassedTests
+    getUserQuizzes,
+    getUserTests
 }

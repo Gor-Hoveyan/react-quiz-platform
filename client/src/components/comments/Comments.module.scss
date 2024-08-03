@@ -17,13 +17,6 @@
     .nameAndCircles {
         display: flex;
         justify-content: space-between;
-
-        .circles {
-            font-size: 2rem;
-            padding-top: 0;
-            padding-right: 10px;
-            cursor: pointer;
-        }
     }
 
     .comment {

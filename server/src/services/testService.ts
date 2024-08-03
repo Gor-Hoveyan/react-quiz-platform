@@ -89,66 +89,6 @@ async function getOne(id: string) {
     return test;
 }
 
-async function getTen() {
-    let tests = await Test.aggregate([
-        { $sample: { size: 10 } },
-        {
-            $lookup: {
-                from: 'users',
-                let: { authorId: '$author' },
-                pipeline: [
-                    { $match: { $expr: { $eq: ['$_id', '$$authorId'] } } },
-                    { $project: { username: 1, avatarUrl: 1 } } // Specify the fields you want to include
-                ],
-                as: 'author'
-            }
-        },
-        {
-            $unwind: {
-                path: '$author',
-                preserveNullAndEmptyArrays: true // In case there are tests without an author
-            }
-        }
-    ]);
-    if (!tests) {
-        throw ({ status: 404, message: 'Tests not found' });
-    }
-    return tests;
-
-}
-
-async function getUserTests(userId: string) {
-    const user = await User.findById(userId).populate({
-        path: 'createdTests',
-        populate: {
-            path: 'author',
-            select: ['username', 'avatarUrl']
-        }
-    });
-    if (!user) {
-        throw ({ status: 404, message: 'User not found' });
-    }
-    return user.createdTests;
-} // Added in postService
-
-async function searchTests(name: string) {
-    const tests = await Test.find({ name: new RegExp(name, 'i') }).populate('author', ['username', 'avatarUrl']);
-    if (!tests) {
-        throw ({ status: 404, message: 'Tests not found' });
-    }
-    return tests;
-} // Added in postService
-
-async function pagination(page: number, limit: number) {
-    const skip = (page - 1) * limit;
-    const tests = await Test.find({}, null, { skip, limit }).populate('author', ['username', 'avatarUrl']);
-    const totalPages = Math.ceil(await Test.countDocuments() / limit)
-    if (tests.length === 0) {
-        throw ({ status: 404, message: 'Tests not found' });
-    }
-    return { tests, totalPages };
-}
-
 async function likeTest(userId: string, testId: string) {
     const user = await User.findById(userId);
     if (!user) {
@@ -208,10 +148,6 @@ export const testService = {
     remove,
     update,
     getOne,
-    getTen,
-    getUserTests,
-    searchTests,
-    pagination,
     submitTest,
     likeTest,
     saveTest,
