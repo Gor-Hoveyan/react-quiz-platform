@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import styles from './QuizResult.module.scss';
 import 'react-circular-progressbar/dist/styles.css';
-import { CircularProgressbar } from "react-circular-progressbar";
-import useQuizStore from "../../stores/quizStore";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import useQuizStore from '../../stores/quizStore';
 
 export default function QuizResult() {
     const result = useQuizStore(state => state.result);

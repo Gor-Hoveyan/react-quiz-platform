@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
 import styles from './UserData.module.scss';
-import useUserStore from "../../stores/userStore";
+import useUserStore from '../../stores/userStore';
+import { FaCubes, FaHeart, FaCircleCheck, FaBookmark } from 'react-icons/fa6';
 
 interface IProps {
     tests: number,
@@ -12,9 +13,10 @@ interface IProps {
     passedPosts?: number,
     id?: string,
     setState: (val: string) => void,
+    state: string,
 }
 
-export default function UserData({ tests, followers, followings, likes, savedPosts, likedPosts, passedPosts, setState, id }: IProps) {
+export default function UserData({ tests, followers, followings, likes, savedPosts, likedPosts, passedPosts, setState, state, id }: IProps) {
     const getLikedPosts = useUserStore(state => state.getLikedPosts);
     const getSavedPosts = useUserStore(state => state.getSavedPosts);
     const getUserPosts = useUserStore(state => state.getUserPosts);
@@ -24,7 +26,7 @@ export default function UserData({ tests, followers, followings, likes, savedPos
 
     function handleSetTests() {
         setState('Tests');
-        if(id) {
+        if (id) {
             getUserPosts(id);
         }
     }
@@ -72,25 +74,45 @@ export default function UserData({ tests, followers, followings, likes, savedPos
 
     return (
         <div className={styles.stats}>
-            <div className={styles.likes}>
-                Likes <br />{likes}
+            <div className={styles.firstLine}>
+                <div className={styles.firstLineItem}>
+                    <span className={styles.number}>{likes}</span><br />Likes
+                </div>
+                <div className={styles.firstLineItem} onClick={() => handleSetFollowers()}>
+                <span className={styles.number}>{followers}</span> <br />Followers
+                </div>
+                <div className={styles.firstLineItem} onClick={() => handleSetFollowings()}>
+                <span className={styles.number}>{followings}</span> <br />Followings
+                </div>
+                <div className={styles.firstLineItem} onClick={() => handleSetTests()}>
+                <span className={styles.number}>{tests}</span> <br />Posts
+                </div>
             </div>
-            <div className={styles.tests} onClick={() => handleSetTests()}>
-                posts <br />{tests}
+
+            <div className={styles.secondLine}>
+                <div className={state === 'Tests' ? `${styles.secondLineItem} ${styles.active}` : styles.secondLineItem} onClick={() => handleSetTests()}>
+                    <FaCubes />
+                </div>
+                {Number(likedPosts) >= 0 &&
+                    <div onClick={() => handleSetLikes()}
+                        className={state === 'Likes' ? `${styles.secondLineItem} ${styles.active}` : styles.secondLineItem}
+                    >
+                        <FaHeart />
+                    </div>}
+                {Number(passedPosts) >= 0 &&
+                    <div onClick={() => handleSetPassed()}
+                        className={state === 'Passed' ? `${styles.secondLineItem} ${styles.active}` : styles.secondLineItem}
+                    >
+                        <FaCircleCheck />
+                    </div>}
+                {Number(savedPosts) >= 0 &&
+                    <div onClick={() => handleSetSaves()}
+                        className={state === 'Saves' ? `${styles.secondLineItem} ${styles.active}` : styles.secondLineItem}
+                    >
+                        <FaBookmark />
+                    </div>}
             </div>
-            <div className={styles.followers} onClick={() => handleSetFollowers()}>
-                Followers <br />{followers}
-            </div>
-            <div className={styles.followings} onClick={() => handleSetFollowings()}>Followings <br />{followings}</div>
-            {Number(likedPosts) >= 0 && <div className={styles.likedTests} onClick={() => handleSetLikes()}>
-                Liked posts <br /> {likedPosts}
-            </div>}
-            {Number(passedPosts) >= 0 && <div className={styles.passedTests} onClick={() => handleSetPassed()}>
-                Passed tests <br /> {passedPosts}
-            </div>}
-            {Number(savedPosts) >= 0 && <div className={styles.savedTests} onClick={() => handleSetSaves()}>
-                Saved tests <br /> {savedPosts}
-            </div>}
+
         </div>
     );
 }

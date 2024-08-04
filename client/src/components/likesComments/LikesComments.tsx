@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import styles from './LikesComments.module.scss';
-import { BsSuitHeartFill, BsBookmarkFill } from "react-icons/bs";
-import { FaCommentDots } from "react-icons/fa";
-import { MdRemoveRedEye } from "react-icons/md";
-import { IoIosCheckmarkCircle } from "react-icons/io";
+import { BsSuitHeartFill, BsBookmarkFill } from 'react-icons/bs';
+import { FaCommentDots } from 'react-icons/fa';
+import { MdRemoveRedEye } from 'react-icons/md';
+import { IoIosCheckmarkCircle } from 'react-icons/io';
 
 
 interface IProps {

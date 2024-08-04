@@ -39,7 +39,7 @@ export default function QuizForm() {
             for (let i = 0; i < data.questions.length; i++) {
                 const uniqueAnswers = new Set();
                 if (questionSet.has(data.questions[i].question)) {
-                    return setError(`Duplicate question found: "${data.questions[i].question}"`);
+                    return setError(`Duplicate question found: '${data.questions[i].question}'`);
                 }
                 questionSet.add(data.questions[i].question);
                 for (let j = 0; j < 4; j++) {

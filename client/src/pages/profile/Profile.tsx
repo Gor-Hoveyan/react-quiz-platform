@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
-import useUserStore, { IPassedTest, IUserIcon } from '../../stores/userStore';
+import useUserStore, { IUserIcon } from '../../stores/userStore';
 import UserData from '../../components/userData/UserData';
 import { Navigate, useParams } from 'react-router-dom';
 import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
@@ -8,7 +8,6 @@ import UsersList from '../../components/usersList/UsersList';
 import { Test } from '../../stores/testStore';
 import PassedTests from '../../components/passedPosts/PassedPosts';
 import Loader from '../../components/loader/Loader';
-import { IQuiz } from '../../stores/quizStore';
 
 export default function Profile() {
     const getUserPage = useUserStore(state => state.getUserPage);
@@ -41,12 +40,6 @@ export default function Profile() {
                 <p className={styles.username}>{userPage?.username}</p>
             </div>
             <div className={styles.bio}>{userPage?.bio}</div>
-            <UserData likes={userPage.likes} tests={userPage.createdTests.length + userPage.createdQuizzes.length}
-                setState={setPageState} followers={userPage.followers.length}
-                followings={userPage.followings.length} id={userPage._id} 
-                passedPosts={userPage.showPassedPosts ? userPage.passedTests.length + userPage.passedQuizzes.length : undefined}
-                likedPosts={userPage?.showLikedPosts ? userPage.likedTests.length + userPage.likedQuizzes.length : undefined}
-            />
             {isLogged &&
                 <div className={styles.actions}>
                     {(user?.followings as unknown[]).includes(userPage._id) ?
@@ -55,6 +48,12 @@ export default function Profile() {
                         <button className={styles.button} onClick={() => follow(userPage._id)}>Follow</button>}
                 </div>
             }
+            <UserData likes={userPage.likes} tests={userPage.createdTests.length + userPage.createdQuizzes.length}
+                setState={setPageState} followers={userPage.followers.length}
+                followings={userPage.followings.length} id={userPage._id} state={pageState}
+                passedPosts={userPage.showPassedPosts ? userPage.passedTests.length + userPage.passedQuizzes.length : undefined}
+                likedPosts={userPage?.showLikedPosts ? userPage.likedTests.length + userPage.likedQuizzes.length : undefined}
+            />
             {pageState === 'Tests' && <UserProfilePosts posts={(posts as Test[])} />}
             {pageState === 'Likes' && <UserProfilePosts isLikedPosts={true} posts={likedPosts} />}
             {pageState === 'Followers' && <UsersList icons={(userPage.followers as IUserIcon[])} isFollowers={true} />}

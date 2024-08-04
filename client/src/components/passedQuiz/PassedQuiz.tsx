@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import styles from './PassedQuiz.module.scss';
-import { NavLink } from "react-router-dom";
-import UserIcon from "../userIcon/UserIcon";
-import LikesComments from "../likesComments/LikesComments";
-import useUserStore, { IPassedQuiz } from "../../stores/userStore";
+import { NavLink } from 'react-router-dom';
+import UserIcon from '../userIcon/UserIcon';
+import LikesComments from '../likesComments/LikesComments';
+import useUserStore, { IPassedQuiz } from '../../stores/userStore';
 
 interface IProps {
     quiz: IPassedQuiz,

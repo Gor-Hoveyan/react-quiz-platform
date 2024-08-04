@@ -1,14 +1,10 @@
+@import '../../styles/_mixins.scss';
+
+
 .main {
     text-align: center;
-
-    .testList {
-        margin: 0px auto;
-        list-style-type: none;
-        list-style: none;
-        padding: 0;
-        width: fit-content;
-
-    }
+    @include postList;
+    
     .header {
         margin: 20px 0;
         width: 100%;

@@ -38,6 +38,7 @@ export interface IQuizAnswer {
 interface IStore {
     quiz: IQuiz | null,
     result: number,
+    isSuccess: boolean,
     comments: IComment[],
     formError: string,
     createdQuizId: string,
@@ -51,6 +52,7 @@ interface IStore {
 const useQuizStore = create<IStore>()(devtools(immer((set, get) => ({
     quiz: null,
     result: 0,
+    isSuccess: false,
     comments: [],
     formError: '',
     createdQuizId: '',
@@ -71,8 +73,7 @@ const useQuizStore = create<IStore>()(devtools(immer((set, get) => ({
     },
     submitQuiz: async (quizId, rightAnswers) => {
         await API.post('/quiz/submit', {quizId, rightAnswers}).then(res => {
-            console.log(res.data.result);
-            set({ result: res.data.result });
+            set({ result: res.data.result, isSuccess: true });
         }).catch(err => console.log(err));
     }
 }))));

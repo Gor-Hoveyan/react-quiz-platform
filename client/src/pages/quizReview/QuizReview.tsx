@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import styles from './QuizReview.module.scss';
-import { NavLink, useParams } from "react-router-dom";
-import useQuizStore from "../../stores/quizStore";
-import useUserStore from "../../stores/userStore";
-import Comments from "../../components/comments/Comments";
-import LikesComments from "../../components/likesComments/LikesComments";
-import UserIcon from "../../components/userIcon/UserIcon";
-import Loader from "../../components/loader/Loader";
+import { NavLink, useParams } from 'react-router-dom';
+import useQuizStore from '../../stores/quizStore';
+import useUserStore from '../../stores/userStore';
+import Comments from '../../components/comments/Comments';
+import LikesComments from '../../components/likesComments/LikesComments';
+import UserIcon from '../../components/userIcon/UserIcon';
+import Loader from '../../components/loader/Loader';
 
 
 export default function QuizReview() {

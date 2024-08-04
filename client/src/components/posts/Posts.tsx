@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import styles from './Posts.module.scss';
-import { Test } from "../../stores/testStore";
-import { IQuiz } from "../../stores/quizStore";
-import TestComponent from "../testComponent/TestComponent";
-import QuizComponent from "../quizComponent/QuizComponent";
-import Loader from "../loader/Loader";
+import { Test } from '../../stores/testStore';
+import { IQuiz } from '../../stores/quizStore';
+import TestComponent from '../testComponent/TestComponent';
+import QuizComponent from '../quizComponent/QuizComponent';
+import Loader from '../loader/Loader';
 
 interface IProps {
     posts: (Test | IQuiz)[]

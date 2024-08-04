@@ -22,7 +22,7 @@ const Pagination = ({ totalPages, currentPage, handlePagination }: IProps) => {
                 </button>
             );
             if (startPage > 2) {
-                pageNumbers.push(<span key="ellipsis-start" className={styles.paginationEllipsis}>...</span>);
+                pageNumbers.push(<span key='ellipsis-start' className={styles.paginationEllipsis}>...</span>);
             }
         }
 
@@ -36,7 +36,7 @@ const Pagination = ({ totalPages, currentPage, handlePagination }: IProps) => {
 
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
-                pageNumbers.push(<span key="ellipsis-end" className={styles.paginationEllipsis}>...</span>);
+                pageNumbers.push(<span key='ellipsis-end' className={styles.paginationEllipsis}>...</span>);
             }
             pageNumbers.push(
                 <button key={totalPages} className={styles.paginationButton} onClick={() => handlePagination(totalPages)}>

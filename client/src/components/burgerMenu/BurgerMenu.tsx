@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import styles from './BurgerMenu.module.scss';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 interface IProps {
     isLogged: boolean,

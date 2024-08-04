@@ -362,8 +362,10 @@
 
 @mixin postList {
     margin: 0px auto;
-    list-style-type: none;
     list-style: none;
+    .testList {
+        list-style: none;
+    }
     padding: 0;
     width: fit-content;
 }
@@ -401,7 +403,9 @@
         text-align: left;
     }
 
-
+    @media (max-width: 600px) {
+        min-width: 300px;
+    }
 }
 
 @mixin authorization {
@@ -458,6 +462,71 @@
     @media (max-width: 800px) {
         .formContainer {
             width: 80%;
+        }
+    }
+}
+
+@mixin commentArea {
+    .textarea {
+        resize: vertical;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 1em;
+        min-height: 80px;
+        width: 100%;
+    }
+}
+
+@mixin profilePage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    @include button;
+
+
+    .avatar {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+    }
+
+    .details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+    }
+
+    .username {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-right: 5px;
+    }
+
+    .bio {
+        font-size: 1.2em;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .posts {
+        text-align: center;
+
+        .postsHeader {
+            margin: 20px 0;
         }
     }
 }

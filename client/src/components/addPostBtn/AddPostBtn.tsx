@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 import styles from './AddPostBtn.module.scss';
-import { NavLink } from "react-router-dom";
-import { FiPlusCircle } from "react-icons/fi";
+import { NavLink } from 'react-router-dom';
+import { FiPlusCircle } from 'react-icons/fi';
 
 interface IProps {
     postType: 'test' | 'quiz'

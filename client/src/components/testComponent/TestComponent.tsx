@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import styles from './TestComponent.module.scss';
-import { Test } from "../../stores/testStore";
-import { NavLink } from "react-router-dom";
-import UserIcon from "../userIcon/UserIcon";
-import LikesComments from "../likesComments/LikesComments";
-import useUserStore from "../../stores/userStore";
+import { Test } from '../../stores/testStore';
+import { NavLink } from 'react-router-dom';
+import UserIcon from '../userIcon/UserIcon';
+import LikesComments from '../likesComments/LikesComments';
+import useUserStore from '../../stores/userStore';
 
 interface IProps {
     test: Test

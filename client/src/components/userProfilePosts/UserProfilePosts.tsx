@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import styles from './UserProfilePosts.module.scss';
-import { Test } from "../../stores/testStore";
-import AddPostBtn from "../addPostBtn/AddPostBtn";
-import Posts from "../posts/Posts";
-import { IQuiz } from "../../stores/quizStore";
+import { Test } from '../../stores/testStore';
+import AddPostBtn from '../addPostBtn/AddPostBtn';
+import Posts from '../posts/Posts';
+import { IQuiz } from '../../stores/quizStore';
 
 interface IProps {
     posts: (Test | IQuiz)[],
@@ -18,7 +18,7 @@ export default function UserProfilePosts({ posts, isLikedPosts, isSavedPosts }: 
                 <h3 className={styles.postsHeader}>
                     {isLikedPosts && 'Liked posts'}
                     {isSavedPosts && 'Saved posts'}
-                    {!isLikedPosts && !isSavedPosts && 'Your Posts'}
+                    {!isLikedPosts && !isSavedPosts && 'Created Posts'}
                 </h3>
                 {posts?.length ? <Posts posts={posts} /> : <h4>No posts yet</h4>}
             </div>

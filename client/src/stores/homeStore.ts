@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from "zustand/middleware";
+import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import API from './../api/axiosConfig';
 import { Test } from './testStore';

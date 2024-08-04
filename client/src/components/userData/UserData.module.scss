@@ -1,31 +1,57 @@
 .stats {
+    .firstLine {
+        margin: 30px 0 70px 0;
+
+        .firstLineItem {
+            padding: 0 15px;
+            border-right: 1px solid gray;
+            text-align: center;
+
+            .number {
+                font-weight: bolder;
+                font-size: large;
+                color: black;
+            }
+        }
+    }
+
+    .secondLine {
+        font-weight: bold;
+        font-size: 2rem;
+
+        .secondLineItem {
+            padding: 0 30px;
+
+            cursor: pointer;
+            transition-duration: 0.6s;
+
+            &:hover {
+                color: black;
+            }
+        }
+
+        .active {
+            color: black;
+        }
+    }
+}
+
+.firstLine,
+.secondLine {
     display: flex;
-    text-align: center;
-    font-weight: bold;
-    margin: 20px 0;
+    align-items: center;
+    justify-content: center;
 
-    .likes,
-    .followers,
-    .followings,
-    .tests,
-    .likedTests,
-    .savedTests,
-    .passedTests {
-        padding: 0 15px;
-        line-height: 1.5;
-    }
+    .firstLineItem,
+    .secondLineItem {
+        color: gray;
 
-    .tests,
-    .followers,
-    .followings,
-    .likedTests,
-    .savedTests,
-    .passedTests  {
-        border-left: 2px solid gray;
-    }
+        &:first-of-type {
+            border-left: none;
+        }
 
-    .likedPosts {
-        border-left: 2px solid gray;
-        border-right: 2px solid gray;
+        &:last-of-type {
+            border-right: none;
+        }
     }
 }

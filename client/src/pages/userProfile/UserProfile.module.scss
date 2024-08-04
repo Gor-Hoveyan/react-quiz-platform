@@ -1,62 +1,6 @@
+@import '../../styles/mixins.scss';
+
+
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    min-height: 100vh;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
-}
-
-.details {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.username {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    margin-right: 5px;
-}
-
-.bio {
-    font-size: 1.2em;
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.actions {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.avatarContainer {
-    display: flex;
-    justify-content: end;
-    align-items: end;
-    width: 150px;
-    height: 150px;
-    .avatar {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
-    .updateIcon {
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        cursor: pointer;
-    }
+    @include profilePage;
 }

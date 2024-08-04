@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 import styles from './UsersList.module.scss';
-import UserIcon from "../userIcon/UserIcon";
-import { IUserIcon } from "../../stores/userStore";
+import UserIcon from '../userIcon/UserIcon';
+import { IUserIcon } from '../../stores/userStore';
 
 interface IProps {
     icons: Omit<IUserIcon, 'createdAt'>[],

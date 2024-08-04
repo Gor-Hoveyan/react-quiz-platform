@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import styles from './Answer.module.scss';
-import { useForm, SubmitHandler } from "react-hook-form";
-import useUserStore from "../../stores/userStore";
-import LikesComments from "../likesComments/LikesComments";
-import UserIcon from "../userIcon/UserIcon";
-import useCommentStore, { ICommentAnswer } from "../../stores/commentStore";
+import { useForm, SubmitHandler } from 'react-hook-form';
+import useUserStore from '../../stores/userStore';
+import LikesComments from '../likesComments/LikesComments';
+import UserIcon from '../userIcon/UserIcon';
+import useCommentStore, { ICommentAnswer } from '../../stores/commentStore';
 
 type FormValues = {
     updatedAnswer: string
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function Answer({ answer }: Props) {
-    const { register, handleSubmit, reset } = useForm<FormValues>();
+    const { register, handleSubmit, reset, formState: {errors} } = useForm<FormValues>();
     const user = useUserStore(state => state.user);
     const updateAnswer = useCommentStore(state => state.updateAnswer);
     const setUpdatingAnswer = useCommentStore(state => state.setUpdatingAnswer);
@@ -42,10 +42,11 @@ export default function Answer({ answer }: Props) {
                 {updatingAnswer === answer._id ?
                     <form className={styles.submitForm} onSubmit={handleSubmit(onSubmit)}>
                         <textarea className={styles.textarea} defaultValue={answer.comment} {...register('updatedAnswer', {
-                                        required: 'This field is required',
-                                        minLength: { value: 3, message: 'Answer must contain at least 2 characters' },
-                                        maxLength: { value: 1000, message: 'Answer can contain maximum 1000 characters' },
-                                    })} />
+                            required: 'This field is required',
+                            minLength: { value: 3, message: 'Answer must contain at least 2 characters' },
+                            maxLength: { value: 1000, message: 'Answer can contain maximum 1000 characters' },
+                        })} />
+                        <p className={styles.error}>{errors.updatedAnswer && errors.updatedAnswer.message}</p>
                         <button className={styles.button} type='submit'>
                             Update answer
                         </button>

@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import styles from './QuizComponent.module.scss';
-import { IQuiz } from "../../stores/quizStore";
-import { NavLink } from "react-router-dom";
-import UserIcon from "../userIcon/UserIcon";
-import LikesComments from "../likesComments/LikesComments";
-import useUserStore from "../../stores/userStore";
+import { IQuiz } from '../../stores/quizStore';
+import { NavLink } from 'react-router-dom';
+import UserIcon from '../userIcon/UserIcon';
+import LikesComments from '../likesComments/LikesComments';
+import useUserStore from '../../stores/userStore';
 
 interface IProps {
     quiz: IQuiz,

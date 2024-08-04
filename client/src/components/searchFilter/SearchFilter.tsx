@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import styles from './SearchFilter.module.scss';
-import useHomeStore from "../../stores/homeStore";
-import { FaCheckCircle } from "react-icons/fa";
-import { BsFilterLeft } from "react-icons/bs";
+import useHomeStore from '../../stores/homeStore';
+import { FaCheckCircle } from 'react-icons/fa';
+import { BsFilterLeft } from 'react-icons/bs';
 
 
 export default function SearchFilter() {

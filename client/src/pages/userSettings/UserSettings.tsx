@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import styles from './UserSettings.module.scss';
-import useUserStore from "../../stores/userStore";
-import { Navigate, NavLink } from "react-router-dom";
-import { useForm, SubmitHandler } from "react-hook-form";
+import useUserStore from '../../stores/userStore';
+import { Navigate, NavLink } from 'react-router-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormValues = {
     username: string,
@@ -57,7 +57,7 @@ export default function UserSettings() {
                 />
                 <p className={styles.error}>{errors.bio?.message}</p>
 
-                <div className={styles.detailsDIv}>
+                <div className={styles.detailsDiv}>
                     <div className={styles.checkboxContainer}>
                         <input className={styles.checkbox} id='showLikedPosts'
                             type='checkbox' {...register('showLikedPosts')} defaultChecked={user.showLikedPosts}

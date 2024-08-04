@@ -25,6 +25,7 @@ export default function QuizPage() {
     const params = useParams();
     const quizId = params.id;
     const result = useQuizStore(state => state.result);
+    const isSuccess = useQuizStore(state => state.isSuccess);
     const { control, handleSubmit, setValue, formState: { errors } } = useForm<QuizPageFormValues>({
         defaultValues: {
             questions: []
@@ -102,7 +103,7 @@ export default function QuizPage() {
                         ))}
 
 
-                        {!result ? <button className={styles.button} onClick={() => console.log(errors)} type='submit'>Submit</button> : <NavLink className={styles.navLink} to={`/quiz/${quiz._id}/result`}><button className={styles.button}>View results</button></NavLink>}
+                        {!isSuccess ? <button className={styles.button} onClick={() => console.log(errors)} type='submit'>Submit</button> : <NavLink className={styles.navLink} to={`/quiz/${quiz._id}/result`}><button className={styles.button}>View results</button></NavLink>}
 
                     </form>
                 </div>

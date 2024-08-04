@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import styles from './DragAndDrop.module.scss';
-import { AiOutlineCloudUpload } from "react-icons/ai";
-import useUserStore from "../../stores/userStore";
+import { AiOutlineCloudUpload } from 'react-icons/ai';
+import useUserStore from '../../stores/userStore';
 
 export default function DragAndDrop() {
     const [drag, setDrag] = useState<boolean>(false);

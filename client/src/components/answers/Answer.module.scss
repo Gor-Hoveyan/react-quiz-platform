@@ -10,6 +10,7 @@
     @include dropdown;
     @include answerLink;
     @include cancelButton;
+    @include commentArea;
 
     p {
         margin: 0 0 5px 0;
@@ -21,19 +22,13 @@
     }
 
     @include button;
+
     .nameAndDropdown {
         display: flex;
         justify-content: space-between;
     }
-
-    .textarea {
-        resize: vertical;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        font-size: 1em;
-        min-height: 80px;
-        width: 100%;
+    .error {
+        color: tomato;
+        margin: 10px 0;
     }
 }

@@ -50,7 +50,7 @@ export default function TestForm() {
             const uniqueAnswers = new Set();
             const uniquePoints = new Set();
             if (questionSet.has(data.questions[i].question)) {
-                return setError(`Duplicate question found: "${data.questions[i].question}"`);
+                return setError(`Duplicate question found: '${data.questions[i].question}'`);
             }
             questionSet.add(data.questions[i].question);
             for (let j = 0; j < 4; j++) {
@@ -132,8 +132,8 @@ export default function TestForm() {
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
             <h1 className={styles.header}>New test</h1>
                 <div className={styles.formGroup}>
-                    <label htmlFor="name">Name</label>
-                    <input type="text" id="name" {...register('name', {
+                    <label htmlFor='name'>Name</label>
+                    <input type='text' id='name' {...register('name', {
                         required: 'This field is required',
                         minLength: { value: 5, message: 'Name must contain at least 5 characters' },
                         maxLength: { value: 60, message: 'Name can contain maximum 60 characters' },
@@ -168,7 +168,7 @@ export default function TestForm() {
                                 <>
                                     <div key={aIndex} className={styles.answerGroup}>
                                         <input
-                                            type="text"
+                                            type='text'
                                             {...register(`questions.${index}.answers.${aIndex}.answer`, {
                                                 required: 'This field is required',
                                                 minLength: { value: 2, message: 'Question must contain at least 2 characters' },
@@ -179,19 +179,19 @@ export default function TestForm() {
                                         />
 
                                         <select {...register(`questions.${index}.answers.${aIndex}.points`, { required: 'This field is required' })}>
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                            <option value='0'>0</option>
+                                            <option value='1'>1</option>
+                                            <option value='2'>2</option>
+                                            <option value='3'>3</option>
                                         </select>
                                     </div>
                                     <p className={styles.error}>{Array.isArray(errors?.questions) && Array.isArray(errors?.questions[index]?.answers) ? errors?.questions[index]?.answers[aIndex]?.answer?.message : ''}</p>
                                 </>
                             ))}
-                            <button className={styles.button} type="button" onClick={() => removeQuestion(index)}>Remove question</button>
+                            <button className={styles.button} type='button' onClick={() => removeQuestion(index)}>Remove question</button>
                         </div>
                     ))}
-                    <button className={styles.button} type="button" onClick={() => addQuestion()}>Add question</button>
+                    <button className={styles.button} type='button' onClick={() => addQuestion()}>Add question</button>
                 </div>
 
                 <div className={styles.formGroup}>
@@ -209,16 +209,16 @@ export default function TestForm() {
                             <input value={(Number(resultFields[index - 1]?.maxScore) + 1) || 0} {...register(`results.${index}.minScore`, { required: 'This field is required', value: (Number(resultFields[index - 1]?.maxScore) + 1) || 0 })} />
 
                             <label>Max Score</label>
-                            <input type="number" {...register(`results.${index}.maxScore`, { required: 'This field is required' })} />
-                            <button className={styles.button} type="button" onClick={() => removeResult(index)}>Remove result</button>
+                            <input type='number' {...register(`results.${index}.maxScore`, { required: 'This field is required' })} />
+                            <button className={styles.button} type='button' onClick={() => removeResult(index)}>Remove result</button>
                         </div>
                     ))}
                     <p className={styles.error}>{errors.results?.message && errors.results?.message}</p>
-                    <button className={styles.button} type="button" onClick={() => appendResult({ result: '', minScore: 0, maxScore: 0 })}>Add Result</button>
+                    <button className={styles.button} type='button' onClick={() => appendResult({ result: '', minScore: 0, maxScore: 0 })}>Add Result</button>
                 </div>
 
                 <p className={styles.error}>{formError && formError}</p>
-                {id ? <NavLink className={styles.navLink} to={`/test/${id}`}><button className={styles.button} type='button'>View test</button></NavLink> : <button className={styles.button} type="submit">Submit</button>}
+                {id ? <NavLink className={styles.navLink} to={`/test/${id}`}><button className={styles.button} type='button'>View test</button></NavLink> : <button className={styles.button} type='submit'>Submit</button>}
             </form >
         </div > : <Navigate to={`/verify`} />
     );

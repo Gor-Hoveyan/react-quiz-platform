@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './UserProfile.module.scss';
-import useUserStore, { IPassedQuiz, IPassedTest, IUserIcon } from '../../stores/userStore';
+import useUserStore, { IUserIcon } from '../../stores/userStore';
 import { Navigate, NavLink } from 'react-router-dom';
-import { MdSettings, MdChangeCircle } from "react-icons/md";
+import { MdSettings, MdChangeCircle } from 'react-icons/md';
 import DragAndDrop from '../../components/dragAndDrop/DragAndDrop';
 import UserData from '../../components/userData/UserData';
 import UserProfilePosts from '../../components/userProfilePosts/UserProfilePosts';
@@ -58,6 +58,7 @@ export default function UserProfile() {
                 likedPosts={user.likedTests.length + user.likedQuizzes.length} 
                 savedPosts={user.savedTests.length + user.savedQuizzes.length} 
                 passedPosts={user.passedTests.length + user.passedQuizzes.length}
+                state={pageState}
             />
 
             {pageState === 'Tests' && <UserProfilePosts posts={posts} />}

@@ -1,51 +1,5 @@
 @import '../../styles/mixins.scss';
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    min-height: 100vh;
-    @include button;
-}
-
-.avatar {
-    max-width: 150px;
-    max-height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
-}
-
-.details {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-}
-
-.username {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    margin-right: 5px;
-}
-
-.bio {
-    font-size: 1.2em;
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.actions {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.posts {
-    text-align: center;
-    .postsHeader {
-        margin: 20px 0;
-    }
+    @include profilePage;
 }
