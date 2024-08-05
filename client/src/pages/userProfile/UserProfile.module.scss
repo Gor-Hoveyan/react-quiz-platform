@@ -4,3 +4,15 @@
 .container {
     @include profilePage;
 }
+.avatarContainer {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+
+    .updateIcon {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        cursor: pointer;
+    }
+}

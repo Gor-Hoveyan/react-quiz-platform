@@ -105,7 +105,7 @@ async function getFollowings(userId: string) {
     return user.followings;
 }
 
-async function getUserQuizzes(userId: string) {
+async function getUserQuizzes(userId: string, page: number, limit: number) {
     const user = await User.findById(userId).populate({
         path: 'createdQuizzes',
         populate: {
@@ -116,10 +116,10 @@ async function getUserQuizzes(userId: string) {
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
     }
-    return user.createdQuizzes;
+    return {quizzes: user.createdQuizzes.slice((page - 1)  * limit, page * limit), totalQuizzes: user.createdQuizzes.length};
 }
 
-async function getUserTests(userId: string) {
+async function getUserTests(userId: string, page: number, limit: number) {
     const user = await User.findById(userId).populate({
         path: 'createdTests',
         populate: {
@@ -130,7 +130,7 @@ async function getUserTests(userId: string) {
     if (!user) {
         throw ({ status: 404, message: 'User not found' });
     }
-    return user.createdTests;
+    return {tests: user.createdTests.slice((page - 1)  * limit, page * limit), totalTests: user.createdQuizzes.length};
 }
 
 export const userService = {

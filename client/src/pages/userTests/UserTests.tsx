@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './UserTests.module.scss';
 import { Navigate } from 'react-router-dom';
-import useUserStore from '../../stores/userStore';
+import useUserStore, { PaginationData } from '../../stores/userStore';
 import Loader from '../../components/loader/Loader';
 import AddPostBtn from '../../components/addPostBtn/AddPostBtn';
 import Posts from '../../components/posts/Posts';
 
 export default function UserTests() {
+    const [testsQuery, setTestsQuery] = useState<PaginationData>({ page: 1, limit: 10 });
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+
     const getTests = useUserStore(state => state.getUserTests);
     const tests = useUserStore(state => state.tests);
     const isLogged = useUserStore(state => state.isLogged);
@@ -16,11 +19,32 @@ export default function UserTests() {
 
     useEffect(() => {
         if (isLogged && user) {
-            getTests(user._id);
+            getTests(user._id, testsQuery.page, testsQuery.limit);
         } else {
             getUser();
         }
-    }, [isLogged, user, getTests, getUser])
+    }, [isLogged, user, getTests, getUser]);
+
+    useEffect(() => {
+        document.addEventListener('scroll', scrollHandler);
+        return function () {
+            document.removeEventListener('scroll', scrollHandler);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isFetching && user) {
+            getTests(user._id, testsQuery.page, testsQuery.limit);
+            setTestsQuery({ page: testsQuery.page + 1, limit: 10 });
+        }
+    }, [isFetching])
+
+    function scrollHandler(e: Event) {
+        const target = e.target as Document;
+        if (target.documentElement.scrollHeight - (target.documentElement.scrollTop + window.innerHeight) < 100) {
+            setIsFetching(true);
+        }
+    }
 
     return (
         <>{isLogged ?

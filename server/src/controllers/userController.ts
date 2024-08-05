@@ -89,13 +89,17 @@ async function getFollowings(req: Request, res: Response, next: NextFunction) {
 
 async function getUserQuizzes(req: Request, res: Response, next: NextFunction) {
     try {
+        const { page, limit } = req.query;
+        if (!Number(page) || !Number(limit)) {
+            throw ({ status: 400, message: 'Invalid request' });
+        }
         const { id } = req.params;
         if (id !== req.user.id) {
             res.status(403);
             throw new Error('Access denied');
         }
-        const quizzes = await userService.getUserQuizzes(id);
-        return res.status(200).json({ quizzes });
+        const { quizzes, totalQuizzes } = await userService.getUserQuizzes(id, Number(page), Number(limit));
+        return res.status(200).json({ quizzes, totalQuizzes });
     } catch (err) {
         next(err);
     }
@@ -103,12 +107,16 @@ async function getUserQuizzes(req: Request, res: Response, next: NextFunction) {
 
 async function getUserTests(req: Request, res: Response, next: NextFunction) {
     try {
+        const { page, limit } = req.query;
+        if (!Number(page) || !Number(limit)) {
+            throw ({ status: 400, message: 'Invalid request' });
+        }
         const { id } = req.params;
         if (id !== req.user.id) {
-            throw({status: 403, message: 'Access denied'});
+            throw ({ status: 403, message: 'Access denied' });
         }
-        const tests = await userService.getUserTests(id);
-        return res.status(200).json({ tests });
+        const { tests, totalTests } = await userService.getUserTests(id, Number(page), Number(limit));
+        return res.status(200).json({ tests, totalTests });
     } catch (err) {
         next(err);
     }

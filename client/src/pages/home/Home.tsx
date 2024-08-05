@@ -13,11 +13,14 @@ const Home = () => {
     const setPagination = useHomeStore(state => state.setPagination);
     const setCurrentPage = useHomeStore(state => state.setCurrentPage);
     const totalPages = useHomeStore(state => state.totalPages);
-    const currentPage = useHomeStore(state => state.currentPage)
+    const currentPage = useHomeStore(state => state.currentPage);
+    const searchVal = useHomeStore(state => state.searchVal);
+
 
     useEffect(() => {
         setPagination();
-    }, [setPagination])
+    }, [setPagination]);
+
 
     function handlePagination(page: number) {
         setCurrentPage(page);
@@ -30,7 +33,7 @@ const Home = () => {
             {posts ? <>
                 <h1>Some tests for you :D</h1>
                 <Posts posts={posts} />
-                <Pagination currentPage={currentPage} totalPages={totalPages} handlePagination={handlePagination} />
+                {!searchVal && <Pagination currentPage={currentPage} totalPages={totalPages} handlePagination={handlePagination} />}
             </> : isLoading ? <Loader /> : <h1>Posts not found</h1>
             }
         </div>

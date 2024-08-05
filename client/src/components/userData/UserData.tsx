@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './UserData.module.scss';
-import useUserStore from '../../stores/userStore';
+import useUserStore, { PaginationData } from '../../stores/userStore';
 import { FaCubes, FaHeart, FaCircleCheck, FaBookmark } from 'react-icons/fa6';
 
 interface IProps {
@@ -17,59 +17,29 @@ interface IProps {
 }
 
 export default function UserData({ tests, followers, followings, likes, savedPosts, likedPosts, passedPosts, setState, state, id }: IProps) {
-    const getLikedPosts = useUserStore(state => state.getLikedPosts);
-    const getSavedPosts = useUserStore(state => state.getSavedPosts);
-    const getUserPosts = useUserStore(state => state.getUserPosts);
-    const getFollowers = useUserStore(state => state.getFollowers);
-    const getFollowings = useUserStore(state => state.getFollowings);
-    const getPassedPosts = useUserStore(state => state.getPassedPosts);
 
     function handleSetTests() {
         setState('Tests');
-        if (id) {
-            getUserPosts(id);
-        }
     }
 
     function handleSetSaves() {
         setState('Saves');
-        getSavedPosts();
     }
 
     function handleSetLikes() {
         setState('Likes');
-        if (id) {
-            getLikedPosts(id);
-        } else {
-            getLikedPosts();
-        }
     }
 
     function handleSetFollowers() {
         setState('Followers');
-        if (id) {
-            getFollowers(id);
-        } else {
-            getFollowers();
-        }
     }
 
     function handleSetFollowings() {
         setState('Followings');
-        if (id) {
-            getFollowings(id);
-        } else {
-            getFollowings();
-        }
     }
 
     function handleSetPassed() {
         setState('Passed');
-        if (id) {
-            getPassedPosts(id);
-        } else {
-            getPassedPosts();
-        }
     }
 
     return (
@@ -79,13 +49,13 @@ export default function UserData({ tests, followers, followings, likes, savedPos
                     <span className={styles.number}>{likes}</span><br />Likes
                 </div>
                 <div className={styles.firstLineItem} onClick={() => handleSetFollowers()}>
-                <span className={styles.number}>{followers}</span> <br />Followers
+                    <span className={styles.number}>{followers}</span><br />Followers
                 </div>
                 <div className={styles.firstLineItem} onClick={() => handleSetFollowings()}>
-                <span className={styles.number}>{followings}</span> <br />Followings
+                    <span className={styles.number}>{followings}</span><br />Followings
                 </div>
                 <div className={styles.firstLineItem} onClick={() => handleSetTests()}>
-                <span className={styles.number}>{tests}</span> <br />Posts
+                    <span className={styles.number}>{tests}</span><br />Posts
                 </div>
             </div>
 
